@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>musique</title>
+    <style>
+      :root {
+        --bg: #fafaf8;
+        --fg: #1a1a1a;
+        --muted: #6b6b6b;
+        --accent: #c0392b;
+        --card: #fff;
+        --line: #e6e6e2;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: system-ui, sans-serif;
+        line-height: 1.6;
+        background: var(--bg);
+        color: var(--fg);
+        margin: 0 auto;
+        padding: 3rem 2rem 6rem;
+        max-width: 50rem;
+      }
+
+      header {
+        border-bottom: 2px solid var(--fg);
+        margin-bottom: 3rem;
+        padding-bottom: 1.5rem;
+      }
+
+      h1 {
+        font-size: 2.4rem;
+        margin: 0 0 0.25rem;
+      }
+
+      header p {
+        color: var(--muted);
+        margin: 0.5rem 0 0;
+      }
+
+      .components {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .components a {
+        display: block;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 1.75rem 2rem;
+        text-decoration: none;
+        color: var(--fg);
+        transition: border-color 0.15s, box-shadow 0.15s;
+      }
+
+      .components a:hover {
+        border-color: var(--accent);
+        box-shadow: 0 2px 12px #c0392b18;
+      }
+
+      .components h2 {
+        font-size: 1.4rem;
+        margin: 0 0 0.25rem;
+      }
+
+      .components h2 code {
+        background: var(--fg);
+        color: var(--bg);
+        padding: 0.1em 0.3em;
+        border-radius: 4px;
+      }
+
+      .components p {
+        color: var(--muted);
+        margin: 0.4rem 0 0;
+      }
+
+      footer {
+        color: var(--muted);
+        font-size: 0.85rem;
+        text-align: center;
+        margin-top: 4rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>musique</h1>
+      <p>Web Components for music visualization — piano, fretboard, and more.</p>
+    </header>
+
+    <div class="components">
+      <a href="src/mq-piano/mq-piano.html">
+        <h2><code>&lt;mq-piano&gt;</code></h2>
+        <p>
+          Renders a piano keyboard with realistic geometry. Configurable range,
+          CSS-driven borders, stylable keys via <code>::part()</code>, and
+          per-note annotations via named slots.
+        </p>
+      </a>
+
+      <a href="src/mq-piano-chord/mq-piano-chord.html">
+        <h2><code>&lt;mq-piano-chord&gt;</code></h2>
+        <p>
+          Displays piano chord diagrams. Pass a chord name, get a highlighted
+          keyboard with optional note labels.
+        </p>
+      </a>
+
+      <a href="src/mq-piano-scale/mq-piano-scale.html">
+        <h2><code>&lt;mq-piano-scale&gt;</code></h2>
+        <p>
+          Displays piano scale diagrams. Pass a scale name, get a highlighted
+          keyboard with optional note and degree labels.
+        </p>
+      </a>
+
+      <a href="src/mq-fretboard/mq-fretboard.html">
+        <h2><code>&lt;mq-fretboard&gt;</code></h2>
+        <p>
+          Full fretboard display with slot-based content placement.
+          Scales, positions, intervals — horizontal or vertical orientation.
+        </p>
+      </a>
+
+      <a href="src/mq-fretboard-chord/mq-fretboard-chord.html">
+        <h2><code>&lt;mq-fretboard-chord&gt;</code></h2>
+        <p>
+          Displays guitar chord diagrams. Pass a chord name, get a
+          fretboard with finger positions and multiple voicings.
+        </p>
+      </a>
+
+      <a href="src/mq-fretboard-scale/mq-fretboard-scale.html">
+        <h2><code>&lt;mq-fretboard-scale&gt;</code></h2>
+        <p>
+          Displays scale patterns on a fretboard. Pass a scale name,
+          get a full-neck diagram with highlighted notes and optional labels.
+        </p>
+      </a>
+
+    </div>
+
+    <footer>musique</footer>
+  </body>
+</html>
