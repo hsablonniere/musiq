@@ -1,7 +1,7 @@
 import { css, html, LitElement, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { Chord } from "tonal";
-import { assignOctaves, noteToPianoKeysName } from "../utils.js";
+import { assignOctaves, isBlackKey, noteToPianoKeysName } from "../utils.js";
 import "../mq-piano/mq-piano.js";
 
 @customElement("mq-piano-chord")
@@ -31,7 +31,7 @@ export class MqPianoChord extends LitElement {
       >
         ${notes.map(
           (note) => html`
-            <div slot="note-${noteToPianoKeysName(note)}" class="active-fill">
+            <div slot="note-${noteToPianoKeysName(note)}" class="active-fill${isBlackKey(note) ? " black" : ""}">
               ${this.noteLabels
                 ? html`<span class="label"
                     >${note.replace(/\d+$/, "").replace("#", "♯").replace("b", "♭")}</span
@@ -78,6 +78,13 @@ export class MqPianoChord extends LitElement {
       display: flex;
       align-items: flex-end;
       justify-content: center;
+    }
+
+    .active-fill.black {
+      border-left: 1px solid #000;
+      border-right: 1px solid #000;
+      border-bottom: 1px solid #000;
+      box-sizing: border-box;
     }
 
     .label {
