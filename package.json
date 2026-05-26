@@ -5,7 +5,8 @@
   "type": "module",
   "sideEffects": true,
   "files": [
-    "dist"
+    "dist",
+    "custom-elements.json"
   ],
   "scripts": {
     "dev": "vite",
@@ -15,7 +16,8 @@
     "format:check": "oxfmt src/",
     "lint": "oxlint src/",
     "typecheck": "tsgo --noEmit",
-    "prepublishOnly": "npm run build"
+    "cem": "cem analyze",
+    "prepublishOnly": "npm run build && npm run cem"
   },
   "license": "MIT",
   "author": "Hubert Sablonnière",
@@ -24,10 +26,12 @@
     "url": "https://github.com/hsablonniere/musiq.git"
   },
   "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.11.0",
     "@typescript/native-preview": "^7.0.0-dev.20260524.1",
     "oxfmt": "^0.51.0",
     "oxlint": "^1.66.0",
     "typescript": "^5.5.0",
     "vite": "^6.0.0"
-  }
+  },
+  "customElements": "custom-elements.json"
 }
