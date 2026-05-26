@@ -34,6 +34,11 @@
       "types": "./dist/mq-fretboard-chord/mq-fretboard-chord.d.ts",
       "import": "./dist/mq-fretboard-chord/mq-fretboard-chord.js",
       "default": "./dist/mq-fretboard-chord/mq-fretboard-chord.js"
+    },
+    "./mq-fretboard-scale": {
+      "types": "./dist/mq-fretboard-scale/mq-fretboard-scale.d.ts",
+      "import": "./dist/mq-fretboard-scale/mq-fretboard-scale.js",
+      "default": "./dist/mq-fretboard-scale/mq-fretboard-scale.js"
     }
   },
   "files": [
