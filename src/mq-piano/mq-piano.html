@@ -111,9 +111,12 @@
         flex-wrap: wrap;
       }
 
-      .row > mq-piano {
+      .row > * {
         flex: 1;
         min-width: 220px;
+      }
+
+      .row mq-piano {
         height: 200px;
       }
 
@@ -196,9 +199,10 @@
     <header>
       <h1><code>&lt;mq-piano&gt;</code></h1>
       <p>
-        A Web Component that renders a piano keyboard with realistic geometry. Configurable range,
-        CSS-driven borders, stylable keys via
-        <code>::part()</code>, and per-note annotations via named slots.
+        Piano keyboard with realistic key geometry. Configurable range,
+        <code>accurate</code> or <code>centered</code> black key positioning,
+        <code>preserve-ratio</code> for real-world proportions. Stylable via
+        <code>::part()</code> and CSS custom properties. Named slots for per-key annotations.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
@@ -207,7 +211,6 @@
       <h2>Install</h2>
       <pre><code>npm install @hsablonniere/musiq</code></pre>
       <pre><code>import '@hsablonniere/musiq/mq-piano';</code></pre>
-      <pre><code>&lt;mq-piano&gt;&lt;/mq-piano&gt;</code></pre>
     </section>
 
     <section class="api">
@@ -221,6 +224,7 @@
             <th>Property</th>
             <th>Type</th>
             <th>Default</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
@@ -229,24 +233,28 @@
             <td><code>startNote</code></td>
             <td><code>string</code></td>
             <td><code>C3</code></td>
+            <td>First note of the keyboard range. If a black key is specified, the white key before it is included</td>
           </tr>
           <tr>
             <td><code>end-note</code></td>
             <td><code>endNote</code></td>
             <td><code>string</code></td>
             <td><code>E4</code></td>
+            <td>Last note of the keyboard range. If a black key is specified, the white key after it is included</td>
           </tr>
           <tr>
             <td><code>mode</code></td>
             <td><code>mode</code></td>
             <td><code>'accurate' | 'centered'</code></td>
             <td><code>accurate</code></td>
+            <td>Black key positioning: <code>accurate</code> uses real piano geometry, <code>centered</code> centers them between white keys</td>
           </tr>
           <tr>
             <td><code>preserve-ratio</code></td>
             <td><code>preserveRatio</code></td>
             <td><code>boolean</code></td>
             <td><code>false</code></td>
+            <td>Lock aspect ratio to real piano proportions (the unconstrained dimension is derived from the constrained one)</td>
           </tr>
         </tbody>
       </table>
@@ -265,6 +273,7 @@
             <td>
               Per-note content — e.g. <code>note-C3</code>, <code>note-Fs4</code>,
               <code>note-Db3</code>. Black keys expose both enharmonic names.
+              Use <code>s</code> for sharp (♯) since <code>#</code> is not valid in slot names.
             </td>
           </tr>
         </tbody>
@@ -276,32 +285,39 @@
           <tr>
             <th>Property</th>
             <th>Default</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>--mq-piano-border-color</code></td>
             <td><code>#000</code></td>
+            <td>Base color for all borders (outer + inner)</td>
           </tr>
           <tr>
             <td><code>--mq-piano-border-width</code></td>
             <td><code>1px</code></td>
+            <td>Base width for all borders (outer + inner)</td>
           </tr>
           <tr>
             <td><code>--mq-piano-border-color-outer</code></td>
             <td>falls back to <code>border-color</code></td>
+            <td>Color of the outer border around the keyboard</td>
           </tr>
           <tr>
             <td><code>--mq-piano-border-color-inner</code></td>
             <td>falls back to <code>border-color</code></td>
+            <td>Color of borders between keys</td>
           </tr>
           <tr>
             <td><code>--mq-piano-border-width-outer</code></td>
             <td>falls back to <code>border-width</code></td>
+            <td>Width of the outer border around the keyboard</td>
           </tr>
           <tr>
             <td><code>--mq-piano-border-width-inner</code></td>
             <td>falls back to <code>border-width</code></td>
+            <td>Width of borders between keys</td>
           </tr>
         </tbody>
       </table>
@@ -311,13 +327,13 @@
         <thead>
           <tr>
             <th>Part</th>
-            <th>Target</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>key</code></td>
-            <td>All keys</td>
+            <td>All keys (white and black)</td>
           </tr>
           <tr>
             <td><code>key-white</code></td>
@@ -333,7 +349,6 @@
 
     <section>
       <h2>Range — default</h2>
-      <h3>No attributes</h3>
       <p class="desc">
         Without <code>start-note</code> or <code>end-note</code>, the keyboard covers the default
         range <strong>C3 → E4</strong>.
@@ -343,7 +358,6 @@
 
     <section>
       <h2>Range — full piano</h2>
-      <h3>88 keys, A0 → C8</h3>
       <p class="desc">
         A standard acoustic piano: 88 keys from <code>A0</code> to <code>C8</code>.
       </p>
@@ -353,60 +367,69 @@
 
     <section>
       <h2>Range — custom</h2>
-      <h3>2 octaves, C3 → C5</h3>
+      <p class="desc">2 octaves, C3 → C5</p>
       <mq-piano class="demo" start-note="C3" end-note="C5"></mq-piano>
     </section>
 
     <section>
       <h2>Range — single bound</h2>
-      <h3>Only one end provided</h3>
+      <p class="desc">Only one end of the range provided, the other is inferred.</p>
       <div class="row">
-        <mq-piano start-note="G2"></mq-piano>
-        <mq-piano end-note="G5"></mq-piano>
+        <div>
+          <mq-piano start-note="G2"></mq-piano>
+          <p class="caption"><code>start-note="G2"</code> (end inferred)</p>
+        </div>
+        <div>
+          <mq-piano end-note="G5"></mq-piano>
+          <p class="caption"><code>end-note="G5"</code> (start inferred)</p>
+        </div>
       </div>
-      <p class="caption">
-        Left: <code>start-note="G2"</code> (end inferred) · Right: <code>end-note="G5"</code> (start
-        inferred)
-      </p>
     </section>
 
     <section>
       <h2>Mode — <code>centered</code></h2>
-      <h3>Centered black keys</h3>
       <p class="desc">
         With <code>mode="centered"</code>, every white key has the same width and black keys are
         perfectly centered between their neighbors.
       </p>
       <div class="row">
-        <mq-piano start-note="C3" end-note="C5"></mq-piano>
-        <mq-piano start-note="C3" end-note="C5" mode="centered"></mq-piano>
+        <div>
+          <mq-piano start-note="C3" end-note="C5"></mq-piano>
+          <p class="caption"><code>mode="accurate"</code> (default)</p>
+        </div>
+        <div>
+          <mq-piano start-note="C3" end-note="C5" mode="centered"></mq-piano>
+          <p class="caption"><code>mode="centered"</code></p>
+        </div>
       </div>
-      <p class="caption">
-        Left: <code>mode="accurate"</code> (default) · Right: <code>mode="centered"</code>
-      </p>
     </section>
 
     <section>
       <h2>Style — borders</h2>
-      <h3>Width & color via CSS custom properties</h3>
+      <p class="desc">Width and color via CSS custom properties.</p>
       <div class="row">
-        <mq-piano
-          start-note="F3"
-          end-note="E4"
-          style="--mq-piano-border-width: 1px; --mq-piano-border-color: #aaa"
-        ></mq-piano>
-        <mq-piano
-          start-note="F3"
-          end-note="E4"
-          style="--mq-piano-border-width: 6px; --mq-piano-border-color: #c0392b"
-        ></mq-piano>
+        <div>
+          <mq-piano
+            start-note="F3"
+            end-note="E4"
+            style="--mq-piano-border-width: 1px; --mq-piano-border-color: #aaa"
+          ></mq-piano>
+          <p class="caption">1px gray</p>
+        </div>
+        <div>
+          <mq-piano
+            start-note="F3"
+            end-note="E4"
+            style="--mq-piano-border-width: 6px; --mq-piano-border-color: #c0392b"
+          ></mq-piano>
+          <p class="caption">6px red</p>
+        </div>
       </div>
-      <p class="caption">1px gray · 6px red</p>
     </section>
 
     <section>
       <h2>Style — <code>::part()</code></h2>
-      <h3>Harpsichord (inverted colors)</h3>
+      <p class="desc">Harpsichord (inverted colors)</p>
       <style>
         .clavecin::part(key-white) {
           background-color: #1a1a1a;
@@ -423,7 +446,7 @@
 
     <section>
       <h2>Style — <code>::part()</code></h2>
-      <h3>Neon theme</h3>
+      <p class="desc">Neon theme</p>
       <style>
         .neon {
           --mq-piano-border-color: #0a0a14;
@@ -443,7 +466,7 @@
 
     <section>
       <h2>Slots — annotations</h2>
-      <h3>Label each key with note names</h3>
+      <p class="desc">Label each key with note names via named slots.</p>
       <style>
         .annotations::part(key-white),
         .annotations::part(key-black) {
@@ -485,7 +508,7 @@
 
     <section>
       <h2>Slots — colored dots</h2>
-      <h3>C major chord highlighted</h3>
+      <p class="desc">C major chord highlighted</p>
       <style>
         .chord::part(key-white),
         .chord::part(key-black) {
@@ -517,7 +540,7 @@
 
     <section>
       <h2>Layout — <code>preserve-ratio</code></h2>
-      <h3>Realistic aspect ratio</h3>
+      <p class="desc">Locks the keyboard to realistic piano proportions.</p>
       <mq-piano style="width: 600px" start-note="C3" end-note="C5" preserve-ratio></mq-piano>
       <p class="caption">
         Width constrained: <code>width: 600px</code> — height derived from ratio

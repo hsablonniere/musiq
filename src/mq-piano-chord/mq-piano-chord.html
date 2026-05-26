@@ -99,9 +99,12 @@
         flex-wrap: wrap;
       }
 
-      .row > mq-piano-chord {
+      .row > * {
         flex: 1;
         min-width: 200px;
+      }
+
+      .row mq-piano-chord {
         height: 200px;
       }
 
@@ -184,8 +187,9 @@
     <header>
       <h1><code>&lt;mq-piano-chord&gt;</code></h1>
       <p>
-        A Web Component that displays piano chord diagrams. Pass a chord name, get a highlighted
-        keyboard.
+        Piano keyboard with chord visualization. Pass a chord name, get highlighted keys.
+        Supports inversions via slash chords (<code>C/E</code>, <code>C/G</code>),
+        <code>note-labels</code>, and customizable active color.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
@@ -194,7 +198,6 @@
       <h2>Install</h2>
       <pre><code>npm install @hsablonniere/musiq</code></pre>
       <pre><code>import '@hsablonniere/musiq/mq-piano-chord';</code></pre>
-      <pre><code>&lt;mq-piano-chord chord="C"&gt;&lt;/mq-piano-chord&gt;</code></pre>
     </section>
 
     <section class="api">
@@ -208,6 +211,7 @@
             <th>Property</th>
             <th>Type</th>
             <th>Default</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
@@ -216,12 +220,14 @@
             <td><code>chord</code></td>
             <td><code>string</code></td>
             <td>—</td>
+            <td>Chord name (e.g. <code>"C"</code>, <code>"Ebm"</code>, <code>"F#maj7"</code>). Supports slash chords for inversions (<code>"C/E"</code>)</td>
           </tr>
           <tr>
             <td><code>note-labels</code></td>
             <td><code>noteLabels</code></td>
             <td><code>boolean</code></td>
             <td><code>false</code></td>
+            <td>Show note names on active keys (English notation: A, B, C, D, E, F, G)</td>
           </tr>
         </tbody>
       </table>
@@ -232,12 +238,14 @@
           <tr>
             <th>Property</th>
             <th>Default</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>--mq-piano-chord-active-color</code></td>
             <td><span class="swatch" style="background: #4a90d9"></span><code>#4a90d9</code></td>
+            <td>Fill color for active (chord) keys</td>
           </tr>
         </tbody>
       </table>
@@ -247,25 +255,25 @@
         <thead>
           <tr>
             <th>Part</th>
-            <th>Target</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>title</code></td>
-            <td>Chord name heading</td>
+            <td>Chord name heading above the keyboard</td>
           </tr>
           <tr>
             <td><code>key</code></td>
-            <td>All keys (forwarded)</td>
+            <td>All keys (forwarded from <code>mq-piano</code>)</td>
           </tr>
           <tr>
             <td><code>key-white</code></td>
-            <td>White keys (forwarded)</td>
+            <td>White keys (forwarded from <code>mq-piano</code>)</td>
           </tr>
           <tr>
             <td><code>key-black</code></td>
-            <td>Black keys (forwarded)</td>
+            <td>Black keys (forwarded from <code>mq-piano</code>)</td>
           </tr>
         </tbody>
       </table>
@@ -273,7 +281,7 @@
 
     <section>
       <h2>Basic — triads</h2>
-      <h3>Major, minor, diminished</h3>
+      <p class="desc">Major, minor, diminished.</p>
       <div class="row">
         <mq-piano-chord chord="C"></mq-piano-chord>
         <mq-piano-chord chord="Ebm"></mq-piano-chord>
@@ -283,7 +291,7 @@
 
     <section>
       <h2>Basic — seventh chords</h2>
-      <h3>Major 7, minor 7, dominant 7</h3>
+      <p class="desc">Major 7, minor 7, dominant 7.</p>
       <div class="row">
         <mq-piano-chord chord="Bbmaj7"></mq-piano-chord>
         <mq-piano-chord chord="C#m7"></mq-piano-chord>
@@ -293,7 +301,7 @@
 
     <section>
       <h2>Note labels</h2>
-      <h3><code>note-labels</code> attribute</h3>
+      <p class="desc">Display note names on active keys with the <code>note-labels</code> attribute.</p>
       <div class="row">
         <mq-piano-chord chord="F#maj7" note-labels></mq-piano-chord>
         <mq-piano-chord chord="Bbm7" note-labels></mq-piano-chord>
@@ -303,34 +311,31 @@
 
     <section>
       <h2>Inversions — slash chords</h2>
-      <h3>Chord over bass note</h3>
+      <p class="desc">Chord over a specific bass note.</p>
       <div class="row">
-        <mq-piano-chord chord="C" note-labels></mq-piano-chord>
-        <mq-piano-chord chord="C/E" note-labels></mq-piano-chord>
-        <mq-piano-chord chord="C/G" note-labels></mq-piano-chord>
+        <div>
+          <mq-piano-chord chord="C" note-labels></mq-piano-chord>
+          <p class="caption">Root position</p>
+        </div>
+        <div>
+          <mq-piano-chord chord="C/E" note-labels></mq-piano-chord>
+          <p class="caption">1st inversion</p>
+        </div>
+        <div>
+          <mq-piano-chord chord="C/G" note-labels></mq-piano-chord>
+          <p class="caption">2nd inversion</p>
+        </div>
       </div>
-      <p class="caption">Root position · 1st inversion · 2nd inversion</p>
     </section>
 
     <section>
       <h2>Style — active color</h2>
-      <h3><code>--mq-piano-chord-active-color</code></h3>
+      <p class="desc">Customize via <code>--mq-piano-chord-active-color</code>.</p>
       <div class="row">
         <mq-piano-chord chord="Bbm" style="--mq-piano-chord-active-color: #c0392b"></mq-piano-chord>
         <mq-piano-chord chord="Bbm" style="--mq-piano-chord-active-color: #27ae60"></mq-piano-chord>
         <mq-piano-chord chord="Bbm" style="--mq-piano-chord-active-color: #8e44ad"></mq-piano-chord>
       </div>
-    </section>
-
-    <section>
-      <h2>Progression</h2>
-      <h3>ii – V – I in Db major</h3>
-      <div class="row">
-        <mq-piano-chord chord="Ebm7" note-labels></mq-piano-chord>
-        <mq-piano-chord chord="Ab7" note-labels></mq-piano-chord>
-        <mq-piano-chord chord="Dbmaj7" note-labels></mq-piano-chord>
-      </div>
-      <p class="caption">ii7 — V7 — Imaj7</p>
     </section>
 
     <footer><code>&lt;mq-piano-chord&gt;</code> · musique</footer>

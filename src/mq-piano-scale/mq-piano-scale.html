@@ -99,9 +99,12 @@
         flex-wrap: wrap;
       }
 
-      .row > mq-piano-scale {
+      .row > * {
         flex: 1;
         min-width: 200px;
+      }
+
+      .row mq-piano-scale {
         height: 200px;
       }
 
@@ -184,8 +187,9 @@
     <header>
       <h1><code>&lt;mq-piano-scale&gt;</code></h1>
       <p>
-        A Web Component that displays piano scale diagrams. Pass a scale name, get a highlighted
-        keyboard.
+        Piano keyboard with scale visualization. Major, minor, pentatonic, blues,
+        modes (dorian, phrygian, lydian…), and more. Distinct root color,
+        <code>note-labels</code>, and <code>degree-labels</code>.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
@@ -194,7 +198,6 @@
       <h2>Install</h2>
       <pre><code>npm install @hsablonniere/musiq</code></pre>
       <pre><code>import '@hsablonniere/musiq/mq-piano-scale';</code></pre>
-      <pre><code>&lt;mq-piano-scale scale="C major"&gt;&lt;/mq-piano-scale&gt;</code></pre>
     </section>
 
     <section class="api">
@@ -208,6 +211,7 @@
             <th>Property</th>
             <th>Type</th>
             <th>Default</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
@@ -216,18 +220,21 @@
             <td><code>scale</code></td>
             <td><code>string</code></td>
             <td>—</td>
+            <td>Scale name (e.g. <code>"C major"</code>, <code>"A minor pentatonic"</code>, <code>"D dorian"</code>). See <a href="https://github.com/tonaljs/tonal/tree/main/packages/scale-type">tonal scale-type</a> for the full list of supported scales</td>
           </tr>
           <tr>
             <td><code>note-labels</code></td>
             <td><code>noteLabels</code></td>
             <td><code>boolean</code></td>
             <td><code>false</code></td>
+            <td>Show note names on active keys</td>
           </tr>
           <tr>
             <td><code>degree-labels</code></td>
             <td><code>degreeLabels</code></td>
             <td><code>boolean</code></td>
             <td><code>false</code></td>
+            <td>Show scale degree numbers (1–7) on active keys</td>
           </tr>
         </tbody>
       </table>
@@ -238,16 +245,19 @@
           <tr>
             <th>Property</th>
             <th>Default</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>--mq-piano-scale-active-color</code></td>
             <td><span class="swatch" style="background: #27ae60"></span><code>#27ae60</code></td>
+            <td>Fill color for scale note keys</td>
           </tr>
           <tr>
             <td><code>--mq-piano-scale-root-color</code></td>
             <td><span class="swatch" style="background: #1e8449"></span><code>#1e8449</code></td>
+            <td>Fill color for root note keys</td>
           </tr>
         </tbody>
       </table>
@@ -257,53 +267,42 @@
         <thead>
           <tr>
             <th>Part</th>
-            <th>Target</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>title</code></td>
-            <td>Scale name heading</td>
+            <td>Scale name heading above the keyboard</td>
           </tr>
           <tr>
             <td><code>key</code></td>
-            <td>All keys (forwarded)</td>
+            <td>All keys (forwarded from <code>mq-piano</code>)</td>
           </tr>
           <tr>
             <td><code>key-white</code></td>
-            <td>White keys (forwarded)</td>
+            <td>White keys (forwarded from <code>mq-piano</code>)</td>
           </tr>
           <tr>
             <td><code>key-black</code></td>
-            <td>Black keys (forwarded)</td>
+            <td>Black keys (forwarded from <code>mq-piano</code>)</td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section>
-      <h2>Basic — major scales</h2>
-      <h3>Common major scales</h3>
+      <h2>Basic — major & minor scales</h2>
       <div class="row">
         <mq-piano-scale scale="C major"></mq-piano-scale>
         <mq-piano-scale scale="G major"></mq-piano-scale>
-        <mq-piano-scale scale="F major"></mq-piano-scale>
-      </div>
-    </section>
-
-    <section>
-      <h2>Basic — minor scales</h2>
-      <h3>Natural minor</h3>
-      <div class="row">
         <mq-piano-scale scale="A minor"></mq-piano-scale>
-        <mq-piano-scale scale="D minor"></mq-piano-scale>
-        <mq-piano-scale scale="E minor"></mq-piano-scale>
       </div>
     </section>
 
     <section>
       <h2>Note labels</h2>
-      <h3><code>note-labels</code> attribute</h3>
+      <p class="desc">Display note names on active keys with the <code>note-labels</code> attribute.</p>
       <div class="row">
         <mq-piano-scale scale="Bb major" note-labels></mq-piano-scale>
         <mq-piano-scale scale="F# minor" note-labels></mq-piano-scale>
@@ -313,7 +312,7 @@
 
     <section>
       <h2>Degree labels</h2>
-      <h3><code>degree-labels</code> attribute</h3>
+      <p class="desc">Show scale degree numbers with the <code>degree-labels</code> attribute.</p>
       <div class="row">
         <mq-piano-scale scale="C major" degree-labels></mq-piano-scale>
         <mq-piano-scale scale="A minor" degree-labels note-labels></mq-piano-scale>
@@ -322,31 +321,45 @@
 
     <section>
       <h2>Modes</h2>
-      <h3>Church modes from C</h3>
+      <p class="desc">Church modes from C</p>
       <div class="row">
-        <mq-piano-scale scale="D dorian" note-labels></mq-piano-scale>
-        <mq-piano-scale scale="E phrygian" note-labels></mq-piano-scale>
-        <mq-piano-scale scale="F lydian" note-labels></mq-piano-scale>
+        <div>
+          <mq-piano-scale scale="D dorian" note-labels></mq-piano-scale>
+          <p class="caption">Dorian</p>
+        </div>
+        <div>
+          <mq-piano-scale scale="E phrygian" note-labels></mq-piano-scale>
+          <p class="caption">Phrygian</p>
+        </div>
+        <div>
+          <mq-piano-scale scale="F lydian" note-labels></mq-piano-scale>
+          <p class="caption">Lydian</p>
+        </div>
       </div>
-      <p class="caption">Dorian · Phrygian · Lydian</p>
     </section>
 
     <section>
       <h2>Exotic scales</h2>
-      <h3>Pentatonic, blues, whole tone</h3>
+      <p class="desc">Pentatonic, blues, whole tone.</p>
       <div class="row">
-        <mq-piano-scale scale="C major pentatonic" note-labels></mq-piano-scale>
-        <mq-piano-scale scale="A blues" note-labels></mq-piano-scale>
-        <mq-piano-scale scale="C whole tone" note-labels></mq-piano-scale>
+        <div>
+          <mq-piano-scale scale="C major pentatonic" note-labels></mq-piano-scale>
+          <p class="caption">Major pentatonic</p>
+        </div>
+        <div>
+          <mq-piano-scale scale="A blues" note-labels></mq-piano-scale>
+          <p class="caption">Blues</p>
+        </div>
+        <div>
+          <mq-piano-scale scale="C whole tone" note-labels></mq-piano-scale>
+          <p class="caption">Whole tone</p>
+        </div>
       </div>
-      <p class="caption">Major pentatonic · Blues · Whole tone</p>
     </section>
 
     <section>
       <h2>Style — active color</h2>
-      <h3>
-        <code>--mq-piano-scale-active-color</code> &amp; <code>--mq-piano-scale-root-color</code>
-      </h3>
+      <p class="desc">Customize via <code>--mq-piano-scale-active-color</code> and <code>--mq-piano-scale-root-color</code>.</p>
       <div class="row">
         <mq-piano-scale
           scale="C major"
@@ -361,16 +374,6 @@
           style="--mq-piano-scale-active-color: #8e44ad; --mq-piano-scale-root-color: #6c3483"
         ></mq-piano-scale>
       </div>
-    </section>
-
-    <section>
-      <h2>Comparison</h2>
-      <h3>Parallel major vs minor</h3>
-      <div class="row">
-        <mq-piano-scale scale="C major" note-labels degree-labels></mq-piano-scale>
-        <mq-piano-scale scale="C minor" note-labels degree-labels></mq-piano-scale>
-      </div>
-      <p class="caption">C major — C minor</p>
     </section>
 
     <footer><code>&lt;mq-piano-scale&gt;</code> · musique</footer>

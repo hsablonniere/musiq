@@ -99,7 +99,7 @@
         flex-wrap: wrap;
       }
 
-      .row > mq-fretboard-scale {
+      .row > * {
         flex: 1;
         min-width: 300px;
       }
@@ -183,8 +183,9 @@
     <header>
       <h1><code>&lt;mq-fretboard-scale&gt;</code></h1>
       <p>
-        A Web Component that displays scale patterns on a guitar fretboard. Pass a scale name, get a
-        full-neck diagram with highlighted notes.
+        Fretboard with scale visualization across the full neck. Custom tunings
+        (drop D, ukulele…), configurable fret range, <code>note-labels</code>,
+        <code>degree-labels</code>, and <code>left-handed</code>.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
@@ -193,7 +194,6 @@
       <h2>Install</h2>
       <pre><code>npm install @hsablonniere/musiq</code></pre>
       <pre><code>import '@hsablonniere/musiq/mq-fretboard-scale';</code></pre>
-      <pre><code>&lt;mq-fretboard-scale scale="A minor pentatonic"&gt;&lt;/mq-fretboard-scale&gt;</code></pre>
     </section>
 
     <section class="api">
@@ -207,6 +207,7 @@
             <th>Property</th>
             <th>Type</th>
             <th>Default</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
@@ -215,42 +216,56 @@
             <td><code>scale</code></td>
             <td><code>string</code></td>
             <td>—</td>
+            <td>Scale name (e.g. <code>"C major"</code>, <code>"A minor pentatonic"</code>, <code>"D dorian"</code>). See <a href="https://github.com/tonaljs/tonal/tree/main/packages/scale-type">tonal scale-type</a> for the full list of supported scales</td>
           </tr>
           <tr>
             <td><code>tuning</code></td>
             <td><code>tuning</code></td>
             <td><code>string</code></td>
             <td><code>'E,A,D,G,B,E'</code></td>
+            <td>Open string notes, comma-separated from low to high (e.g. <code>"D,A,D,G,B,E"</code> for drop D)</td>
           </tr>
           <tr>
             <td><code>start-fret</code></td>
             <td><code>startFret</code></td>
             <td><code>number</code></td>
             <td><code>0</code></td>
+            <td>First fret displayed. 0 includes open strings</td>
           </tr>
           <tr>
             <td><code>end-fret</code></td>
             <td><code>endFret</code></td>
             <td><code>number</code></td>
             <td><code>12</code></td>
+            <td>Last fret displayed</td>
           </tr>
           <tr>
             <td><code>note-labels</code></td>
             <td><code>noteLabels</code></td>
             <td><code>boolean</code></td>
             <td><code>false</code></td>
+            <td>Show note names on dots</td>
           </tr>
           <tr>
             <td><code>degree-labels</code></td>
             <td><code>degreeLabels</code></td>
             <td><code>boolean</code></td>
             <td><code>false</code></td>
+            <td>Show scale degree numbers on dots</td>
           </tr>
           <tr>
             <td><code>left-handed</code></td>
             <td><code>leftHanded</code></td>
             <td><code>boolean</code></td>
             <td><code>false</code></td>
+            <td>Mirror the fretboard for left-handed players</td>
+          </tr>
+          <tr>
+            <td><code>inlays</code></td>
+            <td><code>inlays</code></td>
+            <td><code>boolean</code></td>
+            <td><code>false</code></td>
+            <td>Show fret position markers (inlays) on the fretboard</td>
           </tr>
         </tbody>
       </table>
@@ -261,16 +276,19 @@
           <tr>
             <th>Property</th>
             <th>Default</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>--mq-fretboard-scale-active-color</code></td>
             <td><span class="swatch" style="background: #2980b9"></span><code>#2980b9</code></td>
+            <td>Dot color for scale notes</td>
           </tr>
           <tr>
             <td><code>--mq-fretboard-scale-root-color</code></td>
             <td><span class="swatch" style="background: #c0392b"></span><code>#c0392b</code></td>
+            <td>Dot color for root notes</td>
           </tr>
         </tbody>
       </table>
@@ -280,21 +298,21 @@
         <thead>
           <tr>
             <th>Part</th>
-            <th>Target</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>title</code></td>
-            <td>Scale name heading</td>
+            <td>Scale name heading above the fretboard</td>
           </tr>
           <tr>
             <td><code>dot</code></td>
-            <td>Scale note dots</td>
+            <td>Scale note dots on the fretboard</td>
           </tr>
           <tr>
             <td><code>fret-number</code></td>
-            <td>Fret number labels (forwarded)</td>
+            <td>Fret number labels (forwarded from <code>mq-fretboard</code>)</td>
           </tr>
         </tbody>
       </table>
@@ -302,49 +320,43 @@
 
     <section>
       <h2>Basic — major scales</h2>
-      <h3>C major</h3>
       <mq-fretboard-scale scale="C major" note-labels></mq-fretboard-scale>
     </section>
 
     <section>
       <h2>Minor scales</h2>
-      <h3>A minor (natural)</h3>
       <mq-fretboard-scale scale="A minor" note-labels></mq-fretboard-scale>
     </section>
 
     <section>
       <h2>Pentatonic</h2>
-      <h3>A minor pentatonic</h3>
       <mq-fretboard-scale scale="A minor pentatonic" note-labels></mq-fretboard-scale>
     </section>
 
     <section>
       <h2>Blues</h2>
-      <h3>A blues</h3>
       <mq-fretboard-scale scale="A blues" note-labels></mq-fretboard-scale>
     </section>
 
     <section>
       <h2>Modes</h2>
-      <h3>D dorian</h3>
       <mq-fretboard-scale scale="D dorian" note-labels></mq-fretboard-scale>
     </section>
 
     <section>
       <h2>Degree labels</h2>
-      <h3><code>degree-labels</code> — C major</h3>
+      <p class="desc">Show scale degree numbers with the <code>degree-labels</code> attribute.</p>
       <mq-fretboard-scale scale="C major" degree-labels></mq-fretboard-scale>
     </section>
 
     <section>
       <h2>Both labels</h2>
-      <h3><code>note-labels</code> + <code>degree-labels</code></h3>
+      <p class="desc">Combine <code>note-labels</code> and <code>degree-labels</code>.</p>
       <mq-fretboard-scale scale="E minor pentatonic" note-labels degree-labels></mq-fretboard-scale>
     </section>
 
     <section>
       <h2>Fret range</h2>
-      <h3><code>start-fret="5" end-fret="12"</code></h3>
       <mq-fretboard-scale
         scale="C major"
         note-labels
@@ -355,67 +367,48 @@
 
     <section>
       <h2>Extended range</h2>
-      <h3><code>end-fret="21"</code></h3>
       <mq-fretboard-scale scale="F harmonic minor" note-labels end-fret="21"></mq-fretboard-scale>
     </section>
 
     <section>
       <h2>Left-handed</h2>
-      <h3><code>left-handed</code></h3>
       <div class="row">
-        <mq-fretboard-scale scale="G major" note-labels end-fret="5"></mq-fretboard-scale>
-        <mq-fretboard-scale
-          scale="G major"
-          note-labels
-          end-fret="5"
-          left-handed
-        ></mq-fretboard-scale>
+        <div>
+          <mq-fretboard-scale scale="G major" note-labels end-fret="5"></mq-fretboard-scale>
+          <p class="caption">Right-handed</p>
+        </div>
+        <div>
+          <mq-fretboard-scale
+            scale="G major"
+            note-labels
+            end-fret="5"
+            left-handed
+          ></mq-fretboard-scale>
+          <p class="caption">Left-handed</p>
+        </div>
       </div>
-      <p class="caption">Right-handed · Left-handed</p>
     </section>
 
     <section>
       <h2>Custom tuning</h2>
-      <h3>Drop D — <code>tuning="D,A,D,G,B,E"</code></h3>
+      <p class="desc">Drop D — <code>tuning="D,A,D,G,B,E"</code></p>
       <mq-fretboard-scale scale="D minor" note-labels tuning="D,A,D,G,B,E"></mq-fretboard-scale>
     </section>
 
     <section>
       <h2>Ukulele</h2>
-      <h3><code>tuning="G,C,E,A"</code></h3>
       <mq-fretboard-scale scale="C major" note-labels tuning="G,C,E,A"></mq-fretboard-scale>
     </section>
 
     <section>
       <h2>Style — colors</h2>
-      <h3>
-        <code>--mq-fretboard-scale-active-color</code> &amp;
-        <code>--mq-fretboard-scale-root-color</code>
-      </h3>
+      <p class="desc">Customize via <code>--mq-fretboard-scale-active-color</code> and <code>--mq-fretboard-scale-root-color</code>.</p>
       <mq-fretboard-scale
         scale="C major"
         note-labels
         end-fret="7"
         style="--mq-fretboard-scale-active-color: #8e44ad; --mq-fretboard-scale-root-color: #6c3483"
       ></mq-fretboard-scale>
-    </section>
-
-    <section>
-      <h2>Comparison</h2>
-      <h3>Major vs minor pentatonic</h3>
-      <div class="row">
-        <mq-fretboard-scale
-          scale="C major pentatonic"
-          note-labels
-          end-fret="7"
-        ></mq-fretboard-scale>
-        <mq-fretboard-scale
-          scale="C minor pentatonic"
-          note-labels
-          end-fret="7"
-        ></mq-fretboard-scale>
-      </div>
-      <p class="caption">C major pentatonic · C minor pentatonic</p>
     </section>
 
     <footer><code>&lt;mq-fretboard-scale&gt;</code> · musique</footer>
