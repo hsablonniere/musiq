@@ -18,6 +18,9 @@ for (const dir of componentDirs) {
 
 export default defineConfig({
   base: '/musiq/',
+  esbuild: {
+    target: 'es2022',
+  },
   build: {
     outDir: 'dist-demo',
     rollupOptions: {
