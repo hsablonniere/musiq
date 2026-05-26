@@ -88,13 +88,54 @@
         text-align: center;
         margin-top: 4rem;
       }
+
+      header a {
+        color: var(--accent);
+      }
+
+      .install {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 1.75rem 2rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .install h2 {
+        font-size: 1.05rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--accent);
+        margin: 0 0 0.75rem;
+      }
+
+      pre {
+        background: #f0f0ec;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-size: 0.88rem;
+        margin: 0.5rem 0;
+      }
+
+      pre code {
+        background: none;
+        padding: 0;
+      }
     </style>
   </head>
   <body>
     <header>
       <h1>musiq</h1>
       <p>Web Components for music visualization — piano, fretboard, and more.</p>
+      <p><a href="https://github.com/hsablonniere/musiq">GitHub</a> · <a href="https://www.npmjs.com/package/@hsablonniere/musiq">npm</a></p>
     </header>
+
+    <section class="install">
+      <h2>Install</h2>
+      <pre><code>npm install @hsablonniere/musiq</code></pre>
+      <pre><code>import '@hsablonniere/musiq';</code></pre>
+    </section>
 
     <div class="components">
       <a href="src/mq-piano/mq-piano.html">
