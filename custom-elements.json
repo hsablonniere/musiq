@@ -1,0 +1,1033 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MqFretboard",
+          "declaration": {
+            "name": "MqFretboard",
+            "module": "./mq-fretboard/mq-fretboard.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "MqFretboardChord",
+          "declaration": {
+            "name": "MqFretboardChord",
+            "module": "./mq-fretboard-chord/mq-fretboard-chord.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "MqFretboardScale",
+          "declaration": {
+            "name": "MqFretboardScale",
+            "module": "./mq-fretboard-scale/mq-fretboard-scale.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "MqPiano",
+          "declaration": {
+            "name": "MqPiano",
+            "module": "./mq-piano/mq-piano.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "MqPianoChord",
+          "declaration": {
+            "name": "MqPianoChord",
+            "module": "./mq-piano-chord/mq-piano-chord.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "MqPianoScale",
+          "declaration": {
+            "name": "MqPianoScale",
+            "module": "./mq-piano-scale/mq-piano-scale.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "noteToPianoKeysName",
+          "return": {
+            "type": {
+              "text": "string"
+            }
+          },
+          "parameters": [
+            {
+              "name": "note",
+              "type": {
+                "text": "string"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "assignOctaves",
+          "return": {
+            "type": {
+              "text": "string[]"
+            }
+          },
+          "parameters": [
+            {
+              "name": "pitchClasses",
+              "type": {
+                "text": "string[]"
+              }
+            },
+            {
+              "name": "startOctave",
+              "type": {
+                "text": "number"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "noteToPianoKeysName",
+          "declaration": {
+            "name": "noteToPianoKeysName",
+            "module": "src/utils.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "assignOctaves",
+          "declaration": {
+            "name": "assignOctaves",
+            "module": "src/utils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/mq-piano/mq-piano.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MqPiano",
+          "members": [
+            {
+              "kind": "field",
+              "name": "startNote",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "start-note"
+            },
+            {
+              "kind": "field",
+              "name": "endNote",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "end-note"
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "\"accurate\" | \"centered\""
+              },
+              "default": "\"accurate\"",
+              "attribute": "mode"
+            },
+            {
+              "kind": "field",
+              "name": "preserveRatio",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "preserve-ratio"
+            },
+            {
+              "kind": "field",
+              "name": "_startSemitone",
+              "privacy": "private",
+              "default": "parseSemitone(DEFAULT_START_NOTE)!"
+            },
+            {
+              "kind": "field",
+              "name": "_endSemitone",
+              "privacy": "private",
+              "default": "parseSemitone(DEFAULT_END_NOTE)!"
+            },
+            {
+              "kind": "method",
+              "name": "_renderKey",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "note",
+                  "type": {
+                    "text": "Note"
+                  }
+                },
+                {
+                  "name": "octave",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "w",
+                  "optional": true,
+                  "type": {
+                    "text": "{ top: number; bottom: number }"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_borderTpl",
+              "privacy": "private",
+              "default": "html`<div class=\"border\"></div>`"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "start-note",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "startNote",
+              "attribute": "start-note"
+            },
+            {
+              "name": "end-note",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "endNote",
+              "attribute": "end-note"
+            },
+            {
+              "name": "mode",
+              "type": {
+                "text": "\"accurate\" | \"centered\""
+              },
+              "default": "\"accurate\"",
+              "fieldName": "mode",
+              "attribute": "mode"
+            },
+            {
+              "name": "preserve-ratio",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "preserveRatio",
+              "attribute": "preserve-ratio"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mq-piano",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MqPiano",
+          "declaration": {
+            "name": "MqPiano",
+            "module": "src/mq-piano/mq-piano.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mq-piano",
+          "declaration": {
+            "name": "MqPiano",
+            "module": "src/mq-piano/mq-piano.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mq-piano",
+          "declaration": {
+            "name": "MqPiano",
+            "module": "src/mq-piano/mq-piano.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/mq-fretboard/mq-fretboard.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MqFretboard",
+          "members": [
+            {
+              "kind": "field",
+              "name": "strings",
+              "type": {
+                "text": "number"
+              },
+              "default": "6",
+              "attribute": "strings"
+            },
+            {
+              "kind": "field",
+              "name": "startFret",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "attribute": "start-fret"
+            },
+            {
+              "kind": "field",
+              "name": "endFret",
+              "type": {
+                "text": "number"
+              },
+              "default": "12",
+              "attribute": "end-fret"
+            },
+            {
+              "kind": "field",
+              "name": "orientation",
+              "type": {
+                "text": "\"horizontal\" | \"vertical\""
+              },
+              "default": "\"horizontal\"",
+              "attribute": "orientation",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "fretNumbers",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "fret-numbers"
+            },
+            {
+              "kind": "field",
+              "name": "inlays",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "inlays"
+            },
+            {
+              "kind": "field",
+              "name": "fullNeck",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "full-neck"
+            },
+            {
+              "kind": "field",
+              "name": "leftHanded",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "left-handed",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "extraSlots",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "extra-slots"
+            },
+            {
+              "kind": "method",
+              "name": "_place",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "neckPos",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "stringPos",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "name": "strings",
+              "type": {
+                "text": "number"
+              },
+              "default": "6",
+              "fieldName": "strings",
+              "attribute": "strings"
+            },
+            {
+              "name": "start-fret",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "fieldName": "startFret",
+              "attribute": "start-fret"
+            },
+            {
+              "name": "end-fret",
+              "type": {
+                "text": "number"
+              },
+              "default": "12",
+              "fieldName": "endFret",
+              "attribute": "end-fret"
+            },
+            {
+              "name": "orientation",
+              "type": {
+                "text": "\"horizontal\" | \"vertical\""
+              },
+              "default": "\"horizontal\"",
+              "fieldName": "orientation",
+              "attribute": "orientation"
+            },
+            {
+              "name": "fret-numbers",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "fretNumbers",
+              "attribute": "fret-numbers"
+            },
+            {
+              "name": "inlays",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "inlays",
+              "attribute": "inlays"
+            },
+            {
+              "name": "full-neck",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "fullNeck",
+              "attribute": "full-neck"
+            },
+            {
+              "name": "left-handed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "leftHanded",
+              "attribute": "left-handed"
+            },
+            {
+              "name": "extra-slots",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "extraSlots",
+              "attribute": "extra-slots"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mq-fretboard",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MqFretboard",
+          "declaration": {
+            "name": "MqFretboard",
+            "module": "src/mq-fretboard/mq-fretboard.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mq-fretboard",
+          "declaration": {
+            "name": "MqFretboard",
+            "module": "src/mq-fretboard/mq-fretboard.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mq-fretboard",
+          "declaration": {
+            "name": "MqFretboard",
+            "module": "src/mq-fretboard/mq-fretboard.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/mq-piano-chord/mq-piano-chord.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MqPianoChord",
+          "members": [
+            {
+              "kind": "field",
+              "name": "chord",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "chord"
+            },
+            {
+              "kind": "field",
+              "name": "noteLabels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "note-labels"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "chord",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "chord",
+              "attribute": "chord"
+            },
+            {
+              "name": "note-labels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "noteLabels",
+              "attribute": "note-labels"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mq-piano-chord",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MqPianoChord",
+          "declaration": {
+            "name": "MqPianoChord",
+            "module": "src/mq-piano-chord/mq-piano-chord.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mq-piano-chord",
+          "declaration": {
+            "name": "MqPianoChord",
+            "module": "src/mq-piano-chord/mq-piano-chord.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mq-piano-chord",
+          "declaration": {
+            "name": "MqPianoChord",
+            "module": "src/mq-piano-chord/mq-piano-chord.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/mq-piano-scale/mq-piano-scale.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MqPianoScale",
+          "members": [
+            {
+              "kind": "field",
+              "name": "scale",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "scale"
+            },
+            {
+              "kind": "field",
+              "name": "noteLabels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "note-labels"
+            },
+            {
+              "kind": "field",
+              "name": "degreeLabels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "degree-labels"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "scale",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "scale",
+              "attribute": "scale"
+            },
+            {
+              "name": "note-labels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "noteLabels",
+              "attribute": "note-labels"
+            },
+            {
+              "name": "degree-labels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "degreeLabels",
+              "attribute": "degree-labels"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mq-piano-scale",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MqPianoScale",
+          "declaration": {
+            "name": "MqPianoScale",
+            "module": "src/mq-piano-scale/mq-piano-scale.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mq-piano-scale",
+          "declaration": {
+            "name": "MqPianoScale",
+            "module": "src/mq-piano-scale/mq-piano-scale.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mq-piano-scale",
+          "declaration": {
+            "name": "MqPianoScale",
+            "module": "src/mq-piano-scale/mq-piano-scale.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/mq-fretboard-chord/mq-fretboard-chord.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MqFretboardChord",
+          "members": [
+            {
+              "kind": "field",
+              "name": "chord",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "chord"
+            },
+            {
+              "kind": "field",
+              "name": "instrument",
+              "type": {
+                "text": "Instrument"
+              },
+              "default": "\"guitar\"",
+              "attribute": "instrument"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "attribute": "position"
+            },
+            {
+              "kind": "field",
+              "name": "leftHanded",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "left-handed",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "fingerLabels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "finger-labels"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "chord",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "chord",
+              "attribute": "chord"
+            },
+            {
+              "name": "instrument",
+              "type": {
+                "text": "Instrument"
+              },
+              "default": "\"guitar\"",
+              "fieldName": "instrument",
+              "attribute": "instrument"
+            },
+            {
+              "name": "position",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "position",
+              "attribute": "position"
+            },
+            {
+              "name": "left-handed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "leftHanded",
+              "attribute": "left-handed"
+            },
+            {
+              "name": "finger-labels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "fingerLabels",
+              "attribute": "finger-labels"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mq-fretboard-chord",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MqFretboardChord",
+          "declaration": {
+            "name": "MqFretboardChord",
+            "module": "src/mq-fretboard-chord/mq-fretboard-chord.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mq-fretboard-chord",
+          "declaration": {
+            "name": "MqFretboardChord",
+            "module": "src/mq-fretboard-chord/mq-fretboard-chord.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mq-fretboard-chord",
+          "declaration": {
+            "name": "MqFretboardChord",
+            "module": "src/mq-fretboard-chord/mq-fretboard-chord.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/mq-fretboard-scale/mq-fretboard-scale.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MqFretboardScale",
+          "members": [
+            {
+              "kind": "field",
+              "name": "scale",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "attribute": "scale"
+            },
+            {
+              "kind": "field",
+              "name": "tuning",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"E,A,D,G,B,E\"",
+              "attribute": "tuning"
+            },
+            {
+              "kind": "field",
+              "name": "startFret",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "attribute": "start-fret"
+            },
+            {
+              "kind": "field",
+              "name": "endFret",
+              "type": {
+                "text": "number"
+              },
+              "default": "12",
+              "attribute": "end-fret"
+            },
+            {
+              "kind": "field",
+              "name": "noteLabels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "note-labels"
+            },
+            {
+              "kind": "field",
+              "name": "degreeLabels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "degree-labels"
+            },
+            {
+              "kind": "field",
+              "name": "leftHanded",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "left-handed",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "inlays",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "inlays"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "scale",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "fieldName": "scale",
+              "attribute": "scale"
+            },
+            {
+              "name": "tuning",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"E,A,D,G,B,E\"",
+              "fieldName": "tuning",
+              "attribute": "tuning"
+            },
+            {
+              "name": "start-fret",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "fieldName": "startFret",
+              "attribute": "start-fret"
+            },
+            {
+              "name": "end-fret",
+              "type": {
+                "text": "number"
+              },
+              "default": "12",
+              "fieldName": "endFret",
+              "attribute": "end-fret"
+            },
+            {
+              "name": "note-labels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "noteLabels",
+              "attribute": "note-labels"
+            },
+            {
+              "name": "degree-labels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "degreeLabels",
+              "attribute": "degree-labels"
+            },
+            {
+              "name": "left-handed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "leftHanded",
+              "attribute": "left-handed"
+            },
+            {
+              "name": "inlays",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "inlays",
+              "attribute": "inlays"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "mq-fretboard-scale",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MqFretboardScale",
+          "declaration": {
+            "name": "MqFretboardScale",
+            "module": "src/mq-fretboard-scale/mq-fretboard-scale.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mq-fretboard-scale",
+          "declaration": {
+            "name": "MqFretboardScale",
+            "module": "src/mq-fretboard-scale/mq-fretboard-scale.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "mq-fretboard-scale",
+          "declaration": {
+            "name": "MqFretboardScale",
+            "module": "src/mq-fretboard-scale/mq-fretboard-scale.ts"
+          }
+        }
+      ]
+    }
+  ]
+}
