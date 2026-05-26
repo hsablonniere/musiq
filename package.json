@@ -11,6 +11,9 @@
     "dev": "vite",
     "build": "vite build && tsc --declaration --emitDeclarationOnly --outDir dist",
     "preview": "vite preview",
+    "format": "oxfmt --write src/",
+    "format:check": "oxfmt src/",
+    "lint": "oxlint src/",
     "typecheck": "tsgo --noEmit",
     "prepublishOnly": "npm run build"
   },
@@ -22,6 +25,8 @@
   },
   "devDependencies": {
     "@typescript/native-preview": "^7.0.0-dev.20260524.1",
+    "oxfmt": "^0.51.0",
+    "oxlint": "^1.66.0",
     "typescript": "^5.5.0",
     "vite": "^6.0.0"
   }
