@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&lt;mq-piano&gt; — demo</title>
+    <style>
+      :root {
+        --bg: #fafaf8;
+        --fg: #1a1a1a;
+        --muted: #6b6b6b;
+        --accent: #c0392b;
+        --card: #fff;
+        --line: #e6e6e2;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: system-ui, sans-serif;
+        line-height: 1.6;
+        background: var(--bg);
+        color: var(--fg);
+        margin: 0 auto;
+        padding: 3rem 2rem 6rem;
+        max-width: 80rem;
+      }
+
+      header {
+        border-bottom: 2px solid var(--fg);
+        margin-bottom: 3rem;
+        padding-bottom: 1.5rem;
+      }
+
+      h1 {
+        font-size: 2.4rem;
+        margin: 0 0 0.25rem;
+      }
+
+      h1 code {
+        background: var(--fg);
+        color: var(--bg);
+        padding: 0.1em 0.3em;
+        border-radius: 4px;
+      }
+
+      header p {
+        color: var(--muted);
+        margin: 0.5rem 0 0;
+      }
+
+      header a {
+        color: var(--accent);
+      }
+
+      section {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 1.75rem 2rem 2rem;
+        margin-bottom: 2rem;
+      }
+
+      h2 {
+        font-size: 1.05rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--accent);
+        margin: 0 0 0.4rem;
+      }
+
+      h3 {
+        font-size: 1.4rem;
+        margin: 0 0 0.5rem;
+      }
+
+      .desc {
+        color: var(--muted);
+        margin: 0 0 1.5rem;
+        max-width: 46rem;
+      }
+
+      .desc code,
+      .api code,
+      h2 code,
+      footer code {
+        background: #f0f0ec;
+        padding: 0.1em 0.35em;
+        border-radius: 4px;
+        font-size: 0.88em;
+        color: var(--fg);
+      }
+
+      .demo {
+        height: 240px;
+      }
+
+      .demo-tall {
+        height: 320px;
+      }
+
+      .demo-short {
+        height: 150px;
+      }
+
+      .row {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .row > mq-piano {
+        flex: 1;
+        min-width: 220px;
+        height: 200px;
+      }
+
+      .caption {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin: 0.6rem 0 0;
+        text-align: center;
+      }
+
+      footer {
+        color: var(--muted);
+        font-size: 0.85rem;
+        text-align: center;
+        margin-top: 4rem;
+      }
+
+      .api h3 {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+        margin: 1.5rem 0 0.4rem;
+      }
+
+      .api h3:first-of-type {
+        margin-top: 0.25rem;
+      }
+
+      .api table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+      }
+
+      .api th {
+        text-align: left;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+        border-bottom: 2px solid var(--line);
+        padding: 0.3rem 0.75rem 0.3rem 0;
+        font-weight: 600;
+      }
+
+      .api td {
+        padding: 0.3rem 0.75rem 0.3rem 0;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+
+      .api .swatch {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        border-radius: 2px;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        vertical-align: baseline;
+        margin-right: 0.3em;
+      }
+    </style>
+    <script type="module" src="./mq-piano.ts"></script>
+  </head>
+  <body>
+    <header>
+      <h1><code>&lt;mq-piano&gt;</code></h1>
+      <p>
+        A Web Component that renders a piano keyboard with realistic geometry. Configurable range,
+        CSS-driven borders, stylable keys via
+        <code>::part()</code>, and per-note annotations via named slots.
+      </p>
+      <p><a href="../../">← Back to index</a></p>
+    </header>
+
+    <section class="api">
+      <h2>API</h2>
+
+      <h3>Attributes / Properties</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Property</th>
+            <th>Type</th>
+            <th>Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>start-note</code></td>
+            <td><code>startNote</code></td>
+            <td><code>string</code></td>
+            <td><code>C3</code></td>
+          </tr>
+          <tr>
+            <td><code>end-note</code></td>
+            <td><code>endNote</code></td>
+            <td><code>string</code></td>
+            <td><code>E4</code></td>
+          </tr>
+          <tr>
+            <td><code>mode</code></td>
+            <td><code>mode</code></td>
+            <td><code>'accurate' | 'centered'</code></td>
+            <td><code>accurate</code></td>
+          </tr>
+          <tr>
+            <td><code>preserve-ratio</code></td>
+            <td><code>preserveRatio</code></td>
+            <td><code>boolean</code></td>
+            <td><code>false</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Slots</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Slot</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>note-{name}{octave}</code></td>
+            <td>
+              Per-note content — e.g. <code>note-C3</code>, <code>note-Fs4</code>,
+              <code>note-Db3</code>. Black keys expose both enharmonic names.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>CSS Custom Properties</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--mq-piano-border-color</code></td>
+            <td><code>#000</code></td>
+          </tr>
+          <tr>
+            <td><code>--mq-piano-border-width</code></td>
+            <td><code>1px</code></td>
+          </tr>
+          <tr>
+            <td><code>--mq-piano-border-color-outer</code></td>
+            <td>falls back to <code>border-color</code></td>
+          </tr>
+          <tr>
+            <td><code>--mq-piano-border-color-inner</code></td>
+            <td>falls back to <code>border-color</code></td>
+          </tr>
+          <tr>
+            <td><code>--mq-piano-border-width-outer</code></td>
+            <td>falls back to <code>border-width</code></td>
+          </tr>
+          <tr>
+            <td><code>--mq-piano-border-width-inner</code></td>
+            <td>falls back to <code>border-width</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>CSS Parts</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Part</th>
+            <th>Target</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>key</code></td>
+            <td>All keys</td>
+          </tr>
+          <tr>
+            <td><code>key-white</code></td>
+            <td>White keys only</td>
+          </tr>
+          <tr>
+            <td><code>key-black</code></td>
+            <td>Black keys only</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Range — default</h2>
+      <h3>No attributes</h3>
+      <p class="desc">
+        Without <code>start-note</code> or <code>end-note</code>, the keyboard covers the default
+        range <strong>C3 → E4</strong>.
+      </p>
+      <mq-piano class="demo"></mq-piano>
+    </section>
+
+    <section>
+      <h2>Range — full piano</h2>
+      <h3>88 keys, A0 → C8</h3>
+      <p class="desc">
+        A standard acoustic piano: 88 keys from <code>A0</code> to <code>C8</code>.
+      </p>
+      <mq-piano class="demo-short" start-note="A0" end-note="C8"></mq-piano>
+      <p class="caption">A0 — C8 · 52 white keys · 36 black keys</p>
+    </section>
+
+    <section>
+      <h2>Range — custom</h2>
+      <h3>2 octaves, C3 → C5</h3>
+      <mq-piano class="demo" start-note="C3" end-note="C5"></mq-piano>
+    </section>
+
+    <section>
+      <h2>Range — single bound</h2>
+      <h3>Only one end provided</h3>
+      <div class="row">
+        <mq-piano start-note="G2"></mq-piano>
+        <mq-piano end-note="G5"></mq-piano>
+      </div>
+      <p class="caption">
+        Left: <code>start-note="G2"</code> (end inferred) · Right: <code>end-note="G5"</code> (start
+        inferred)
+      </p>
+    </section>
+
+    <section>
+      <h2>Mode — <code>centered</code></h2>
+      <h3>Centered black keys</h3>
+      <p class="desc">
+        With <code>mode="centered"</code>, every white key has the same width and black keys are
+        perfectly centered between their neighbors.
+      </p>
+      <div class="row">
+        <mq-piano start-note="C3" end-note="C5"></mq-piano>
+        <mq-piano start-note="C3" end-note="C5" mode="centered"></mq-piano>
+      </div>
+      <p class="caption">
+        Left: <code>mode="accurate"</code> (default) · Right: <code>mode="centered"</code>
+      </p>
+    </section>
+
+    <section>
+      <h2>Style — borders</h2>
+      <h3>Width & color via CSS custom properties</h3>
+      <div class="row">
+        <mq-piano
+          start-note="F3"
+          end-note="E4"
+          style="--mq-piano-border-width: 1px; --mq-piano-border-color: #aaa"
+        ></mq-piano>
+        <mq-piano
+          start-note="F3"
+          end-note="E4"
+          style="--mq-piano-border-width: 6px; --mq-piano-border-color: #c0392b"
+        ></mq-piano>
+      </div>
+      <p class="caption">1px gray · 6px red</p>
+    </section>
+
+    <section>
+      <h2>Style — <code>::part()</code></h2>
+      <h3>Harpsichord (inverted colors)</h3>
+      <style>
+        .clavecin::part(key-white) {
+          background-color: #1a1a1a;
+        }
+        .clavecin::part(key-black) {
+          background-color: #f4f0e6;
+        }
+        .clavecin {
+          --mq-piano-border-color: #f4f0e6;
+        }
+      </style>
+      <mq-piano class="demo clavecin" start-note="C3" end-note="C5"></mq-piano>
+    </section>
+
+    <section>
+      <h2>Style — <code>::part()</code></h2>
+      <h3>Neon theme</h3>
+      <style>
+        .neon {
+          --mq-piano-border-color: #0a0a14;
+          --mq-piano-border-width: 2px;
+        }
+        .neon::part(key-white) {
+          background: linear-gradient(#1b1b2f, #0e0e1a);
+          box-shadow: inset 0 0 12px #00e5ff44;
+        }
+        .neon::part(key-black) {
+          background: linear-gradient(#ff2d95, #b3005c);
+          box-shadow: 0 0 10px #ff2d9588;
+        }
+      </style>
+      <mq-piano class="demo neon" start-note="C3" end-note="C5"></mq-piano>
+    </section>
+
+    <section>
+      <h2>Slots — annotations</h2>
+      <h3>Label each key with note names</h3>
+      <style>
+        .annotations::part(key-white),
+        .annotations::part(key-black) {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
+          text-align: center;
+          padding-bottom: 1em;
+          font-weight: bold;
+        }
+        .annotations::part(key-white) {
+          color: #000;
+        }
+        .annotations::part(key-black) {
+          color: #fff;
+        }
+      </style>
+      <mq-piano class="demo annotations">
+        <span slot="note-C3">C / Do</span>
+        <span slot="note-Cs3">C♯<br />Do♯</span>
+        <span slot="note-D3">D / Ré</span>
+        <span slot="note-Ds3">D♯<br />Ré♯</span>
+        <span slot="note-E3">E / Mi</span>
+        <span slot="note-F3">F / Fa</span>
+        <span slot="note-Fs3">F♯<br />Fa♯</span>
+        <span slot="note-G3">G / Sol</span>
+        <span slot="note-Gs3">G♯<br />Sol♯</span>
+        <span slot="note-A3">A / La</span>
+        <span slot="note-As3">A♯<br />La♯</span>
+        <span slot="note-B3">B / Si</span>
+        <span slot="note-C4">C / Do</span>
+        <span slot="note-Cs4">C♯<br />Do♯</span>
+        <span slot="note-D4">D / Ré</span>
+        <span slot="note-Ds4">D♯<br />Ré♯</span>
+        <span slot="note-E4">E / Mi</span>
+      </mq-piano>
+    </section>
+
+    <section>
+      <h2>Slots — colored dots</h2>
+      <h3>C major chord highlighted</h3>
+      <style>
+        .chord::part(key-white),
+        .chord::part(key-black) {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
+        }
+        .chord .dot {
+          width: 2.2em;
+          height: 2.2em;
+          line-height: 2.2em;
+          margin-bottom: 1.2em;
+          border-radius: 50%;
+          text-align: center;
+          font-weight: bold;
+          color: #fff;
+        }
+      </style>
+      <mq-piano class="demo chord" start-note="C3" end-note="C5">
+        <div slot="note-C3" class="dot" style="background: #c0392b">1</div>
+        <div slot="note-E3" class="dot" style="background: #2980b9">3</div>
+        <div slot="note-G3" class="dot" style="background: #27ae60">5</div>
+        <div slot="note-C4" class="dot" style="background: #c0392b">1</div>
+        <div slot="note-E4" class="dot" style="background: #2980b9">3</div>
+        <div slot="note-G4" class="dot" style="background: #27ae60">5</div>
+      </mq-piano>
+    </section>
+
+    <section>
+      <h2>Layout — <code>preserve-ratio</code></h2>
+      <h3>Realistic aspect ratio</h3>
+      <mq-piano style="width: 600px" start-note="C3" end-note="C5" preserve-ratio></mq-piano>
+      <p class="caption">
+        Width constrained: <code>width: 600px</code> — height derived from ratio
+      </p>
+    </section>
+
+    <footer><code>&lt;mq-piano&gt;</code> · musique</footer>
+  </body>
+</html>

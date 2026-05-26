@@ -4,6 +4,18 @@
   "description": "Web components for rendering musical instruments, chords, and scales",
   "type": "module",
   "sideEffects": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./mq-piano": {
+      "types": "./dist/mq-piano/mq-piano.d.ts",
+      "import": "./dist/mq-piano/mq-piano.js",
+      "default": "./dist/mq-piano/mq-piano.js"
+    }
+  },
   "files": [
     "dist",
     "custom-elements.json"
@@ -19,11 +31,20 @@
     "cem": "cem analyze",
     "prepublishOnly": "npm run build && npm run cem"
   },
+  "keywords": [
+    "web-components",
+    "lit",
+    "music",
+    "piano"
+  ],
   "license": "MIT",
   "author": "Hubert Sablonnière",
   "repository": {
     "type": "git",
     "url": "https://github.com/hsablonniere/musiq.git"
+  },
+  "dependencies": {
+    "lit": "^3.0.0"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
