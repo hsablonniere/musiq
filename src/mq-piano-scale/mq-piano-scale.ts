@@ -1,13 +1,8 @@
 import { css, html, LitElement, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { Scale } from "tonal";
-import { assignOctaves, noteToPianoKeysName } from "../utils.js";
+import { assignOctaves, isBlackKey, noteToPianoKeysName } from "../utils.js";
 import "../mq-piano/mq-piano.js";
-
-function isBlackKey(note: string): boolean {
-  const pc = note.replace(/\d+$/, "");
-  return pc.includes("#") || (pc.length > 1 && pc.includes("b"));
-}
 
 @customElement("mq-piano-scale")
 export class MqPianoScale extends LitElement {
