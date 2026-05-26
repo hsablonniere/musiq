@@ -14,6 +14,11 @@
       "types": "./dist/mq-piano/mq-piano.d.ts",
       "import": "./dist/mq-piano/mq-piano.js",
       "default": "./dist/mq-piano/mq-piano.js"
+    },
+    "./mq-piano-chord": {
+      "types": "./dist/mq-piano-chord/mq-piano-chord.d.ts",
+      "import": "./dist/mq-piano-chord/mq-piano-chord.js",
+      "default": "./dist/mq-piano-chord/mq-piano-chord.js"
     }
   },
   "files": [
@@ -35,7 +40,8 @@
     "web-components",
     "lit",
     "music",
-    "piano"
+    "piano",
+    "chords"
   ],
   "license": "MIT",
   "author": "Hubert Sablonnière",
@@ -44,7 +50,8 @@
     "url": "https://github.com/hsablonniere/musiq.git"
   },
   "dependencies": {
-    "lit": "^3.0.0"
+    "lit": "^3.0.0",
+    "tonal": "^6.4.0"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
