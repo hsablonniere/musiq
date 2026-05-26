@@ -1,0 +1,49 @@
+# musiq
+
+Lit Web Components library for music visualization — piano, fretboard/guitar, chords, and scales.
+
+## Stack
+
+- **Lit 3** — Web Components
+- **tonal** — music theory (chords, scales, notes)
+- **@tombatossals/chords-db** — guitar/ukulele chord positions
+- **Vite 6** — dev server + build (lib mode, ESM only, externals: lit, tonal, @tombatossals)
+- **TypeScript** — strict, `tsgo` for typecheck
+- **oxlint** / **oxfmt** — lint + format
+- **pnpm** — package manager
+
+## Commands
+
+```bash
+pnpm dev              # Dev server (index.html = demo catalog)
+pnpm build            # Vite build + tsc declarations
+pnpm typecheck        # tsgo --noEmit
+pnpm lint             # oxlint src/
+pnpm format           # oxfmt --write src/
+pnpm format:check     # oxfmt src/ (check only)
+pnpm cem              # Custom Elements Manifest
+```
+
+## Architecture
+
+```
+src/
+  index.ts                              # Re-exports all components
+  utils.ts                              # Shared helpers
+  mq-<name>/
+    mq-<name>.ts                        # Lit component definition
+    mq-<name>.html                      # Demo page
+```
+
+Base components (`mq-piano`, `mq-fretboard`) provide slots. High-level components (`*-chord`, `*-scale`) compose a base with tonal/chords-db data.
+
+## Conventions
+
+- `mq-` prefix for all custom elements
+- Base components (`mq-piano`, `mq-fretboard`): named slots for content
+- High-level components (`*-chord`, `*-scale`): compose a base + tonal/chords-db data
+- CSS custom properties prefixed `--mq-piano-*` / `--mq-fretboard-*`
+- `::part()` for external key/dot styling
+- `exportparts` to pierce shadow DOM of composed components
+- No unit tests — visual verification via demo pages
+- Conventional commits: `feat:`, `fix:`, `chore:`, `docs:`
