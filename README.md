@@ -16,13 +16,13 @@ A collection of web components for rendering musical instruments, chords, and sc
 ## Install
 
 ```bash
-npm install musiq
+npm install @hsablonniere/musiq
 ```
 
 ## Usage
 
 ```js
-import 'musiq';
+import '@hsablonniere/musiq';
 ```
 
 ```html
@@ -35,8 +35,8 @@ import 'musiq';
 You can also import individual components:
 
 ```js
-import 'musiq/mq-piano';
-import 'musiq/mq-fretboard-chord';
+import '@hsablonniere/musiq/mq-piano';
+import '@hsablonniere/musiq/mq-fretboard-chord';
 ```
 
 ## Components API
