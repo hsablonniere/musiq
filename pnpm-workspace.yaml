@@ -2,3 +2,4 @@ onlyBuiltDependencies:
   - esbuild
 allowBuilds:
   esbuild: true
+  rs-module-lexer: true

@@ -4,3 +4,4 @@ dist/
 .pnpm-store/
 .idea/
 .playwright-cli/
+custom-elements.json
