@@ -24,6 +24,11 @@
       "types": "./dist/mq-piano-scale/mq-piano-scale.d.ts",
       "import": "./dist/mq-piano-scale/mq-piano-scale.js",
       "default": "./dist/mq-piano-scale/mq-piano-scale.js"
+    },
+    "./mq-fretboard": {
+      "types": "./dist/mq-fretboard/mq-fretboard.d.ts",
+      "import": "./dist/mq-fretboard/mq-fretboard.js",
+      "default": "./dist/mq-fretboard/mq-fretboard.js"
     }
   },
   "files": [
@@ -46,6 +51,8 @@
     "lit",
     "music",
     "piano",
+    "fretboard",
+    "guitar",
     "chords",
     "scales"
   ],
