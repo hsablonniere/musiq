@@ -100,6 +100,10 @@
         align-items: start;
       }
 
+      .row > div {
+        text-align: center;
+      }
+
       .caption {
         font-size: 0.85rem;
         color: var(--muted);
@@ -179,8 +183,10 @@
     <header>
       <h1><code>&lt;mq-fretboard-chord&gt;</code></h1>
       <p>
-        A Web Component that displays guitar chord diagrams. Pass a chord name, get a fretboard with
-        finger positions.
+        Fretboard with chord diagram. Pass a chord name, get finger positions with
+        open/muted string indicators and barre support. Guitar and ukulele, multiple
+        voicings via <code>position</code>, <code>finger-labels</code>, and
+        <code>left-handed</code>.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
@@ -189,7 +195,6 @@
       <h2>Install</h2>
       <pre><code>npm install @hsablonniere/musiq</code></pre>
       <pre><code>import '@hsablonniere/musiq/mq-fretboard-chord';</code></pre>
-      <pre><code>&lt;mq-fretboard-chord chord="Am"&gt;&lt;/mq-fretboard-chord&gt;</code></pre>
     </section>
 
     <section class="api">
@@ -203,6 +208,7 @@
             <th>Property</th>
             <th>Type</th>
             <th>Default</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
@@ -211,30 +217,35 @@
             <td><code>chord</code></td>
             <td><code>string</code></td>
             <td>—</td>
+            <td>Chord name (e.g. <code>"C"</code>, <code>"Am"</code>, <code>"Bbmaj7"</code>)</td>
           </tr>
           <tr>
             <td><code>instrument</code></td>
             <td><code>instrument</code></td>
             <td><code>'guitar' | 'ukulele'</code></td>
             <td><code>'guitar'</code></td>
+            <td>Target instrument (determines string count and chord voicings)</td>
           </tr>
           <tr>
             <td><code>position</code></td>
             <td><code>position</code></td>
             <td><code>number</code></td>
             <td><code>0</code></td>
+            <td>Voicing index from the chord database (0 = first/most common voicing)</td>
           </tr>
           <tr>
             <td><code>left-handed</code></td>
             <td><code>leftHanded</code></td>
             <td><code>boolean</code></td>
             <td><code>false</code></td>
+            <td>Mirror the diagram for left-handed players</td>
           </tr>
           <tr>
             <td><code>finger-labels</code></td>
             <td><code>fingerLabels</code></td>
             <td><code>boolean</code></td>
             <td><code>false</code></td>
+            <td>Show finger numbers (1–4) on dots and barres</td>
           </tr>
         </tbody>
       </table>
@@ -244,29 +255,29 @@
         <thead>
           <tr>
             <th>Part</th>
-            <th>Target</th>
+            <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>title</code></td>
-            <td>Chord name heading</td>
+            <td>Chord name heading above the diagram</td>
           </tr>
           <tr>
             <td><code>marker</code></td>
-            <td>Open / muted string indicators</td>
+            <td>Open (○) and muted (✕) string indicators above the nut</td>
           </tr>
           <tr>
             <td><code>dot</code></td>
-            <td>Fretted note dots</td>
+            <td>Fretted note dots on the fretboard</td>
           </tr>
           <tr>
             <td><code>barre</code></td>
-            <td>Barre chord bars</td>
+            <td>Barre chord bars spanning multiple strings</td>
           </tr>
           <tr>
             <td><code>fret-number</code></td>
-            <td>Fret number label (forwarded)</td>
+            <td>Fret number label (forwarded from <code>mq-fretboard</code>)</td>
           </tr>
         </tbody>
       </table>
@@ -298,7 +309,7 @@
 
     <section>
       <h2>Finger labels</h2>
-      <h3><code>finger-labels</code> attribute</h3>
+      <p class="desc">Show finger numbers on dots with the <code>finger-labels</code> attribute.</p>
       <div class="row">
         <mq-fretboard-chord chord="C" finger-labels></mq-fretboard-chord>
         <mq-fretboard-chord chord="Am" finger-labels></mq-fretboard-chord>
@@ -311,29 +322,44 @@
 
     <section>
       <h2>Voicings — <code>position</code></h2>
-      <h3>A minor — 4 positions</h3>
+      <p class="desc">A minor — 4 positions</p>
       <div class="row">
-        <mq-fretboard-chord chord="Am" position="0" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="Am" position="1" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="Am" position="2" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="Am" position="3" finger-labels></mq-fretboard-chord>
+        <div>
+          <mq-fretboard-chord chord="Am" position="0" finger-labels></mq-fretboard-chord>
+          <p class="caption">position 0</p>
+        </div>
+        <div>
+          <mq-fretboard-chord chord="Am" position="1" finger-labels></mq-fretboard-chord>
+          <p class="caption">position 1</p>
+        </div>
+        <div>
+          <mq-fretboard-chord chord="Am" position="2" finger-labels></mq-fretboard-chord>
+          <p class="caption">position 2</p>
+        </div>
+        <div>
+          <mq-fretboard-chord chord="Am" position="3" finger-labels></mq-fretboard-chord>
+          <p class="caption">position 3</p>
+        </div>
       </div>
-      <p class="caption">position 0 · position 1 · position 2 · position 3</p>
     </section>
 
     <section>
       <h2>Left-handed</h2>
-      <h3><code>left-handed</code> attribute</h3>
+      <p class="desc">Mirror the diagram with the <code>left-handed</code> attribute.</p>
       <div class="row">
-        <mq-fretboard-chord chord="C" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="C" finger-labels left-handed></mq-fretboard-chord>
+        <div>
+          <mq-fretboard-chord chord="C" finger-labels></mq-fretboard-chord>
+          <p class="caption">Right-handed</p>
+        </div>
+        <div>
+          <mq-fretboard-chord chord="C" finger-labels left-handed></mq-fretboard-chord>
+          <p class="caption">Left-handed</p>
+        </div>
       </div>
-      <p class="caption">Right-handed · Left-handed</p>
     </section>
 
     <section>
       <h2>Sharps & flats</h2>
-      <h3>F#m, Bbmaj7, Ebm7</h3>
       <div class="row">
         <mq-fretboard-chord chord="F#m" finger-labels></mq-fretboard-chord>
         <mq-fretboard-chord chord="Bbmaj7" finger-labels></mq-fretboard-chord>
@@ -342,19 +368,7 @@
     </section>
 
     <section>
-      <h2>Progression</h2>
-      <h3>ii – V – I in G major</h3>
-      <div class="row">
-        <mq-fretboard-chord chord="Am7" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="D7" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="G" finger-labels></mq-fretboard-chord>
-      </div>
-      <p class="caption">ii7 — V7 — I</p>
-    </section>
-
-    <section>
       <h2>Barre chords</h2>
-      <h3>F, Bm, C11</h3>
       <div class="row">
         <mq-fretboard-chord chord="F" finger-labels></mq-fretboard-chord>
         <mq-fretboard-chord chord="Bm" finger-labels></mq-fretboard-chord>
@@ -364,7 +378,7 @@
 
     <section>
       <h2>Ukulele</h2>
-      <h3><code>instrument="ukulele"</code></h3>
+      <p class="desc"><code>instrument="ukulele"</code></p>
       <div class="row">
         <mq-fretboard-chord chord="C" instrument="ukulele" finger-labels></mq-fretboard-chord>
         <mq-fretboard-chord chord="Am" instrument="ukulele" finger-labels></mq-fretboard-chord>
@@ -375,7 +389,7 @@
 
     <section>
       <h2>Style — CSS parts</h2>
-      <h3><code>::part(dot)</code>, <code>::part(barre)</code></h3>
+      <p class="desc">Customize via <code>::part(dot)</code> and <code>::part(barre)</code>.</p>
       <style>
         .red-dots::part(dot) {
           background: #c0392b;

@@ -141,49 +141,57 @@
       <a href="src/mq-piano/mq-piano.html">
         <h2><code>&lt;mq-piano&gt;</code></h2>
         <p>
-          Renders a piano keyboard with realistic geometry. Configurable range,
-          CSS-driven borders, stylable keys via <code>::part()</code>, and
-          per-note annotations via named slots.
+          Piano keyboard with realistic key geometry. Configurable range,
+          <code>accurate</code> or <code>centered</code> black key positioning,
+          <code>preserve-ratio</code> for real-world proportions. Stylable via
+          <code>::part()</code> and CSS custom properties. Named slots for per-key annotations.
         </p>
       </a>
 
       <a href="src/mq-piano-chord/mq-piano-chord.html">
         <h2><code>&lt;mq-piano-chord&gt;</code></h2>
         <p>
-          Displays piano chord diagrams. Pass a chord name, get a highlighted
-          keyboard with optional note labels.
+          Piano keyboard with chord visualization. Pass a chord name, get highlighted keys.
+          Supports inversions via slash chords (<code>C/E</code>, <code>C/G</code>),
+          <code>note-labels</code>, and customizable active color.
         </p>
       </a>
 
       <a href="src/mq-piano-scale/mq-piano-scale.html">
         <h2><code>&lt;mq-piano-scale&gt;</code></h2>
         <p>
-          Displays piano scale diagrams. Pass a scale name, get a highlighted
-          keyboard with optional note and degree labels.
+          Piano keyboard with scale visualization. Major, minor, pentatonic, blues,
+          modes (dorian, phrygian, lydian…), and more. Distinct root color,
+          <code>note-labels</code>, and <code>degree-labels</code>.
         </p>
       </a>
 
       <a href="src/mq-fretboard/mq-fretboard.html">
         <h2><code>&lt;mq-fretboard&gt;</code></h2>
         <p>
-          Full fretboard display with slot-based content placement.
-          Scales, positions, intervals — horizontal or vertical orientation.
+          Guitar/bass fretboard with slot-based content placement. The component positions,
+          you style. Horizontal or vertical orientation, configurable string count and fret range,
+          <code>inlays</code>, <code>full-neck</code>, <code>left-handed</code>, and
+          multi-string span slots for barres via <code>extra-slots</code>.
         </p>
       </a>
 
       <a href="src/mq-fretboard-chord/mq-fretboard-chord.html">
         <h2><code>&lt;mq-fretboard-chord&gt;</code></h2>
         <p>
-          Displays guitar chord diagrams. Pass a chord name, get a
-          fretboard with finger positions and multiple voicings.
+          Fretboard with chord diagram. Pass a chord name, get finger positions with
+          open/muted string indicators and barre support. Guitar and ukulele, multiple
+          voicings via <code>position</code>, <code>finger-labels</code>, and
+          <code>left-handed</code>.
         </p>
       </a>
 
       <a href="src/mq-fretboard-scale/mq-fretboard-scale.html">
         <h2><code>&lt;mq-fretboard-scale&gt;</code></h2>
         <p>
-          Displays scale patterns on a fretboard. Pass a scale name,
-          get a full-neck diagram with highlighted notes and optional labels.
+          Fretboard with scale visualization across the full neck. Custom tunings
+          (drop D, ukulele…), configurable fret range, <code>note-labels</code>,
+          <code>degree-labels</code>, and <code>left-handed</code>.
         </p>
       </a>
 
