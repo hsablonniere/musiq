@@ -3,10 +3,23 @@
   "version": "0.0.1",
   "description": "Web components for rendering musical instruments, chords, and scales",
   "type": "module",
+  "sideEffects": true,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc --declaration --emitDeclarationOnly --outDir dist",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build"
+  },
   "license": "MIT",
   "author": "Hubert Sablonnière",
   "repository": {
     "type": "git",
     "url": "https://github.com/hsablonniere/musiq.git"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
   }
 }
