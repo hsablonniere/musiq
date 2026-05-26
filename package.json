@@ -29,6 +29,11 @@
       "types": "./dist/mq-fretboard/mq-fretboard.d.ts",
       "import": "./dist/mq-fretboard/mq-fretboard.js",
       "default": "./dist/mq-fretboard/mq-fretboard.js"
+    },
+    "./mq-fretboard-chord": {
+      "types": "./dist/mq-fretboard-chord/mq-fretboard-chord.d.ts",
+      "import": "./dist/mq-fretboard-chord/mq-fretboard-chord.js",
+      "default": "./dist/mq-fretboard-chord/mq-fretboard-chord.js"
     }
   },
   "files": [
@@ -63,6 +68,7 @@
     "url": "https://github.com/hsablonniere/musiq.git"
   },
   "dependencies": {
+    "@tombatossals/chords-db": "^0.5.1",
     "lit": "^3.0.0",
     "tonal": "^6.4.0"
   },
