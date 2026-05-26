@@ -1,0 +1,12 @@
+{
+  "name": "musiq",
+  "version": "0.0.1",
+  "description": "Web components for rendering musical instruments, chords, and scales",
+  "type": "module",
+  "license": "MIT",
+  "author": "Hubert Sablonnière",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hsablonniere/musiq.git"
+  }
+}
