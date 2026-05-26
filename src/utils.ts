@@ -4,6 +4,11 @@ export function noteToPianoKeysName(note: string): string {
   return note.replace("#", "s");
 }
 
+export function isBlackKey(note: string): boolean {
+  const pc = note.replace(/\d+$/, "");
+  return pc.includes("#") || (pc.length > 1 && pc.includes("b"));
+}
+
 export function assignOctaves(pitchClasses: string[], startOctave: number): string[] {
   const notes: string[] = [];
   let octave = startOctave;
