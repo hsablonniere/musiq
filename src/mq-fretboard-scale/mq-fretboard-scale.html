@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&lt;mq-fretboard-scale&gt; — demo</title>
+    <style>
+      :root {
+        --bg: #fafaf8;
+        --fg: #1a1a1a;
+        --muted: #6b6b6b;
+        --accent: #c0392b;
+        --card: #fff;
+        --line: #e6e6e2;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: system-ui, sans-serif;
+        line-height: 1.6;
+        background: var(--bg);
+        color: var(--fg);
+        margin: 0 auto;
+        padding: 3rem 2rem 6rem;
+        max-width: 80rem;
+      }
+
+      header {
+        border-bottom: 2px solid var(--fg);
+        margin-bottom: 3rem;
+        padding-bottom: 1.5rem;
+      }
+
+      h1 {
+        font-size: 2.4rem;
+        margin: 0 0 0.25rem;
+      }
+
+      h1 code {
+        background: var(--fg);
+        color: var(--bg);
+        padding: 0.1em 0.3em;
+        border-radius: 4px;
+      }
+
+      header p {
+        color: var(--muted);
+        margin: 0.5rem 0 0;
+      }
+
+      header a {
+        color: var(--accent);
+      }
+
+      section {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 1.75rem 2rem 2rem;
+        margin-bottom: 2rem;
+      }
+
+      h2 {
+        font-size: 1.05rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--accent);
+        margin: 0 0 0.4rem;
+      }
+
+      h3 {
+        font-size: 1.4rem;
+        margin: 0 0 0.5rem;
+      }
+
+      .desc {
+        color: var(--muted);
+        margin: 0 0 1.5rem;
+        max-width: 46rem;
+      }
+
+      .desc code,
+      .api code,
+      h2 code,
+      footer code {
+        background: #f0f0ec;
+        padding: 0.1em 0.35em;
+        border-radius: 4px;
+        font-size: 0.88em;
+        color: var(--fg);
+      }
+
+      .row {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .row > mq-fretboard-scale {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .caption {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin: 0.6rem 0 0;
+        text-align: center;
+      }
+
+      footer {
+        color: var(--muted);
+        font-size: 0.85rem;
+        text-align: center;
+        margin-top: 4rem;
+      }
+
+      .api h3 {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+        margin: 1.5rem 0 0.4rem;
+      }
+
+      .api h3:first-of-type {
+        margin-top: 0.25rem;
+      }
+
+      .api table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+      }
+
+      .api th {
+        text-align: left;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+        border-bottom: 2px solid var(--line);
+        padding: 0.3rem 0.75rem 0.3rem 0;
+        font-weight: 600;
+      }
+
+      .api td {
+        padding: 0.3rem 0.75rem 0.3rem 0;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+
+      .api .swatch {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        border-radius: 2px;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        vertical-align: baseline;
+        margin-right: 0.3em;
+      }
+    </style>
+    <script type="module" src="./mq-fretboard-scale.ts"></script>
+  </head>
+  <body>
+    <header>
+      <h1><code>&lt;mq-fretboard-scale&gt;</code></h1>
+      <p>
+        A Web Component that displays scale patterns on a guitar fretboard. Pass a scale name, get a
+        full-neck diagram with highlighted notes.
+      </p>
+      <p><a href="../../">← Back to index</a></p>
+    </header>
+
+    <section class="api">
+      <h2>API</h2>
+
+      <h3>Attributes / Properties</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Property</th>
+            <th>Type</th>
+            <th>Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>scale</code></td>
+            <td><code>scale</code></td>
+            <td><code>string</code></td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><code>tuning</code></td>
+            <td><code>tuning</code></td>
+            <td><code>string</code></td>
+            <td><code>'E,A,D,G,B,E'</code></td>
+          </tr>
+          <tr>
+            <td><code>start-fret</code></td>
+            <td><code>startFret</code></td>
+            <td><code>number</code></td>
+            <td><code>0</code></td>
+          </tr>
+          <tr>
+            <td><code>end-fret</code></td>
+            <td><code>endFret</code></td>
+            <td><code>number</code></td>
+            <td><code>12</code></td>
+          </tr>
+          <tr>
+            <td><code>note-labels</code></td>
+            <td><code>noteLabels</code></td>
+            <td><code>boolean</code></td>
+            <td><code>false</code></td>
+          </tr>
+          <tr>
+            <td><code>degree-labels</code></td>
+            <td><code>degreeLabels</code></td>
+            <td><code>boolean</code></td>
+            <td><code>false</code></td>
+          </tr>
+          <tr>
+            <td><code>left-handed</code></td>
+            <td><code>leftHanded</code></td>
+            <td><code>boolean</code></td>
+            <td><code>false</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>CSS Custom Properties</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--mq-fretboard-scale-active-color</code></td>
+            <td><span class="swatch" style="background: #2980b9"></span><code>#2980b9</code></td>
+          </tr>
+          <tr>
+            <td><code>--mq-fretboard-scale-root-color</code></td>
+            <td><span class="swatch" style="background: #c0392b"></span><code>#c0392b</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>CSS Parts</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Part</th>
+            <th>Target</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>title</code></td>
+            <td>Scale name heading</td>
+          </tr>
+          <tr>
+            <td><code>dot</code></td>
+            <td>Scale note dots</td>
+          </tr>
+          <tr>
+            <td><code>fret-number</code></td>
+            <td>Fret number labels (forwarded)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Basic — major scales</h2>
+      <h3>C major</h3>
+      <mq-fretboard-scale scale="C major" note-labels></mq-fretboard-scale>
+    </section>
+
+    <section>
+      <h2>Minor scales</h2>
+      <h3>A minor (natural)</h3>
+      <mq-fretboard-scale scale="A minor" note-labels></mq-fretboard-scale>
+    </section>
+
+    <section>
+      <h2>Pentatonic</h2>
+      <h3>A minor pentatonic</h3>
+      <mq-fretboard-scale scale="A minor pentatonic" note-labels></mq-fretboard-scale>
+    </section>
+
+    <section>
+      <h2>Blues</h2>
+      <h3>A blues</h3>
+      <mq-fretboard-scale scale="A blues" note-labels></mq-fretboard-scale>
+    </section>
+
+    <section>
+      <h2>Modes</h2>
+      <h3>D dorian</h3>
+      <mq-fretboard-scale scale="D dorian" note-labels></mq-fretboard-scale>
+    </section>
+
+    <section>
+      <h2>Degree labels</h2>
+      <h3><code>degree-labels</code> — C major</h3>
+      <mq-fretboard-scale scale="C major" degree-labels></mq-fretboard-scale>
+    </section>
+
+    <section>
+      <h2>Both labels</h2>
+      <h3><code>note-labels</code> + <code>degree-labels</code></h3>
+      <mq-fretboard-scale scale="E minor pentatonic" note-labels degree-labels></mq-fretboard-scale>
+    </section>
+
+    <section>
+      <h2>Fret range</h2>
+      <h3><code>start-fret="5" end-fret="12"</code></h3>
+      <mq-fretboard-scale
+        scale="C major"
+        note-labels
+        start-fret="5"
+        end-fret="12"
+      ></mq-fretboard-scale>
+    </section>
+
+    <section>
+      <h2>Extended range</h2>
+      <h3><code>end-fret="21"</code></h3>
+      <mq-fretboard-scale scale="F harmonic minor" note-labels end-fret="21"></mq-fretboard-scale>
+    </section>
+
+    <section>
+      <h2>Left-handed</h2>
+      <h3><code>left-handed</code></h3>
+      <div class="row">
+        <mq-fretboard-scale scale="G major" note-labels end-fret="5"></mq-fretboard-scale>
+        <mq-fretboard-scale
+          scale="G major"
+          note-labels
+          end-fret="5"
+          left-handed
+        ></mq-fretboard-scale>
+      </div>
+      <p class="caption">Right-handed · Left-handed</p>
+    </section>
+
+    <section>
+      <h2>Custom tuning</h2>
+      <h3>Drop D — <code>tuning="D,A,D,G,B,E"</code></h3>
+      <mq-fretboard-scale scale="D minor" note-labels tuning="D,A,D,G,B,E"></mq-fretboard-scale>
+    </section>
+
+    <section>
+      <h2>Ukulele</h2>
+      <h3><code>tuning="G,C,E,A"</code></h3>
+      <mq-fretboard-scale scale="C major" note-labels tuning="G,C,E,A"></mq-fretboard-scale>
+    </section>
+
+    <section>
+      <h2>Style — colors</h2>
+      <h3>
+        <code>--mq-fretboard-scale-active-color</code> &amp;
+        <code>--mq-fretboard-scale-root-color</code>
+      </h3>
+      <mq-fretboard-scale
+        scale="C major"
+        note-labels
+        end-fret="7"
+        style="--mq-fretboard-scale-active-color: #8e44ad; --mq-fretboard-scale-root-color: #6c3483"
+      ></mq-fretboard-scale>
+    </section>
+
+    <section>
+      <h2>Comparison</h2>
+      <h3>Major vs minor pentatonic</h3>
+      <div class="row">
+        <mq-fretboard-scale
+          scale="C major pentatonic"
+          note-labels
+          end-fret="7"
+        ></mq-fretboard-scale>
+        <mq-fretboard-scale
+          scale="C minor pentatonic"
+          note-labels
+          end-fret="7"
+        ></mq-fretboard-scale>
+      </div>
+      <p class="caption">C major pentatonic · C minor pentatonic</p>
+    </section>
+
+    <footer><code>&lt;mq-fretboard-scale&gt;</code> · musique</footer>
+  </body>
+</html>
