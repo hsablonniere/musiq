@@ -2,6 +2,8 @@
 
 A collection of web components for rendering musical instruments, chords, and scales. Built with [Lit](https://lit.dev/).
 
+**[Live demo](https://hsablonniere.github.io/musiq/)**
+
 ## Components
 
 | Component | Description |
