@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&lt;mq-piano-scale&gt; — demo</title>
+    <style>
+      :root {
+        --bg: #fafaf8;
+        --fg: #1a1a1a;
+        --muted: #6b6b6b;
+        --accent: #27ae60;
+        --card: #fff;
+        --line: #e6e6e2;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: system-ui, sans-serif;
+        line-height: 1.6;
+        background: var(--bg);
+        color: var(--fg);
+        margin: 0 auto;
+        padding: 3rem 2rem 6rem;
+        max-width: 80rem;
+      }
+
+      header {
+        border-bottom: 2px solid var(--fg);
+        margin-bottom: 3rem;
+        padding-bottom: 1.5rem;
+      }
+
+      h1 {
+        font-size: 2.4rem;
+        margin: 0 0 0.25rem;
+      }
+
+      h1 code {
+        background: var(--fg);
+        color: var(--bg);
+        padding: 0.1em 0.3em;
+        border-radius: 4px;
+      }
+
+      header p {
+        color: var(--muted);
+        margin: 0.5rem 0 0;
+      }
+
+      header a {
+        color: var(--accent);
+      }
+
+      section {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 1.75rem 2rem 2rem;
+        margin-bottom: 2rem;
+      }
+
+      h2 {
+        font-size: 1.05rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--accent);
+        margin: 0 0 0.4rem;
+      }
+
+      h3 {
+        font-size: 1.4rem;
+        margin: 0 0 0.5rem;
+      }
+
+      .desc {
+        color: var(--muted);
+        margin: 0 0 1.5rem;
+        max-width: 46rem;
+      }
+
+      .desc code,
+      .api code,
+      h2 code,
+      footer code {
+        background: #f0f0ec;
+        padding: 0.1em 0.35em;
+        border-radius: 4px;
+        font-size: 0.88em;
+        color: var(--fg);
+      }
+
+      .row {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .row > mq-piano-scale {
+        flex: 1;
+        min-width: 200px;
+        height: 200px;
+      }
+
+      .caption {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin: 0.6rem 0 0;
+        text-align: center;
+      }
+
+      footer {
+        color: var(--muted);
+        font-size: 0.85rem;
+        text-align: center;
+        margin-top: 4rem;
+      }
+
+      .api h3 {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+        margin: 1.5rem 0 0.4rem;
+      }
+
+      .api h3:first-of-type {
+        margin-top: 0.25rem;
+      }
+
+      .api table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+      }
+
+      .api th {
+        text-align: left;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+        border-bottom: 2px solid var(--line);
+        padding: 0.3rem 0.75rem 0.3rem 0;
+        font-weight: 600;
+      }
+
+      .api td {
+        padding: 0.3rem 0.75rem 0.3rem 0;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+
+      .api .swatch {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        border-radius: 2px;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        vertical-align: baseline;
+        margin-right: 0.3em;
+      }
+    </style>
+    <script type="module" src="./mq-piano-scale.ts"></script>
+  </head>
+  <body>
+    <header>
+      <h1><code>&lt;mq-piano-scale&gt;</code></h1>
+      <p>
+        A Web Component that displays piano scale diagrams. Pass a scale name, get a highlighted
+        keyboard.
+      </p>
+      <p><a href="../../">← Back to index</a></p>
+    </header>
+
+    <section class="api">
+      <h2>API</h2>
+
+      <h3>Attributes / Properties</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Property</th>
+            <th>Type</th>
+            <th>Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>scale</code></td>
+            <td><code>scale</code></td>
+            <td><code>string</code></td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><code>note-labels</code></td>
+            <td><code>noteLabels</code></td>
+            <td><code>boolean</code></td>
+            <td><code>false</code></td>
+          </tr>
+          <tr>
+            <td><code>degree-labels</code></td>
+            <td><code>degreeLabels</code></td>
+            <td><code>boolean</code></td>
+            <td><code>false</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>CSS Custom Properties</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--mq-piano-scale-active-color</code></td>
+            <td><span class="swatch" style="background: #27ae60"></span><code>#27ae60</code></td>
+          </tr>
+          <tr>
+            <td><code>--mq-piano-scale-root-color</code></td>
+            <td><span class="swatch" style="background: #1e8449"></span><code>#1e8449</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>CSS Parts</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Part</th>
+            <th>Target</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>title</code></td>
+            <td>Scale name heading</td>
+          </tr>
+          <tr>
+            <td><code>key</code></td>
+            <td>All keys (forwarded)</td>
+          </tr>
+          <tr>
+            <td><code>key-white</code></td>
+            <td>White keys (forwarded)</td>
+          </tr>
+          <tr>
+            <td><code>key-black</code></td>
+            <td>Black keys (forwarded)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Basic — major scales</h2>
+      <h3>Common major scales</h3>
+      <div class="row">
+        <mq-piano-scale scale="C major"></mq-piano-scale>
+        <mq-piano-scale scale="G major"></mq-piano-scale>
+        <mq-piano-scale scale="F major"></mq-piano-scale>
+      </div>
+    </section>
+
+    <section>
+      <h2>Basic — minor scales</h2>
+      <h3>Natural minor</h3>
+      <div class="row">
+        <mq-piano-scale scale="A minor"></mq-piano-scale>
+        <mq-piano-scale scale="D minor"></mq-piano-scale>
+        <mq-piano-scale scale="E minor"></mq-piano-scale>
+      </div>
+    </section>
+
+    <section>
+      <h2>Note labels</h2>
+      <h3><code>note-labels</code> attribute</h3>
+      <div class="row">
+        <mq-piano-scale scale="Bb major" note-labels></mq-piano-scale>
+        <mq-piano-scale scale="F# minor" note-labels></mq-piano-scale>
+        <mq-piano-scale scale="Eb major" note-labels></mq-piano-scale>
+      </div>
+    </section>
+
+    <section>
+      <h2>Degree labels</h2>
+      <h3><code>degree-labels</code> attribute</h3>
+      <div class="row">
+        <mq-piano-scale scale="C major" degree-labels></mq-piano-scale>
+        <mq-piano-scale scale="A minor" degree-labels note-labels></mq-piano-scale>
+      </div>
+    </section>
+
+    <section>
+      <h2>Modes</h2>
+      <h3>Church modes from C</h3>
+      <div class="row">
+        <mq-piano-scale scale="D dorian" note-labels></mq-piano-scale>
+        <mq-piano-scale scale="E phrygian" note-labels></mq-piano-scale>
+        <mq-piano-scale scale="F lydian" note-labels></mq-piano-scale>
+      </div>
+      <p class="caption">Dorian · Phrygian · Lydian</p>
+    </section>
+
+    <section>
+      <h2>Exotic scales</h2>
+      <h3>Pentatonic, blues, whole tone</h3>
+      <div class="row">
+        <mq-piano-scale scale="C major pentatonic" note-labels></mq-piano-scale>
+        <mq-piano-scale scale="A blues" note-labels></mq-piano-scale>
+        <mq-piano-scale scale="C whole tone" note-labels></mq-piano-scale>
+      </div>
+      <p class="caption">Major pentatonic · Blues · Whole tone</p>
+    </section>
+
+    <section>
+      <h2>Style — active color</h2>
+      <h3>
+        <code>--mq-piano-scale-active-color</code> &amp; <code>--mq-piano-scale-root-color</code>
+      </h3>
+      <div class="row">
+        <mq-piano-scale
+          scale="C major"
+          style="--mq-piano-scale-active-color: #c0392b; --mq-piano-scale-root-color: #962d22"
+        ></mq-piano-scale>
+        <mq-piano-scale
+          scale="C major"
+          style="--mq-piano-scale-active-color: #4a90d9; --mq-piano-scale-root-color: #2c5f8a"
+        ></mq-piano-scale>
+        <mq-piano-scale
+          scale="C major"
+          style="--mq-piano-scale-active-color: #8e44ad; --mq-piano-scale-root-color: #6c3483"
+        ></mq-piano-scale>
+      </div>
+    </section>
+
+    <section>
+      <h2>Comparison</h2>
+      <h3>Parallel major vs minor</h3>
+      <div class="row">
+        <mq-piano-scale scale="C major" note-labels degree-labels></mq-piano-scale>
+        <mq-piano-scale scale="C minor" note-labels degree-labels></mq-piano-scale>
+      </div>
+      <p class="caption">C major — C minor</p>
+    </section>
+
+    <footer><code>&lt;mq-piano-scale&gt;</code> · musique</footer>
+  </body>
+</html>

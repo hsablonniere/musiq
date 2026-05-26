@@ -19,6 +19,11 @@
       "types": "./dist/mq-piano-chord/mq-piano-chord.d.ts",
       "import": "./dist/mq-piano-chord/mq-piano-chord.js",
       "default": "./dist/mq-piano-chord/mq-piano-chord.js"
+    },
+    "./mq-piano-scale": {
+      "types": "./dist/mq-piano-scale/mq-piano-scale.d.ts",
+      "import": "./dist/mq-piano-scale/mq-piano-scale.js",
+      "default": "./dist/mq-piano-scale/mq-piano-scale.js"
     }
   },
   "files": [
@@ -41,7 +46,8 @@
     "lit",
     "music",
     "piano",
-    "chords"
+    "chords",
+    "scales"
   ],
   "license": "MIT",
   "author": "Hubert Sablonnière",
