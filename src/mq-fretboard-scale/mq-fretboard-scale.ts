@@ -42,8 +42,7 @@ export class MqFretboardScale extends LitElement {
 
     const tuningPCs = this.tuning
       .split(",")
-      .map((s) => s.trim())
-      .reverse();
+      .map((s) => s.trim());
     const stringCount = tuningPCs.length;
 
     const fbStartFret = Math.max(1, this.startFret);
