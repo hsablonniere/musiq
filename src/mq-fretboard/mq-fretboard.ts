@@ -45,6 +45,7 @@ export class MqFretboard extends LitElement {
       stringTracks.push("minmax(0.5em, 1fr)", "auto", "minmax(0.5em, 1fr)");
     if (!isV) stringTracks.push("auto");
 
+    const vs = (s: number) => (isV ? s : this.strings - s + 1);
     const sc = (s: number) => so + (s - 1) * 3 + 2;
     const ss = (s: number) => `${so + (s - 1) * 3 + 1} / ${so + (s - 1) * 3 + 4}`;
     const fretWire = (f: number) => 2 + (f - this.startFret) * 2 + 2;
@@ -92,7 +93,7 @@ export class MqFretboard extends LitElement {
           return html`<div class="fret" style="${this._place(`${p} / ${p + 1}`, fretSpan)}"></div>`;
         })}
         ${Array.from({ length: this.strings }, (_, i) => {
-          const c = sc(i + 1);
+          const c = sc(vs(i + 1));
           return html`<div
             class="string"
             style="${this._place(`3 / ${neckEnd}`, `${c} / ${c + 1}`)}"
@@ -129,7 +130,7 @@ export class MqFretboard extends LitElement {
         })}
         ${Array.from({ length: this.strings }, (_, i) => {
           const s = i + 1;
-          const span = ss(s);
+          const span = ss(vs(s));
           return html` <slot
               name="s${s}-marker"
               style="${this._place("1 / 2", span)}; place-self: center;"
@@ -153,8 +154,10 @@ export class MqFretboard extends LitElement {
               const fret = parseInt(match[3], 10);
               if (fret < this.startFret || fret > this.endFret) return nothing;
               const space = fretSpace(fret);
-              const spanStart = so + (from - 1) * 3 + 1;
-              const spanEnd = so + (to - 1) * 3 + 4;
+              const vFrom = vs(from);
+              const vTo = vs(to);
+              const spanStart = Math.min(so + (vFrom - 1) * 3 + 1, so + (vTo - 1) * 3 + 1);
+              const spanEnd = Math.max(so + (vFrom - 1) * 3 + 4, so + (vTo - 1) * 3 + 4);
               const stretch = isV
                 ? "align-self: center; justify-self: stretch;"
                 : "align-self: stretch; justify-self: center;";
