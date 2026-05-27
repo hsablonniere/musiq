@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.4
+
+### Bug Fixes
+
+- `<mq-fretboard-scale>` — fix notes appearing on wrong strings after horizontal string order fix
+
 ## 0.0.3
 
 ### Bug Fixes
