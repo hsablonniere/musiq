@@ -277,7 +277,7 @@ export class MqFretboard extends LitElement {
     }
 
     :host([left-handed]) slot,
-    :host([left-handed]) .fret-number {
+    :host([left-handed]) mq-fretboard-fret-number {
       transform: scaleX(-1);
     }
   `;
