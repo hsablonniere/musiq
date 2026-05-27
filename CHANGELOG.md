@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.3
+
+### Bug Fixes
+
+- `<mq-fretboard>` — reverse string order in horizontal orientation
+
 ## 0.0.2
 
 ### Bug Fixes
