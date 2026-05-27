@@ -1,6 +1,6 @@
 {
   "name": "@hsablonniere/musiq",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Web components for rendering musical instruments, chords, and scales",
   "type": "module",
   "packageManager": "pnpm@11.1.3",
