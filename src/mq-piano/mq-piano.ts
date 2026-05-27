@@ -135,7 +135,7 @@ export class MqPiano extends LitElement {
     const startNote = NOTES_BY_SEMITONE[this._startSemitone % 12];
     if (startNote.type === "white" && this._startSemitone > 0 && isBlack(this._startSemitone - 1)) {
       const w = this.mode === "centered" ? startNote.centered : startNote.accurate;
-      blackLayer.push(html`<div style="flex:${w.startPad}"></div>`);
+      blackLayer.push(html`<mq-piano-pad style="flex:${w.startPad}"></mq-piano-pad>`);
     }
 
     for (let semitone = this._startSemitone; semitone <= this._endSemitone; semitone++) {
@@ -150,11 +150,10 @@ export class MqPiano extends LitElement {
 
         const w = this.mode === "centered" ? note.centered : note.accurate;
         whiteLayer.push(this._renderKey(note, octave, w));
-        blackLayer.push(html` <div
-          class="white-spacer"
-          data-key="${note.names.join("-")}"
+        blackLayer.push(html` <mq-piano-white-spacer
+          key="${note.names.join("-")}"
           style="--top-width:${w.top}"
-        ></div>`);
+        ></mq-piano-white-spacer>`);
         prevWasWhite = true;
       } else {
         whiteLayer.push(this._borderTpl);
@@ -166,26 +165,26 @@ export class MqPiano extends LitElement {
     const endNote = NOTES_BY_SEMITONE[this._endSemitone % 12];
     if (endNote.type === "white" && isBlack(this._endSemitone + 1)) {
       const w = this.mode === "centered" ? endNote.centered : endNote.accurate;
-      blackLayer.push(html`<div style="flex:${w.endPad}"></div>`);
+      blackLayer.push(html`<mq-piano-pad style="flex:${w.endPad}"></mq-piano-pad>`);
     }
 
     return html`
-      <div class="layer layer-white">${whiteLayer}</div>
-      <div class="layer layer-black">${blackLayer}</div>
+      <mq-piano-layer type="white">${whiteLayer}</mq-piano-layer>
+      <mq-piano-layer type="black">${blackLayer}</mq-piano-layer>
     `;
   }
 
   private _renderKey(note: Note, octave: number, w?: { top: number; bottom: number }) {
     const style = w == null ? "" : `--top-width:${w.top};--bottom-width:${w.bottom}`;
     return html`
-      <div
+      <mq-piano-key
         part="key key-${note.type}"
-        data-type="${note.type}"
-        data-key="${note.names.join("-")}"
+        type="${note.type}"
+        key="${note.names.join("-")}"
         style="${style}"
       >
         ${note.names.map((alias) => html` <slot name="note-${alias}${octave}"></slot>`)}
-      </div>
+      </mq-piano-key>
     `;
   }
 
@@ -203,29 +202,29 @@ export class MqPiano extends LitElement {
       grid-template-rows: 2fr 1fr;
     }
 
-    .layer {
+    mq-piano-layer {
       display: flex;
       grid-column: 1 / 2;
     }
 
-    .layer-white {
+    mq-piano-layer[type="white"] {
       grid-row: 1 / 3;
     }
 
-    .layer-black {
+    mq-piano-layer[type="black"] {
       grid-row: 1 / 2;
     }
 
-    [data-type="white"] {
+    mq-piano-key[type="white"] {
       background-color: #fff;
       flex: var(--bottom-width);
     }
 
-    .white-spacer {
+    mq-piano-white-spacer {
       flex: var(--top-width);
     }
 
-    [data-type="black"] {
+    mq-piano-key[type="black"] {
       background-color: #000;
       flex: 14;
     }
@@ -235,7 +234,7 @@ export class MqPiano extends LitElement {
       background-color: var(--mq-piano-border-color-inner, var(--border-color));
     }
 
-    .layer-black .border {
+    mq-piano-layer[type="black"] .border {
       visibility: hidden;
     }
   `;
