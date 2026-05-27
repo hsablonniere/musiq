@@ -74,58 +74,51 @@ export class MqFretboard extends LitElement {
     const neckSpan = `${so + 1} / ${so + this.strings * 3 + 1}`;
 
     return html`
-      <div
-        class="grid"
+      <mq-fretboard-grid
         style="grid-template-columns: ${(isV ? stringTracks : neckTracks).join(
           " ",
         )}; grid-template-rows: ${(isV ? neckTracks : stringTracks).join(" ")};"
       >
-        <div
-          class="neck"
+        <mq-fretboard-neck
           style="${this._place(`2 / ${neckEnd}`, this.fullNeck ? neckSpan : fretSpan)}"
-        ></div>
+        ></mq-fretboard-neck>
         ${showNut
-          ? html`<div class="nut" style="${this._place("2 / 3", fretSpan)}"></div>`
-          : html`<div class="fret first-fret" style="${this._place("2 / 3", fretSpan)}"></div>`}
+          ? html`<mq-fretboard-nut style="${this._place("2 / 3", fretSpan)}"></mq-fretboard-nut>`
+          : html`<mq-fretboard-fret class="first-fret" style="${this._place("2 / 3", fretSpan)}"></mq-fretboard-fret>`}
         ${Array.from({ length: fretCount }, (_, i) => {
           const p = fretWire(this.startFret + i);
-          return html`<div class="fret" style="${this._place(`${p} / ${p + 1}`, fretSpan)}"></div>`;
+          return html`<mq-fretboard-fret style="${this._place(`${p} / ${p + 1}`, fretSpan)}"></mq-fretboard-fret>`;
         })}
         ${Array.from({ length: this.strings }, (_, i) => {
           const c = sc(i + 1);
-          return html`<div
-            class="string"
+          return html`<mq-fretboard-string
             style="${this._place(`3 / ${neckEnd}`, `${c} / ${c + 1}`)}"
-          ></div>`;
+          ></mq-fretboard-string>`;
         })}
         ${markers.map((f) => {
           const space = fretSpace(f);
           const np = `${space} / ${space + 1}`;
           if (DOUBLE_MARKERS.has(f)) {
             const half = Math.ceil(this.strings / 2);
-            return html` <div
-                class="inlay"
+            return html` <mq-fretboard-inlay
                 style="${this._place(np, `${sc(1) - 1} / ${sc(half) + 2}`)}"
-              ></div>
-              <div
-                class="inlay"
+              ></mq-fretboard-inlay>
+              <mq-fretboard-inlay
                 style="${this._place(np, `${sc(half + 1) - 1} / ${sc(this.strings) + 2}`)}"
-              ></div>`;
+              ></mq-fretboard-inlay>`;
           }
-          return html`<div
-            class="inlay"
+          return html`<mq-fretboard-inlay
             style="${this._place(np, `${sc(1) - 1} / ${sc(this.strings) + 2}`)}"
-          ></div>`;
+          ></mq-fretboard-inlay>`;
         })}
         ${numFrets.map((f) => {
           const space = fretSpace(f);
-          return html`<div
-            class="fret-number"
+          return html`<mq-fretboard-fret-number
             part="fret-number"
             style="${this._place(`${space} / ${space + 1}`, fnumPos)}"
           >
             ${f}
-          </div>`;
+          </mq-fretboard-fret-number>`;
         })}
         ${Array.from({ length: this.strings }, (_, i) => {
           const s = i + 1;
@@ -167,7 +160,7 @@ export class MqFretboard extends LitElement {
               ></slot>`;
             })
           : nothing}
-      </div>
+      </mq-fretboard-grid>
     `;
   }
 
@@ -180,11 +173,11 @@ export class MqFretboard extends LitElement {
       display: inline-block;
     }
 
-    .grid {
+    mq-fretboard-grid {
       display: grid;
     }
 
-    :host([orientation="vertical"]) .grid {
+    :host([orientation="vertical"]) mq-fretboard-grid {
       display: inline-grid;
     }
 
@@ -192,32 +185,32 @@ export class MqFretboard extends LitElement {
       display: block;
     }
 
-    .neck {
+    mq-fretboard-neck {
       background: var(--mq-fretboard-neck-color);
     }
 
-    .nut {
+    mq-fretboard-nut {
       background-color: var(--mq-fretboard-nut-color, #000);
       border-radius: var(--mq-fretboard-nut-radius, 0);
     }
 
-    :host(:not([orientation="vertical"])) .nut {
+    :host(:not([orientation="vertical"])) mq-fretboard-nut {
       width: var(--mq-fretboard-nut-width, 3px);
     }
 
-    :host([orientation="vertical"]) .nut {
+    :host([orientation="vertical"]) mq-fretboard-nut {
       height: var(--mq-fretboard-nut-width, 3px);
     }
 
-    .fret {
+    mq-fretboard-fret {
       background-color: var(--mq-fretboard-fret-color, #000);
     }
 
-    :host(:not([orientation="vertical"])) .fret {
+    :host(:not([orientation="vertical"])) mq-fretboard-fret {
       width: var(--mq-fretboard-fret-width, 1px);
     }
 
-    :host([orientation="vertical"]) .fret {
+    :host([orientation="vertical"]) mq-fretboard-fret {
       height: var(--mq-fretboard-fret-width, 1px);
     }
 
@@ -231,19 +224,19 @@ export class MqFretboard extends LitElement {
       margin-top: calc(var(--mq-fretboard-nut-width, 3px) - var(--mq-fretboard-fret-width, 1px));
     }
 
-    .string {
+    mq-fretboard-string {
       background-color: var(--mq-fretboard-string-color, #000);
     }
 
-    :host(:not([orientation="vertical"])) .string {
+    :host(:not([orientation="vertical"])) mq-fretboard-string {
       height: var(--mq-fretboard-string-width, 1px);
     }
 
-    :host([orientation="vertical"]) .string {
+    :host([orientation="vertical"]) mq-fretboard-string {
       width: var(--mq-fretboard-string-width, 1px);
     }
 
-    .inlay {
+    mq-fretboard-inlay {
       background-color: var(--mq-fretboard-inlay-color, #000);
       width: var(--mq-fretboard-inlay-size, 6px);
       height: var(--mq-fretboard-inlay-size, 6px);
@@ -251,22 +244,22 @@ export class MqFretboard extends LitElement {
       place-self: center;
     }
 
-    .fret-number {
+    mq-fretboard-fret-number {
       color: inherit;
       font-size: 0.75em;
       line-height: 1;
       place-self: center;
     }
 
-    :host(:not([orientation="vertical"])) .fret-number {
+    :host(:not([orientation="vertical"])) mq-fretboard-fret-number {
       margin-top: 0.3em;
     }
 
-    :host([orientation="vertical"]) .fret-number {
+    :host([orientation="vertical"]) mq-fretboard-fret-number {
       margin-right: 0.3em;
     }
 
-    :host([left-handed]) .grid {
+    :host([left-handed]) mq-fretboard-grid {
       transform: scaleX(-1);
     }
 
