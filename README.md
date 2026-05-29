@@ -22,7 +22,7 @@ import '@hsablonniere/musiq';
 
 Piano keyboard with realistic key geometry. Configurable range, `accurate` or `centered` black key positioning, `preserve-ratio` for real-world proportions. Stylable via `::part()` and CSS custom properties. Named slots (`note-C3`, `note-Fs4`…) for per-key annotations.
 
-**[Docs & demos](https://hsablonniere.github.io/musiq/mq-piano/mq-piano.html)**
+**[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-piano/mq-piano.html)**
 
 ![mq-piano](src/mq-piano/mq-piano.png)
 
@@ -30,7 +30,7 @@ Piano keyboard with realistic key geometry. Configurable range, `accurate` or `c
 
 Piano keyboard with chord visualization. Pass a chord name, get highlighted keys. Supports inversions via slash chords (`C/E`, `C/G`), `note-labels`, and customizable active color.
 
-**[Docs & demos](https://hsablonniere.github.io/musiq/mq-piano-chord/mq-piano-chord.html)**
+**[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-piano-chord/mq-piano-chord.html)**
 
 ![mq-piano-chord](src/mq-piano-chord/mq-piano-chord.png)
 
@@ -38,7 +38,7 @@ Piano keyboard with chord visualization. Pass a chord name, get highlighted keys
 
 Piano keyboard with scale visualization. Major, minor, pentatonic, blues, modes (dorian, phrygian, lydian…), and more. Distinct root color, `note-labels`, and `degree-labels`.
 
-**[Docs & demos](https://hsablonniere.github.io/musiq/mq-piano-scale/mq-piano-scale.html)**
+**[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-piano-scale/mq-piano-scale.html)**
 
 ![mq-piano-scale](src/mq-piano-scale/mq-piano-scale.png)
 
@@ -46,7 +46,7 @@ Piano keyboard with scale visualization. Major, minor, pentatonic, blues, modes 
 
 Guitar/bass fretboard with slot-based content placement. The component positions, you style. Horizontal or vertical orientation, configurable string count and fret range, `inlays`, `full-neck`, `left-handed`, and multi-string span slots for barres via `extra-slots`.
 
-**[Docs & demos](https://hsablonniere.github.io/musiq/mq-fretboard/mq-fretboard.html)**
+**[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-fretboard/mq-fretboard.html)**
 
 ![mq-fretboard](src/mq-fretboard/mq-fretboard.png)
 
@@ -54,7 +54,7 @@ Guitar/bass fretboard with slot-based content placement. The component positions
 
 Fretboard with chord diagram. Pass a chord name, get finger positions with open/muted string indicators and barre support. Guitar and ukulele, multiple voicings via `position`, `finger-labels`, and `left-handed`.
 
-**[Docs & demos](https://hsablonniere.github.io/musiq/mq-fretboard-chord/mq-fretboard-chord.html)**
+**[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-fretboard-chord/mq-fretboard-chord.html)**
 
 ![mq-fretboard-chord](src/mq-fretboard-chord/mq-fretboard-chord.png)
 
@@ -62,7 +62,7 @@ Fretboard with chord diagram. Pass a chord name, get finger positions with open/
 
 Fretboard with scale visualization across the full neck. Custom tunings (drop D, ukulele…), configurable fret range, `note-labels`, `degree-labels`, and `left-handed`.
 
-**[Docs & demos](https://hsablonniere.github.io/musiq/mq-fretboard-scale/mq-fretboard-scale.html)**
+**[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-fretboard-scale/mq-fretboard-scale.html)**
 
 ![mq-fretboard-scale](src/mq-fretboard-scale/mq-fretboard-scale.png)
 
