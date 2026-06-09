@@ -4,6 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>&lt;mq-piano&gt; — demo</title>
+
+    <!-- mq-piano ships unstyled; these base styles keep the plain examples visible. Class-scoped
+         ::part rules below override them per example. -->
+    <style>
+      mq-piano {
+        --mq-piano-border-color: #d0d0d0;
+        --mq-piano-border-color-outer: #b0b0b0;
+        --mq-piano-border-color-inner: #d0d0d0;
+        --mq-piano-border-width: 1px;
+      }
+      mq-piano::part(key-white) {
+        background-color: #fafafa;
+      }
+      mq-piano::part(key-black) {
+        background-color: #222222;
+      }
+    </style>
+
     <style>
       :root {
         --bg: #fafaf8;
@@ -185,8 +203,8 @@
       <p>
         Piano keyboard with realistic key geometry. Configurable range,
         <code>accurate</code> or <code>centered</code> black key positioning, always locked to real
-        piano proportions. Stylable via <code>::part()</code> and CSS custom properties. Named slots
-        for per-key annotations.
+        piano proportions. Ships unstyled — fully themeable via <code>::part()</code> and CSS custom
+        properties. Named slots for per-key annotations.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
@@ -274,7 +292,7 @@
           <tr>
             <td><code>--mq-piano-border-color</code></td>
             <td><code>&lt;color&gt;</code></td>
-            <td><code>#000</code></td>
+            <td><code>transparent</code></td>
             <td>Base color for all borders (outer + inner)</td>
           </tr>
           <tr>

@@ -20,7 +20,7 @@ import '@hsablonniere/musiq';
 
 ### `<mq-piano>`
 
-Piano keyboard with realistic key geometry. Configurable range, `accurate` or `centered` black key positioning, always locked to real piano proportions. Stylable via `::part()` and CSS custom properties. Named slots (`note-C3`, `note-Fs4`…) for per-key annotations.
+Piano keyboard with realistic key geometry. Configurable range, `accurate` or `centered` black key positioning, always locked to real piano proportions. **Ships unstyled** — fully themeable via `::part()` and CSS custom properties. Named slots (`note-C3`, `note-Fs4`…) for per-key annotations.
 
 **[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-piano/mq-piano.html)**
 

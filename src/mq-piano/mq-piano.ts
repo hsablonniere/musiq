@@ -269,7 +269,7 @@ export class MqPiano extends LitElement {
 
   static styles = css`
     :host {
-      --border-color: var(--mq-piano-border-color, #000);
+      --border-color: var(--mq-piano-border-color, transparent);
       --border-width: var(--mq-piano-border-width, 1px);
       border-color: var(--mq-piano-border-color-outer, var(--border-color));
       border-style: solid;
@@ -293,7 +293,6 @@ export class MqPiano extends LitElement {
     }
 
     [data-type="white"] {
-      background-color: #fff;
       flex: var(--front-width);
     }
 
@@ -302,7 +301,6 @@ export class MqPiano extends LitElement {
     }
 
     [data-type="black"] {
-      background-color: #000;
       flex: 14;
     }
 
