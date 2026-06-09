@@ -1,5 +1,7 @@
 import { css, html, LitElement } from "lit";
+import type { TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { styleMap } from "lit/directives/style-map.js";
 
 /** Horizontal geometry of a white key, in proportional flex units. */
 type WhiteKeyGeometry = {
@@ -155,14 +157,16 @@ export class MqPiano extends LitElement {
   }
 
   render() {
-    const whiteLayer: unknown[] = [];
-    const blackLayer: unknown[] = [];
+    const whiteLayer: TemplateResult[] = [];
+    const blackLayer: TemplateResult[] = [];
     let prevWasWhite = false;
 
+    // `_startSemitone` always lands on a white key (willUpdate adjusts it); the
+    // `type === "white"` test is kept to narrow the union for the geometry access below.
     const startNote = NOTES_BY_SEMITONE[this._startSemitone % 12];
     if (startNote.type === "white" && this._startSemitone > 0 && isBlack(this._startSemitone - 1)) {
-      const w = this.mode === "centered" ? startNote.centered : startNote.accurate;
-      blackLayer.push(html`<div style="flex:${w.startGap}"></div>`);
+      const keyGeometry = this.mode === "centered" ? startNote.centered : startNote.accurate;
+      blackLayer.push(html`<div style=${styleMap({ flex: keyGeometry.startGap })}></div>`);
     }
 
     for (let semitone = this._startSemitone; semitone <= this._endSemitone; semitone++) {
@@ -175,12 +179,11 @@ export class MqPiano extends LitElement {
           blackLayer.push(this._borderTpl);
         }
 
-        const w = this.mode === "centered" ? note.centered : note.accurate;
-        whiteLayer.push(this._renderKey(note, octave, w));
-        blackLayer.push(html` <div
+        const keyGeometry = this.mode === "centered" ? note.centered : note.accurate;
+        whiteLayer.push(this._renderKey(note, octave, keyGeometry));
+        blackLayer.push(html`<div
           class="white-spacer"
-          data-key="${note.names.join("-")}"
-          style="--back-width:${w.backWidth}"
+          style=${styleMap({ "--back-width": keyGeometry.backWidth })}
         ></div>`);
         prevWasWhite = true;
       } else {
@@ -190,10 +193,11 @@ export class MqPiano extends LitElement {
       }
     }
 
+    // Always a white key (see willUpdate); the `type === "white"` test narrows the union.
     const endNote = NOTES_BY_SEMITONE[this._endSemitone % 12];
     if (endNote.type === "white" && isBlack(this._endSemitone + 1)) {
-      const w = this.mode === "centered" ? endNote.centered : endNote.accurate;
-      blackLayer.push(html`<div style="flex:${w.endGap}"></div>`);
+      const keyGeometry = this.mode === "centered" ? endNote.centered : endNote.accurate;
+      blackLayer.push(html`<div style=${styleMap({ flex: keyGeometry.endGap })}></div>`);
     }
 
     return html`
@@ -202,16 +206,16 @@ export class MqPiano extends LitElement {
     `;
   }
 
-  private _renderKey(note: Note, octave: number, w?: { backWidth: number; frontWidth: number }) {
-    const style = w == null ? "" : `--back-width:${w.backWidth};--front-width:${w.frontWidth}`;
+  private _renderKey(note: Note, octave: number, geometry?: WhiteKeyGeometry) {
+    const style = geometry ? { "--front-width": geometry.frontWidth } : {};
     return html`
       <div
         part="key key-${note.type}"
         data-type="${note.type}"
         data-key="${note.names.join("-")}"
-        style="${style}"
+        style=${styleMap(style)}
       >
-        ${note.names.map((alias) => html` <slot name="note-${alias}${octave}"></slot>`)}
+        ${note.names.map((alias) => html`<slot name="note-${alias}${octave}"></slot>`)}
       </div>
     `;
   }
