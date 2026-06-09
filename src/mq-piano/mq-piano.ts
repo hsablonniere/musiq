@@ -134,6 +134,35 @@ const MAX_RANGE = 120;
 const WHITE_KEY_WIDTH_MM = 23.5;
 const KEYBOARD_DEPTH_MM = 150;
 
+/**
+ * Piano keyboard with realistic key geometry. Configurable range, `accurate`
+ * or `centered` black key positioning, always locked to real piano
+ * proportions. Ships **unstyled** — fully themeable via `::part()` and CSS
+ * custom properties. Named slots for per-key annotations.
+ *
+ * Keys are correctly positioned but have no color by default. Apply appearance
+ * via `::part()` and CSS custom properties.
+ *
+ * The component is a block whose aspect ratio always matches real piano
+ * proportions. Set `width` and/or `height` on the element to size it; if only
+ * one dimension is constrained, the other follows the ratio.
+ *
+ * @slot note-{name}{octave} - Per-note content, e.g. `note-C3`, `note-Fs4`, `note-Db3`. Black keys expose both enharmonic names; use `s` for sharp (♯).
+ *
+ * @csspart key - Every key (white and black).
+ * @csspart key-white - White keys only.
+ * @csspart key-black - Black keys only.
+ * @csspart note-{name} - All keys of a pitch-class (octave-agnostic), e.g. `note-c`, `note-fs`. Black keys expose both enharmonics: `note-cs`/`note-db`, `note-ds`/`note-eb`, `note-fs`/`note-gb`, `note-gs`/`note-ab`, `note-as`/`note-bb`. Use `s` for sharp (♯).
+ * @csspart note-{name}{octave} - A single key by absolute pitch, e.g. `note-c3`, `note-fs4`, `note-db3`.
+ *
+ * @cssprop [--mq-piano-black-key-height=64%] - Black-key height as a percentage of the full key height: `100%` spans the whole keyboard, `0%` hides them. Defaults to real piano proportions.
+ * @cssprop [--mq-piano-border-color=transparent] - Base color for all borders (outer frame + inner separators).
+ * @cssprop [--mq-piano-border-width=1px] - Base width for all borders.
+ * @cssprop --mq-piano-border-color-outer - Color of the outer frame (falls back to `--mq-piano-border-color`).
+ * @cssprop --mq-piano-border-color-inner - Color of inter-key separators (falls back to `--mq-piano-border-color`).
+ * @cssprop --mq-piano-border-width-outer - Width of the outer frame (falls back to `--mq-piano-border-width`).
+ * @cssprop --mq-piano-border-width-inner - Width of inter-key separators (falls back to `--mq-piano-border-width`).
+ */
 @customElement("mq-piano")
 export class MqPiano extends LitElement {
   @property({ attribute: "start-note" }) accessor startNote: string | undefined;
