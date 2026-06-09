@@ -136,40 +136,36 @@ export class MqPiano extends LitElement {
   private _endSemitone = DEFAULT_END_SEMITONE;
 
   willUpdate() {
-    let startSemitone = parseSemitone(this.startNote);
-    let endSemitone = parseSemitone(this.endNote);
+    const parsedStart = parseSemitone(this.startNote);
+    const parsedEnd = parseSemitone(this.endNote);
 
-    if (this.startNote != null && startSemitone == null) {
+    if (this.startNote != null && parsedStart == null) {
       console.warn(`mq-piano: invalid start-note "${this.startNote}", ignored`);
     }
-    if (this.endNote != null && endSemitone == null) {
+    if (this.endNote != null && parsedEnd == null) {
       console.warn(`mq-piano: invalid end-note "${this.endNote}", ignored`);
     }
 
-    if (startSemitone == null && endSemitone == null) {
-      startSemitone = DEFAULT_START_SEMITONE;
-      endSemitone = DEFAULT_END_SEMITONE;
-    } else if (startSemitone == null) {
-      startSemitone = endSemitone! - DEFAULT_RANGE;
-    } else if (endSemitone == null) {
-      endSemitone = startSemitone + DEFAULT_RANGE;
-    }
+    // Resolve both ends, deriving the missing one from the other (or defaults).
+    let start =
+      parsedStart ?? (parsedEnd != null ? parsedEnd - DEFAULT_RANGE : DEFAULT_START_SEMITONE);
+    let end = parsedEnd ?? start + DEFAULT_RANGE;
 
-    if (endSemitone! < startSemitone) {
+    if (end < start) {
       console.warn(`mq-piano: end-note before start-note, falling back to defaults`);
-      startSemitone = DEFAULT_START_SEMITONE;
-      endSemitone = DEFAULT_END_SEMITONE;
+      start = DEFAULT_START_SEMITONE;
+      end = DEFAULT_END_SEMITONE;
     }
 
-    startSemitone = Math.max(0, startSemitone);
-    if (isBlack(startSemitone)) startSemitone--;
-    if (isBlack(endSemitone!)) endSemitone = endSemitone! + 1;
+    start = Math.max(0, start);
+    if (isBlack(start)) start--;
+    if (isBlack(end)) end++;
 
-    this._startSemitone = startSemitone;
-    this._endSemitone = endSemitone!;
+    this._startSemitone = start;
+    this._endSemitone = end;
 
     let whiteCount = 0;
-    for (let s = startSemitone; s <= endSemitone!; s++) {
+    for (let s = start; s <= end; s++) {
       if (NOTES_BY_SEMITONE[s % 12].type === "white") whiteCount++;
     }
     this.style.aspectRatio = this.preserveRatio ? `${whiteCount * 23.5} / 150` : "";
