@@ -125,6 +125,10 @@ const DEFAULT_START_SEMITONE = parseSemitone(DEFAULT_START_NOTE)!;
 const DEFAULT_END_SEMITONE = parseSemitone(DEFAULT_END_NOTE)!;
 const DEFAULT_RANGE = DEFAULT_END_SEMITONE - DEFAULT_START_SEMITONE;
 
+// Hard cap on the keyboard span (10 octaves). Beyond this, rendering that many
+// keys is almost certainly a mistake (a real piano spans ~7.25 octaves).
+const MAX_RANGE = 120;
+
 @customElement("mq-piano")
 export class MqPiano extends LitElement {
   @property({ attribute: "start-note" }) accessor startNote: string | undefined;
@@ -164,6 +168,14 @@ export class MqPiano extends LitElement {
     start = Math.max(0, start);
     if (isBlack(start)) start--;
     if (isBlack(end)) end++;
+
+    // Cap after the white-key adjustments above, so the rendered span never
+    // exceeds MAX_RANGE. Clamp `end` back to a white key without re-widening.
+    if (end - start > MAX_RANGE) {
+      console.warn(`mq-piano: range exceeds ${MAX_RANGE / 12} octaves, clamping end-note`);
+      end = start + MAX_RANGE;
+      if (isBlack(end)) end--;
+    }
 
     this._startSemitone = start;
     this._endSemitone = end;
