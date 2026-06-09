@@ -29,8 +29,7 @@
       }
 
       header {
-        border-bottom: 2px solid var(--fg);
-        margin-bottom: 3rem;
+        margin-bottom: 1rem;
         padding-bottom: 1.5rem;
       }
 
@@ -55,15 +54,29 @@
         color: var(--accent);
       }
 
+      /* Group divider — sits between cards, not inside them. */
+      h2 {
+        font-size: 1.75rem;
+        letter-spacing: -0.01em;
+        margin: 3rem 0 1.25rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 2px solid var(--fg);
+      }
+
+      header + h2 {
+        margin-top: 2rem;
+      }
+
       section {
         background: var(--card);
         border: 1px solid var(--line);
         border-radius: 12px;
         padding: 1.75rem 2rem 2rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
       }
 
-      h2 {
+      /* Demo subtitle inside a card. */
+      section h3 {
         font-size: 1.05rem;
         text-transform: uppercase;
         letter-spacing: 0.06em;
@@ -71,20 +84,16 @@
         margin: 0 0 0.4rem;
       }
 
-      h3 {
-        font-size: 1.4rem;
-        margin: 0 0 0.5rem;
-      }
-
       .desc {
         color: var(--muted);
         margin: 0 0 1.5rem;
-        max-width: 46rem;
       }
 
       .desc code,
       .api code,
       h2 code,
+      h3 code,
+      .caption code,
       footer code {
         background: #f0f0ec;
         padding: 0.1em 0.35em;
@@ -95,14 +104,6 @@
 
       .demo {
         height: 240px;
-      }
-
-      .demo-tall {
-        height: 320px;
-      }
-
-      .demo-short {
-        height: 150px;
       }
 
       .row {
@@ -124,7 +125,6 @@
         font-size: 0.85rem;
         color: var(--muted);
         margin: 0.6rem 0 0;
-        text-align: center;
       }
 
       footer {
@@ -132,18 +132,6 @@
         font-size: 0.85rem;
         text-align: center;
         margin-top: 4rem;
-      }
-
-      .api h3 {
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--muted);
-        margin: 1.5rem 0 0.4rem;
-      }
-
-      .api h3:first-of-type {
-        margin-top: 0.25rem;
       }
 
       .api table {
@@ -167,16 +155,12 @@
         padding: 0.3rem 0.75rem 0.3rem 0;
         border-bottom: 1px solid var(--line);
         vertical-align: top;
+        white-space: nowrap;
       }
 
-      .api .swatch {
-        display: inline-block;
-        width: 1em;
-        height: 1em;
-        border-radius: 2px;
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        vertical-align: baseline;
-        margin-right: 0.3em;
+      /* Description is always the last column — let it wrap, keep the rest intact. */
+      .api td:last-child {
+        white-space: normal;
       }
 
       pre {
@@ -207,15 +191,14 @@
       <p><a href="../../">← Back to index</a></p>
     </header>
 
+    <h2>Install</h2>
     <section>
-      <h2>Install</h2>
       <pre><code>npm install @hsablonniere/musiq</code></pre>
       <pre><code>import '@hsablonniere/musiq/mq-piano';</code></pre>
     </section>
 
+    <h2>API</h2>
     <section class="api">
-      <h2>API</h2>
-
       <h3>Attributes / Properties</h3>
       <table>
         <thead>
@@ -233,57 +216,52 @@
             <td><code>startNote</code></td>
             <td><code>string</code></td>
             <td><code>C3</code></td>
-            <td>First note of the keyboard range. If a black key is specified, the white key before it is included</td>
+            <td>
+              First note of the keyboard range. If a black key is specified, the white key before it
+              is included
+            </td>
           </tr>
           <tr>
             <td><code>end-note</code></td>
             <td><code>endNote</code></td>
             <td><code>string</code></td>
             <td><code>E4</code></td>
-            <td>Last note of the keyboard range. If a black key is specified, the white key after it is included</td>
+            <td>
+              Last note of the keyboard range. If a black key is specified, the white key after it
+              is included
+            </td>
           </tr>
           <tr>
             <td><code>mode</code></td>
             <td><code>mode</code></td>
             <td><code>'accurate' | 'centered'</code></td>
             <td><code>accurate</code></td>
-            <td>Black key positioning: <code>accurate</code> uses real piano geometry, <code>centered</code> centers them between white keys</td>
+            <td>
+              Black key positioning: <code>accurate</code> uses real piano geometry,
+              <code>centered</code> centers them between white keys
+            </td>
           </tr>
           <tr>
             <td><code>preserve-ratio</code></td>
             <td><code>preserveRatio</code></td>
             <td><code>boolean</code></td>
             <td><code>false</code></td>
-            <td>Lock aspect ratio to real piano proportions (the unconstrained dimension is derived from the constrained one)</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h3>Slots</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Slot</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>note-{name}{octave}</code></td>
             <td>
-              Per-note content — e.g. <code>note-C3</code>, <code>note-Fs4</code>,
-              <code>note-Db3</code>. Black keys expose both enharmonic names.
-              Use <code>s</code> for sharp (♯) since <code>#</code> is not valid in slot names.
+              Lock aspect ratio to real piano proportions (the unconstrained dimension is derived
+              from the constrained one)
             </td>
           </tr>
         </tbody>
       </table>
+    </section>
 
+    <section class="api">
       <h3>CSS Custom Properties</h3>
       <table>
         <thead>
           <tr>
             <th>Property</th>
+            <th>Type</th>
             <th>Default</th>
             <th>Description</th>
           </tr>
@@ -291,37 +269,45 @@
         <tbody>
           <tr>
             <td><code>--mq-piano-border-color</code></td>
+            <td><code>&lt;color&gt;</code></td>
             <td><code>#000</code></td>
             <td>Base color for all borders (outer + inner)</td>
           </tr>
           <tr>
             <td><code>--mq-piano-border-width</code></td>
+            <td><code>&lt;length&gt;</code></td>
             <td><code>1px</code></td>
             <td>Base width for all borders (outer + inner)</td>
           </tr>
           <tr>
             <td><code>--mq-piano-border-color-outer</code></td>
+            <td><code>&lt;color&gt;</code></td>
             <td>falls back to <code>border-color</code></td>
             <td>Color of the outer border around the keyboard</td>
           </tr>
           <tr>
             <td><code>--mq-piano-border-color-inner</code></td>
+            <td><code>&lt;color&gt;</code></td>
             <td>falls back to <code>border-color</code></td>
             <td>Color of borders between keys</td>
           </tr>
           <tr>
             <td><code>--mq-piano-border-width-outer</code></td>
+            <td><code>&lt;length&gt;</code></td>
             <td>falls back to <code>border-width</code></td>
             <td>Width of the outer border around the keyboard</td>
           </tr>
           <tr>
             <td><code>--mq-piano-border-width-inner</code></td>
+            <td><code>&lt;length&gt;</code></td>
             <td>falls back to <code>border-width</code></td>
             <td>Width of borders between keys</td>
           </tr>
         </tbody>
       </table>
+    </section>
 
+    <section class="api">
       <h3>CSS Parts</h3>
       <table>
         <thead>
@@ -333,7 +319,7 @@
         <tbody>
           <tr>
             <td><code>key</code></td>
-            <td>All keys (white and black)</td>
+            <td>All keys, white and black</td>
           </tr>
           <tr>
             <td><code>key-white</code></td>
@@ -347,8 +333,32 @@
       </table>
     </section>
 
+    <section class="api">
+      <h3>Slots</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Slot</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>note-{name}{octave}</code></td>
+            <td>
+              Per-note content — e.g. <code>note-C3</code>, <code>note-Fs4</code>,
+              <code>note-Db3</code>. Black keys expose both enharmonic names. Use <code>s</code> for
+              sharp (♯) since <code>#</code> is not valid in slot names.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <h2>Range</h2>
+
     <section>
-      <h2>Range — default</h2>
+      <h3>Default</h3>
       <p class="desc">
         Without <code>start-note</code> or <code>end-note</code>, the keyboard covers the default
         range <strong>C3 → E4</strong>.
@@ -357,22 +367,22 @@
     </section>
 
     <section>
-      <h2>Range — full piano</h2>
+      <h3>Custom</h3>
       <p class="desc">
-        A standard acoustic piano: 88 keys from <code>A0</code> to <code>C8</code>.
+        Any <code>start-note</code> / <code>end-note</code> pair — from a couple of octaves to a
+        full acoustic piano. A black key as a bound snaps to include the adjacent white key.
       </p>
-      <mq-piano class="demo-short" start-note="A0" end-note="C8"></mq-piano>
-      <p class="caption">A0 — C8 · 52 white keys · 36 black keys</p>
-    </section>
-
-    <section>
-      <h2>Range — custom</h2>
-      <p class="desc">2 octaves, C3 → C5</p>
       <mq-piano class="demo" start-note="C3" end-note="C5"></mq-piano>
+      <p class="caption">2 octaves · <code>start-note="C3"</code> <code>end-note="C5"</code></p>
+      <mq-piano start-note="A0" end-note="C8" style="margin-top: 1.5rem"></mq-piano>
+      <p class="caption">
+        full 88-key piano · <code>start-note="A0"</code> <code>end-note="C8"</code> · 52 white · 36
+        black
+      </p>
     </section>
 
     <section>
-      <h2>Range — single bound</h2>
+      <h3>Single bound</h3>
       <p class="desc">Only one end of the range provided, the other is inferred.</p>
       <div class="row">
         <div>
@@ -386,8 +396,10 @@
       </div>
     </section>
 
+    <h2>Mode</h2>
+
     <section>
-      <h2>Mode — <code>centered</code></h2>
+      <h3><code>accurate</code> vs <code>centered</code></h3>
       <p class="desc">
         With <code>mode="centered"</code>, every white key has the same width and black keys are
         perfectly centered between their neighbors.
@@ -404,8 +416,10 @@
       </div>
     </section>
 
+    <h2>Style</h2>
+
     <section>
-      <h2>Style — borders</h2>
+      <h3>Borders</h3>
       <p class="desc">Width and color via CSS custom properties.</p>
       <div class="row">
         <div>
@@ -428,8 +442,8 @@
     </section>
 
     <section>
-      <h2>Style — <code>::part()</code></h2>
-      <p class="desc">Harpsichord (inverted colors)</p>
+      <h3><code>::part()</code> — harpsichord</h3>
+      <p class="desc">Inverted colors</p>
       <style>
         .clavecin::part(key-white) {
           background-color: #1a1a1a;
@@ -445,7 +459,7 @@
     </section>
 
     <section>
-      <h2>Style — <code>::part()</code></h2>
+      <h3><code>::part()</code> — neon</h3>
       <p class="desc">Neon theme</p>
       <style>
         .neon {
@@ -464,8 +478,10 @@
       <mq-piano class="demo neon" start-note="C3" end-note="C5"></mq-piano>
     </section>
 
+    <h2>Slots</h2>
+
     <section>
-      <h2>Slots — annotations</h2>
+      <h3>Annotations</h3>
       <p class="desc">Label each key with note names via named slots.</p>
       <style>
         .annotations::part(key-white),
@@ -507,7 +523,7 @@
     </section>
 
     <section>
-      <h2>Slots — colored dots</h2>
+      <h3>Colored dots</h3>
       <p class="desc">C major chord highlighted</p>
       <style>
         .chord::part(key-white),
@@ -538,8 +554,10 @@
       </mq-piano>
     </section>
 
+    <h2>Layout</h2>
+
     <section>
-      <h2>Layout — <code>preserve-ratio</code></h2>
+      <h3><code>preserve-ratio</code></h3>
       <p class="desc">Locks the keyboard to realistic piano proportions.</p>
       <mq-piano style="width: 600px" start-note="C3" end-note="C5" preserve-ratio></mq-piano>
       <p class="caption">
