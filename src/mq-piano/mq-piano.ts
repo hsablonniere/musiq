@@ -1,5 +1,5 @@
 import { css, html, LitElement } from "lit";
-import type { TemplateResult } from "lit";
+import type { PropertyValues, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { styleMap } from "lit/directives/style-map.js";
 
@@ -135,7 +135,11 @@ export class MqPiano extends LitElement {
   private _startSemitone = DEFAULT_START_SEMITONE;
   private _endSemitone = DEFAULT_END_SEMITONE;
 
-  willUpdate() {
+  willUpdate(changed: PropertyValues) {
+    // Only the note range drives the geometry; skip the recompute on unrelated
+    // updates (e.g. a `mode` change), but always run on the first update.
+    if (this.hasUpdated && !changed.has("startNote") && !changed.has("endNote")) return;
+
     const parsedStart = parseSemitone(this.startNote);
     const parsedEnd = parseSemitone(this.endNote);
 
