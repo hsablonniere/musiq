@@ -133,13 +133,18 @@ const MAX_RANGE = 120;
 export class MqPiano extends LitElement {
   @property({ attribute: "start-note" }) accessor startNote: string | undefined;
   @property({ attribute: "end-note" }) accessor endNote: string | undefined;
-  @property() accessor mode: "accurate" | "centered" = "accurate";
+  @property({ reflect: true }) accessor mode: "accurate" | "centered" = "accurate";
   @property({ type: Boolean, attribute: "preserve-ratio" }) accessor preserveRatio: boolean = false;
 
   private _startSemitone = DEFAULT_START_SEMITONE;
   private _endSemitone = DEFAULT_END_SEMITONE;
 
   willUpdate(changed: PropertyValues) {
+    if (changed.has("mode") && this.mode !== "accurate" && this.mode !== "centered") {
+      console.warn(`mq-piano: invalid mode "${this.mode}", falling back to "accurate"`);
+      this.mode = "accurate";
+    }
+
     // Only the note range drives the geometry; skip the recompute on unrelated
     // updates (e.g. a `mode` change), but always run on the first update.
     if (this.hasUpdated && !changed.has("startNote") && !changed.has("endNote")) return;
