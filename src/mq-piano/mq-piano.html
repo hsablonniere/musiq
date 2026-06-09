@@ -324,6 +324,30 @@
             <td><code>key-black</code></td>
             <td>Black keys only</td>
           </tr>
+          <tr>
+            <td><code>note-c</code> … <code>note-b</code></td>
+            <td>
+              White keys by pitch-class, octave-agnostic: <code>note-c</code>, <code>note-d</code>,
+              <code>note-e</code>, <code>note-f</code>, <code>note-g</code>, <code>note-a</code>,
+              <code>note-b</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>note-cs</code>/<code>note-db</code> …</td>
+            <td>
+              Black keys by pitch-class, both enharmonic aliases exposed:
+              <code>note-cs</code>/<code>note-db</code>, <code>note-ds</code>/<code>note-eb</code>,
+              <code>note-fs</code>/<code>note-gb</code>, <code>note-gs</code>/<code>note-ab</code>,
+              <code>note-as</code>/<code>note-bb</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>note-c3</code>, <code>note-fs4</code> …</td>
+            <td>
+              A single key by absolute pitch (octave-specific). Black keys expose both enharmonic
+              names: <code>note-cs3</code>/<code>note-db3</code>
+            </td>
+          </tr>
         </tbody>
       </table>
     </section>
@@ -437,40 +461,55 @@
     </section>
 
     <section>
-      <h3><code>::part()</code> — harpsichord</h3>
-      <p class="desc">Inverted colors</p>
+      <h3>Keys</h3>
+      <p class="desc">
+        Style keys by category (<code>::part(key-white)</code> / <code>::part(key-black)</code>),
+        target a pitch-class octave-wide (<code>::part(note-c)</code>, <code>::part(note-fs)</code>,
+        …), or a single key by absolute pitch (<code>::part(note-c3)</code>).
+      </p>
       <style>
-        .clavecin::part(key-white) {
-          background-color: #1a1a1a;
+        .parts-bw {
+          --mq-piano-border-color: #2b2b33;
         }
-        .clavecin::part(key-black) {
+        .parts-bw::part(key-white) {
           background-color: #f4f0e6;
         }
-        .clavecin {
-          --mq-piano-border-color: #f4f0e6;
+        .parts-bw::part(key-black) {
+          background-color: #2b2b33;
         }
-      </style>
-      <mq-piano class="demo clavecin" start-note="C3" end-note="C5"></mq-piano>
-    </section>
 
-    <section>
-      <h3><code>::part()</code> — neon</h3>
-      <p class="desc">Neon theme</p>
-      <style>
-        .neon {
-          --mq-piano-border-color: #0a0a14;
-          --mq-piano-border-width: 2px;
+        .parts-pc {
+          --mq-piano-border-color: #2b2b33;
         }
-        .neon::part(key-white) {
-          background: linear-gradient(#1b1b2f, #0e0e1a);
-          box-shadow: inset 0 0 12px #00e5ff44;
+        .parts-pc::part(key-white) {
+          background-color: #f4f0e6;
         }
-        .neon::part(key-black) {
-          background: linear-gradient(#ff2d95, #b3005c);
-          box-shadow: 0 0 10px #ff2d9588;
+        .parts-pc::part(key-black) {
+          background-color: #2b2b33;
+        }
+        .parts-pc::part(note-c) {
+          background-color: #e9b949;
+        }
+        .parts-pc::part(note-fs) {
+          background-color: #16a085;
         }
       </style>
-      <mq-piano class="demo neon" start-note="C3" end-note="C5"></mq-piano>
+      <div class="row">
+        <div>
+          <mq-piano class="parts-bw" start-note="C3" end-note="C5"></mq-piano>
+          <p class="caption">
+            every white key with <code>::part(key-white)</code> · every black key with
+            <code>::part(key-black)</code>
+          </p>
+        </div>
+        <div>
+          <mq-piano class="parts-pc" start-note="C3" end-note="C5"></mq-piano>
+          <p class="caption">
+            every C key with <code>::part(note-c)</code> · every F♯ key with
+            <code>::part(note-fs)</code>
+          </p>
+        </div>
+      </div>
     </section>
 
     <h2>Slots</h2>

@@ -248,11 +248,16 @@ export class MqPiano extends LitElement {
 
   private _renderKey(note: Note, octave: number, geometry?: WhiteKeyGeometry) {
     const style = geometry ? { "--front-width": geometry.frontWidth } : {};
+    const notesClassParts = note.names
+      .flatMap((noteName) => {
+        const name = noteName.toLowerCase();
+        return [`note-${name}`, `note-${name}${octave}`];
+      })
+      .join(" ");
     return html`
       <div
-        part="key key-${note.type}"
+        part="key key-${note.type} ${notesClassParts}"
         data-type="${note.type}"
-        data-key="${note.names.join("-")}"
         style=${styleMap(style)}
       >
         ${note.names.map((alias) => html`<slot name="note-${alias}${octave}"></slot>`)}
