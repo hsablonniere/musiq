@@ -1,11 +1,36 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-// One octave of semitones. White-key geometry is named by edge: `backWidth` is
-// the strip visible between the neighbouring black keys, `frontWidth` the full
-// key width, and `startGap`/`endGap` the back-edge span taken by the black keys
-// on each side. Proportions derived from http://quadibloc.com/other/cnv05.htm
-const NOTES_BY_SEMITONE = [
+/** Horizontal geometry of a white key, in proportional flex units. */
+type WhiteKeyGeometry = {
+  /** Width of the back edge — the strip visible between the neighbouring black keys. */
+  backWidth: number;
+  /** Width of the front edge (full key width); equals `startGap + backWidth + endGap`. */
+  frontWidth: number;
+  /** Back-edge span taken by the black key on the left (`0` when there is none). */
+  startGap: number;
+  /** Back-edge span taken by the black key on the right (`0` when there is none). */
+  endGap: number;
+};
+
+/**
+ * One semitone slot of the keyboard model: a white key (two geometry variants)
+ * or a black key (note names only).
+ */
+type Note =
+  | {
+      type: "white";
+      names: readonly [string];
+      accurate: WhiteKeyGeometry;
+      centered: WhiteKeyGeometry;
+    }
+  | { type: "black"; names: readonly [string, string] };
+
+// One octave of semitones; white keys carry the geometry that positions the
+// black keys between them (see `WhiteKeyGeometry`). `accurate` mirrors real
+// piano measurements; `centered` evenly spaces the black keys. Proportions
+// derived from http://quadibloc.com/other/cnv05.htm
+const NOTES_BY_SEMITONE: readonly Note[] = [
   {
     type: "white",
     names: ["C"],
@@ -53,9 +78,7 @@ const NOTES_BY_SEMITONE = [
     accurate: { backWidth: 13, frontWidth: 24, startGap: 11, endGap: 0 },
     centered: { backWidth: 17, frontWidth: 24, startGap: 7, endGap: 0 },
   },
-] as const;
-
-type Note = (typeof NOTES_BY_SEMITONE)[number];
+];
 
 const SEMITONE_BY_NOTES: Record<string, number> = {};
 NOTES_BY_SEMITONE.forEach((n, semitone) => {
