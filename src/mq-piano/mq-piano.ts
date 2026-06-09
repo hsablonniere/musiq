@@ -87,6 +87,25 @@ NOTES_BY_SEMITONE.forEach((n, semitone) => {
   for (const name of n.names) SEMITONE_BY_NOTES[name] = semitone;
 });
 
+/**
+ * Parse a scientific-pitch note name into an absolute semitone index
+ * (`C0` = 0, each octave = 12 semitones).
+ *
+ * Expected format: pitch class `A`–`G` (uppercase only), optional accidental `s` (sharp ♯) or
+ * `b` (flat ♭), then a non-negative octave. No `#` (use `s`), no double
+ * accidentals, no negative octaves.
+ *
+ * @example
+ * parseSemitone("C0")      // => 0
+ * parseSemitone("C3")      // => 36
+ * parseSemitone("Fs4")     // => 54  (F♯, same as "Gb4")
+ * parseSemitone("Eb3")     // => 39
+ * parseSemitone("H3")      // => null (invalid pitch class)
+ * parseSemitone("C#3")     // => null (use "Cs3")
+ * parseSemitone(undefined) // => null
+ *
+ * @returns the semitone index, or `null` if `note` is nullish or malformed.
+ */
 function parseSemitone(note: string | undefined): number | null {
   if (note == null) return null;
   const groups = note.match(/^(?<note>[A-G][sb]?)(?<octave>\d+)$/)?.groups;
