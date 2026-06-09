@@ -493,23 +493,35 @@
 
     <section>
       <h3>Borders</h3>
-      <p class="desc">Width and color via CSS custom properties.</p>
+      <p class="desc">
+        Uniform via <code>--mq-piano-border-color</code> / <code>--mq-piano-border-width</code>, or
+        split the outer frame (<code>--mq-piano-border-color-outer</code> /
+        <code>--mq-piano-border-width-outer</code>) from the inner separators (<code
+          >--mq-piano-border-color-inner</code
+        >
+        / <code>--mq-piano-border-width-inner</code>) — each with its own color and width.
+      </p>
       <div class="row">
         <div>
           <mq-piano
             start-note="F3"
             end-note="E4"
-            style="--mq-piano-border-width: 1px; --mq-piano-border-color: #aaa"
+            style="--mq-piano-border-color: #888; --mq-piano-border-width: 2px"
           ></mq-piano>
-          <p class="caption">1px gray</p>
+          <p class="caption">uniform · gray 2px</p>
         </div>
         <div>
           <mq-piano
             start-note="F3"
             end-note="E4"
-            style="--mq-piano-border-width: 6px; --mq-piano-border-color: #c0392b"
+            style="
+              --mq-piano-border-color-outer: #c0392b;
+              --mq-piano-border-width-outer: 6px;
+              --mq-piano-border-color-inner: #2980b9;
+              --mq-piano-border-width-inner: 2px;
+            "
           ></mq-piano>
-          <p class="caption">6px red</p>
+          <p class="caption">outer red 6px · inner blue 2px</p>
         </div>
       </div>
     </section>
@@ -569,9 +581,19 @@
     <h2>Slots</h2>
 
     <section>
-      <h3>Annotations</h3>
-      <p class="desc">Label each key with note names via named slots.</p>
+      <p class="desc">
+        Use named slots to drop your own content onto each key. A key part can be turned into a flex
+        container (or laid out any other way) to align text or markup inside it, and container query
+        units (<code>cqi</code>) keep that content proportional to the keyboard without ever knowing
+        the actual key size. Note: you slot <em>notes</em>, not keys — there is one slot per note,
+        named <code>note-{name}{octave}</code>, and each is filled individually
+        (<code>slot="note-C3"</code>, <code>slot="note-Cs3"</code>, <code>slot="note-D3"</code>, …).
+        The same mechanism carries plain text labels or visual markers such as colored dots:
+      </p>
       <style>
+        .annotations {
+          container-type: inline-size;
+        }
         .annotations::part(key-white),
         .annotations::part(key-black) {
           display: flex;
@@ -581,39 +603,20 @@
           text-align: center;
           padding-bottom: 1em;
           font-weight: bold;
+          line-height: 1.1;
         }
         .annotations::part(key-white) {
           color: #000;
+          font-size: 4cqi;
         }
         .annotations::part(key-black) {
           color: #fff;
+          font-size: 2.4cqi;
         }
-      </style>
-      <mq-piano class="demo annotations">
-        <span slot="note-C3">C / Do</span>
-        <span slot="note-Cs3">C♯<br />Do♯</span>
-        <span slot="note-D3">D / Ré</span>
-        <span slot="note-Ds3">D♯<br />Ré♯</span>
-        <span slot="note-E3">E / Mi</span>
-        <span slot="note-F3">F / Fa</span>
-        <span slot="note-Fs3">F♯<br />Fa♯</span>
-        <span slot="note-G3">G / Sol</span>
-        <span slot="note-Gs3">G♯<br />Sol♯</span>
-        <span slot="note-A3">A / La</span>
-        <span slot="note-As3">A♯<br />La♯</span>
-        <span slot="note-B3">B / Si</span>
-        <span slot="note-C4">C / Do</span>
-        <span slot="note-Cs4">C♯<br />Do♯</span>
-        <span slot="note-D4">D / Ré</span>
-        <span slot="note-Ds4">D♯<br />Ré♯</span>
-        <span slot="note-E4">E / Mi</span>
-      </mq-piano>
-    </section>
 
-    <section>
-      <h3>Colored dots</h3>
-      <p class="desc">C major chord highlighted</p>
-      <style>
+        .chord {
+          container-type: inline-size;
+        }
         .chord::part(key-white),
         .chord::part(key-black) {
           display: flex;
@@ -622,6 +625,7 @@
           justify-content: flex-end;
         }
         .chord .dot {
+          font-size: 2.8cqi;
           width: 2.2em;
           height: 2.2em;
           line-height: 2.2em;
@@ -632,14 +636,38 @@
           color: #fff;
         }
       </style>
-      <mq-piano class="demo chord" start-note="C3" end-note="C5">
-        <div slot="note-C3" class="dot" style="background: #c0392b">1</div>
-        <div slot="note-E3" class="dot" style="background: #2980b9">3</div>
-        <div slot="note-G3" class="dot" style="background: #27ae60">5</div>
-        <div slot="note-C4" class="dot" style="background: #c0392b">1</div>
-        <div slot="note-E4" class="dot" style="background: #2980b9">3</div>
-        <div slot="note-G4" class="dot" style="background: #27ae60">5</div>
-      </mq-piano>
+      <div class="row">
+        <div>
+          <mq-piano class="annotations">
+            <span slot="note-C3">C<br />Do</span>
+            <span slot="note-Cs3">C♯<br />Do♯</span>
+            <span slot="note-D3">D<br />Ré</span>
+            <span slot="note-Ds3">D♯<br />Ré♯</span>
+            <span slot="note-E3">E<br />Mi</span>
+            <span slot="note-F3">F<br />Fa</span>
+            <span slot="note-Fs3">F♯<br />Fa♯</span>
+            <span slot="note-G3">G<br />Sol</span>
+            <span slot="note-Gs3">G♯<br />Sol♯</span>
+            <span slot="note-A3">A<br />La</span>
+            <span slot="note-As3">A♯<br />La♯</span>
+            <span slot="note-B3">B<br />Si</span>
+            <span slot="note-C4">C<br />Do</span>
+            <span slot="note-Cs4">C♯<br />Do♯</span>
+            <span slot="note-D4">D<br />Ré</span>
+            <span slot="note-Ds4">D♯<br />Ré♯</span>
+            <span slot="note-E4">E<br />Mi</span>
+          </mq-piano>
+          <p class="caption">text labels · note names</p>
+        </div>
+        <div>
+          <mq-piano class="chord" start-note="C3" end-note="C4">
+            <div slot="note-C3" class="dot" style="background: #c0392b">1</div>
+            <div slot="note-E3" class="dot" style="background: #2980b9">3</div>
+            <div slot="note-G3" class="dot" style="background: #27ae60">5</div>
+          </mq-piano>
+          <p class="caption">colored markers · C major chord (1 - 3 - 5)</p>
+        </div>
+      </div>
     </section>
 
     <h2>Dimensions</h2>
