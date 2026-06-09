@@ -129,12 +129,16 @@ const DEFAULT_RANGE = DEFAULT_END_SEMITONE - DEFAULT_START_SEMITONE;
 // keys is almost certainly a mistake (a real piano spans ~7.25 octaves).
 const MAX_RANGE = 120;
 
+// Real piano proportions in millimeters, used to lock the element's aspect
+// ratio: one white key is 23.5mm wide, the keyboard is 150mm deep.
+const WHITE_KEY_WIDTH_MM = 23.5;
+const KEYBOARD_DEPTH_MM = 150;
+
 @customElement("mq-piano")
 export class MqPiano extends LitElement {
   @property({ attribute: "start-note" }) accessor startNote: string | undefined;
   @property({ attribute: "end-note" }) accessor endNote: string | undefined;
   @property({ reflect: true }) accessor mode: "accurate" | "centered" = "accurate";
-  @property({ type: Boolean, attribute: "preserve-ratio" }) accessor preserveRatio: boolean = false;
 
   private _startSemitone = DEFAULT_START_SEMITONE;
   private _endSemitone = DEFAULT_END_SEMITONE;
@@ -189,7 +193,7 @@ export class MqPiano extends LitElement {
     for (let s = start; s <= end; s++) {
       if (NOTES_BY_SEMITONE[s % 12].type === "white") whiteCount++;
     }
-    this.style.aspectRatio = this.preserveRatio ? `${whiteCount * 23.5} / 150` : "";
+    this.style.aspectRatio = `${whiteCount * WHITE_KEY_WIDTH_MM} / ${KEYBOARD_DEPTH_MM}`;
   }
 
   render() {

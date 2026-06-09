@@ -184,9 +184,9 @@
       <h1><code>&lt;mq-piano&gt;</code></h1>
       <p>
         Piano keyboard with realistic key geometry. Configurable range,
-        <code>accurate</code> or <code>centered</code> black key positioning,
-        <code>preserve-ratio</code> for real-world proportions. Stylable via
-        <code>::part()</code> and CSS custom properties. Named slots for per-key annotations.
+        <code>accurate</code> or <code>centered</code> black key positioning, always locked to real
+        piano proportions. Stylable via <code>::part()</code> and CSS custom properties. Named slots
+        for per-key annotations.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
@@ -241,18 +241,13 @@
               <code>centered</code> centers them between white keys
             </td>
           </tr>
-          <tr>
-            <td><code>preserve-ratio</code></td>
-            <td><code>preserveRatio</code></td>
-            <td><code>boolean</code></td>
-            <td><code>false</code></td>
-            <td>
-              Lock aspect ratio to real piano proportions (the unconstrained dimension is derived
-              from the constrained one)
-            </td>
-          </tr>
         </tbody>
       </table>
+      <p class="desc" style="margin-top: 0.75rem">
+        The component is always locked to real piano proportions. Set
+        <code>width</code> and/or <code>height</code> on the element to size it (see
+        <em>Dimensions</em> below).
+      </p>
     </section>
 
     <section class="api">
@@ -554,15 +549,39 @@
       </mq-piano>
     </section>
 
-    <h2>Layout</h2>
+    <h2>Dimensions</h2>
 
     <section>
-      <h3><code>preserve-ratio</code></h3>
-      <p class="desc">Locks the keyboard to realistic piano proportions.</p>
-      <mq-piano style="width: 600px" start-note="C3" end-note="C5" preserve-ratio></mq-piano>
-      <p class="caption">
-        Width constrained: <code>width: 600px</code> — height derived from ratio
+      <p class="desc">
+        The component is a block always locked to real piano proportions (the aspect ratio is
+        derived from the number of white keys). Constrain a single dimension and the other follows
+        the ratio; set <strong>both</strong> <code>width</code> and <code>height</code> to force an
+        exact box (the ratio is then overridden and keys stretch).
       </p>
+
+      <p class="desc">
+        <strong>No size set</strong> — fills the container width, height from ratio:
+      </p>
+      <mq-piano start-note="C3" end-note="C5"></mq-piano>
+      <p class="caption">fills the available width</p>
+
+      <p class="desc" style="margin-top: 1.5rem">
+        <strong>Width constrained</strong> — height derived:
+      </p>
+      <mq-piano style="width: 450px" start-note="C3" end-note="C5"></mq-piano>
+      <p class="caption"><code>width: 450px</code></p>
+
+      <p class="desc" style="margin-top: 1.5rem">
+        <strong>Height constrained</strong> — width derived:
+      </p>
+      <mq-piano style="height: 120px; width: fit-content" start-note="C3" end-note="C5"></mq-piano>
+      <p class="caption"><code>height: 120px</code> · width follows the ratio</p>
+
+      <p class="desc" style="margin-top: 1.5rem">
+        <strong>Both forced</strong> — exact box, ratio overridden:
+      </p>
+      <mq-piano style="width: 560px; height: 90px" start-note="C3" end-note="C5"></mq-piano>
+      <p class="caption"><code>width: 560px; height: 90px</code> — keys stretch to fill</p>
     </section>
 
     <footer><code>&lt;mq-piano&gt;</code> · musique</footer>
