@@ -1,53 +1,57 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
+// One octave of semitones. White-key geometry is named by edge: `backWidth` is
+// the strip visible between the neighbouring black keys, `frontWidth` the full
+// key width, and `startGap`/`endGap` the back-edge span taken by the black keys
+// on each side. Proportions derived from http://quadibloc.com/other/cnv05.htm
 const NOTES_BY_SEMITONE = [
   {
     type: "white",
     names: ["C"],
-    accurate: { top: 14, bottom: 23, startPad: 0, endPad: 9 },
-    centered: { top: 17, bottom: 24, startPad: 0, endPad: 7 },
+    accurate: { backWidth: 14, frontWidth: 23, startGap: 0, endGap: 9 },
+    centered: { backWidth: 17, frontWidth: 24, startGap: 0, endGap: 7 },
   },
   { type: "black", names: ["Cs", "Db"] },
   {
     type: "white",
     names: ["D"],
-    accurate: { top: 14, bottom: 24, startPad: 5, endPad: 5 },
-    centered: { top: 10, bottom: 24, startPad: 7, endPad: 7 },
+    accurate: { backWidth: 14, frontWidth: 24, startGap: 5, endGap: 5 },
+    centered: { backWidth: 10, frontWidth: 24, startGap: 7, endGap: 7 },
   },
   { type: "black", names: ["Ds", "Eb"] },
   {
     type: "white",
     names: ["E"],
-    accurate: { top: 14, bottom: 23, startPad: 9, endPad: 0 },
-    centered: { top: 17, bottom: 24, startPad: 7, endPad: 0 },
+    accurate: { backWidth: 14, frontWidth: 23, startGap: 9, endGap: 0 },
+    centered: { backWidth: 17, frontWidth: 24, startGap: 7, endGap: 0 },
   },
   {
     type: "white",
     names: ["F"],
-    accurate: { top: 13, bottom: 24, startPad: 0, endPad: 11 },
-    centered: { top: 17, bottom: 24, startPad: 0, endPad: 7 },
+    accurate: { backWidth: 13, frontWidth: 24, startGap: 0, endGap: 11 },
+    centered: { backWidth: 17, frontWidth: 24, startGap: 0, endGap: 7 },
   },
   { type: "black", names: ["Fs", "Gb"] },
   {
     type: "white",
     names: ["G"],
-    accurate: { top: 13, bottom: 23, startPad: 3, endPad: 7 },
-    centered: { top: 10, bottom: 24, startPad: 7, endPad: 7 },
+    accurate: { backWidth: 13, frontWidth: 23, startGap: 3, endGap: 7 },
+    centered: { backWidth: 10, frontWidth: 24, startGap: 7, endGap: 7 },
   },
   { type: "black", names: ["Gs", "Ab"] },
   {
     type: "white",
     names: ["A"],
-    accurate: { top: 13, bottom: 23, startPad: 7, endPad: 3 },
-    centered: { top: 10, bottom: 24, startPad: 7, endPad: 7 },
+    accurate: { backWidth: 13, frontWidth: 23, startGap: 7, endGap: 3 },
+    centered: { backWidth: 10, frontWidth: 24, startGap: 7, endGap: 7 },
   },
   { type: "black", names: ["As", "Bb"] },
   {
     type: "white",
     names: ["B"],
-    accurate: { top: 13, bottom: 24, startPad: 11, endPad: 0 },
-    centered: { top: 17, bottom: 24, startPad: 7, endPad: 0 },
+    accurate: { backWidth: 13, frontWidth: 24, startGap: 11, endGap: 0 },
+    centered: { backWidth: 17, frontWidth: 24, startGap: 7, endGap: 0 },
   },
 ] as const;
 
@@ -135,7 +139,7 @@ export class MqPiano extends LitElement {
     const startNote = NOTES_BY_SEMITONE[this._startSemitone % 12];
     if (startNote.type === "white" && this._startSemitone > 0 && isBlack(this._startSemitone - 1)) {
       const w = this.mode === "centered" ? startNote.centered : startNote.accurate;
-      blackLayer.push(html`<div style="flex:${w.startPad}"></div>`);
+      blackLayer.push(html`<div style="flex:${w.startGap}"></div>`);
     }
 
     for (let semitone = this._startSemitone; semitone <= this._endSemitone; semitone++) {
@@ -153,7 +157,7 @@ export class MqPiano extends LitElement {
         blackLayer.push(html` <div
           class="white-spacer"
           data-key="${note.names.join("-")}"
-          style="--top-width:${w.top}"
+          style="--back-width:${w.backWidth}"
         ></div>`);
         prevWasWhite = true;
       } else {
@@ -166,7 +170,7 @@ export class MqPiano extends LitElement {
     const endNote = NOTES_BY_SEMITONE[this._endSemitone % 12];
     if (endNote.type === "white" && isBlack(this._endSemitone + 1)) {
       const w = this.mode === "centered" ? endNote.centered : endNote.accurate;
-      blackLayer.push(html`<div style="flex:${w.endPad}"></div>`);
+      blackLayer.push(html`<div style="flex:${w.endGap}"></div>`);
     }
 
     return html`
@@ -175,8 +179,8 @@ export class MqPiano extends LitElement {
     `;
   }
 
-  private _renderKey(note: Note, octave: number, w?: { top: number; bottom: number }) {
-    const style = w == null ? "" : `--top-width:${w.top};--bottom-width:${w.bottom}`;
+  private _renderKey(note: Note, octave: number, w?: { backWidth: number; frontWidth: number }) {
+    const style = w == null ? "" : `--back-width:${w.backWidth};--front-width:${w.frontWidth}`;
     return html`
       <div
         part="key key-${note.type}"
@@ -218,11 +222,11 @@ export class MqPiano extends LitElement {
 
     [data-type="white"] {
       background-color: #fff;
-      flex: var(--bottom-width);
+      flex: var(--front-width);
     }
 
     .white-spacer {
-      flex: var(--top-width);
+      flex: var(--back-width);
     }
 
     [data-type="black"] {
