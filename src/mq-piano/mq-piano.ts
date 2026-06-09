@@ -112,7 +112,7 @@ function parseSemitone(note: string | undefined): number | null {
   if (groups == null) return null;
   const base = SEMITONE_BY_NOTES[groups.note];
   if (base == null) return null;
-  return parseInt(groups.octave) * 12 + base;
+  return parseInt(groups.octave, 10) * 12 + base;
 }
 
 function isBlack(semitone: number): boolean {
