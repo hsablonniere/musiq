@@ -276,7 +276,7 @@ export class MqPiano extends LitElement {
       border-width: var(--mq-piano-border-width-outer, var(--border-width));
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: 2fr 1fr;
+      grid-template-rows: var(--mq-piano-black-key-height, 64%) 1fr;
     }
 
     .layer {

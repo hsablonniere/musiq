@@ -263,6 +263,15 @@
         </thead>
         <tbody>
           <tr>
+            <td><code>--mq-piano-black-key-height</code></td>
+            <td><code>&lt;percentage&gt;</code></td>
+            <td><code>64%</code></td>
+            <td>
+              Black-key height as a fraction of the full key height: <code>100%</code> spans the
+              whole keyboard, <code>0%</code> hides them. Defaults to real piano proportions
+            </td>
+          </tr>
+          <tr>
             <td><code>--mq-piano-border-color</code></td>
             <td><code>&lt;color&gt;</code></td>
             <td><code>#000</code></td>
@@ -436,6 +445,33 @@
     </section>
 
     <h2>Style</h2>
+
+    <section>
+      <h3>Black key height</h3>
+      <p class="desc">
+        <code>--mq-piano-black-key-height</code> sets how tall black keys are, as a percentage of
+        the full key height — <code>100%</code> spans the whole keyboard, <code>0%</code> hides
+        them. Defaults to <code>64%</code> (real piano proportions).
+      </p>
+      <div class="row">
+        <div>
+          <mq-piano
+            start-note="C3"
+            end-note="C5"
+            style="--mq-piano-black-key-height: 40%"
+          ></mq-piano>
+          <p class="caption">short blacks · <code>40%</code></p>
+        </div>
+        <div>
+          <mq-piano
+            start-note="C3"
+            end-note="C5"
+            style="--mq-piano-black-key-height: 90%"
+          ></mq-piano>
+          <p class="caption">tall blacks · <code>90%</code></p>
+        </div>
+      </div>
+    </section>
 
     <section>
       <h3>Borders</h3>
