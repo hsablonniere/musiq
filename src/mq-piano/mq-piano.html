@@ -705,6 +705,79 @@
       <p class="caption"><code>width: 560px; height: 90px</code> — keys stretch to fill</p>
     </section>
 
+    <h2>Putting it all together</h2>
+
+    <section>
+      <p class="desc">
+        A four-octave keyboard at real proportions with classic black-and-white keys, annotated with
+        a <strong>C7</strong> chord on the third octave — each key in the chord carries its note name
+        on a pill (dark on white keys, light on the black <code>B♭</code>). The two lower
+        <code>C</code> keys are tinted to mark the chord's root pitch-class.
+      </p>
+      <style>
+        .showcase {
+          container-type: inline-size;
+          border-radius: 0.5em;
+          overflow: hidden;
+          --mq-piano-border-color: #d0d0d0;
+          --mq-piano-border-color-outer: #111;
+          --mq-piano-border-width-outer: 2px;
+          --mq-piano-black-key-height: 64%;
+        }
+        .showcase::part(key-white) {
+          background: #fff;
+        }
+        .showcase::part(key-black) {
+          background: #111;
+          border-radius: 0 0 0.4cqi 0.4cqi;
+        }
+        /* Root pitch-class tinted on the two octaves below the chord. */
+        .showcase::part(note-c2),
+        .showcase::part(note-c3) {
+          background: #16a085;
+        }
+        .showcase::part(key-white),
+        .showcase::part(key-black) {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
+        }
+        .showcase .pill {
+          --pill-size: 2.4cqi;
+          font-size: calc(var(--pill-size) * 0.58);
+          min-width: var(--pill-size);
+          height: var(--pill-size);
+          line-height: var(--pill-size);
+          padding: 0 0.4cqi;
+          margin-bottom: 1.6cqi;
+          border-radius: 999px;
+          text-align: center;
+          font-weight: 700;
+          font-family: system-ui, sans-serif;
+        }
+        .showcase .pill.on-white {
+          background: #111;
+          color: #fff;
+        }
+        /* The light pill sits on a black key (~60% the width of a white one), so it must
+           stay clear of the narrow key's edges — trimmed smaller, with no side padding. */
+        .showcase .pill.on-black {
+          --pill-size: 1.6cqi;
+          padding: 0;
+          background: #fff;
+          color: #111;
+        }
+      </style>
+      <mq-piano class="showcase" start-note="C2" end-note="C6">
+        <div slot="note-C4" class="pill on-white">C</div>
+        <div slot="note-E4" class="pill on-white">E</div>
+        <div slot="note-G4" class="pill on-white">G</div>
+        <div slot="note-Bb4" class="pill on-black">B♭</div>
+      </mq-piano>
+      <p class="caption">C7 chord (C – E – G – B♭) on the third octave · root pitch-class tinted below</p>
+    </section>
+
     <footer><code>&lt;mq-piano&gt;</code> · musique</footer>
   </body>
 </html>
