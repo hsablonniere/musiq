@@ -181,6 +181,54 @@
         white-space: normal;
       }
 
+      /* Narrow screens: the nowrap columns overflow, so collapse each API table
+         into stacked cards — every row becomes a labelled block, labels pulled
+         from each cell's data-label. */
+      @media (max-width: 1000px) {
+        .api table,
+        .api tbody,
+        .api tr,
+        .api td {
+          display: block;
+        }
+
+        .api thead {
+          /* Header row is redundant once labels move into each cell. */
+          display: none;
+        }
+
+        .api tr {
+          border: 1px solid var(--line);
+          border-radius: 10px;
+          padding: 0.85rem 1rem;
+          margin-bottom: 0.85rem;
+        }
+
+        .api td {
+          border: none;
+          white-space: normal;
+          padding: 0.25rem 0;
+        }
+
+        .api td::before {
+          content: attr(data-label);
+          display: block;
+          font-size: 0.68rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          font-weight: 600;
+          color: var(--muted);
+          margin-bottom: 0.1rem;
+        }
+
+        /* First cell heads the card. */
+        .api td:first-child {
+          margin-bottom: 0.5rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 1px solid var(--line);
+        }
+      }
+
       pre {
         background: #f0f0ec;
         padding: 0.75rem 1rem;
@@ -230,31 +278,31 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>start-note</code></td>
-            <td><code>startNote</code></td>
-            <td><code>string</code></td>
-            <td><code>C3</code></td>
-            <td>
+            <td data-label="Attribute"><code>start-note</code></td>
+            <td data-label="Property"><code>startNote</code></td>
+            <td data-label="Type"><code>string</code></td>
+            <td data-label="Default"><code>C3</code></td>
+            <td data-label="Description">
               First note of the keyboard range. If a black key is specified, the white key before it
               is included
             </td>
           </tr>
           <tr>
-            <td><code>end-note</code></td>
-            <td><code>endNote</code></td>
-            <td><code>string</code></td>
-            <td><code>E4</code></td>
-            <td>
+            <td data-label="Attribute"><code>end-note</code></td>
+            <td data-label="Property"><code>endNote</code></td>
+            <td data-label="Type"><code>string</code></td>
+            <td data-label="Default"><code>E4</code></td>
+            <td data-label="Description">
               Last note of the keyboard range. If a black key is specified, the white key after it
               is included
             </td>
           </tr>
           <tr>
-            <td><code>mode</code></td>
-            <td><code>mode</code></td>
-            <td><code>'accurate' | 'centered'</code></td>
-            <td><code>accurate</code></td>
-            <td>
+            <td data-label="Attribute"><code>mode</code></td>
+            <td data-label="Property"><code>mode</code></td>
+            <td data-label="Type"><code>'accurate' | 'centered'</code></td>
+            <td data-label="Default"><code>accurate</code></td>
+            <td data-label="Description">
               Black key positioning: <code>accurate</code> uses real piano geometry,
               <code>centered</code> centers them between white keys
             </td>
@@ -281,49 +329,49 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>--mq-piano-black-key-height</code></td>
-            <td><code>&lt;percentage&gt;</code></td>
-            <td><code>64%</code></td>
-            <td>
+            <td data-label="Property"><code>--mq-piano-black-key-height</code></td>
+            <td data-label="Type"><code>&lt;percentage&gt;</code></td>
+            <td data-label="Default"><code>64%</code></td>
+            <td data-label="Description">
               Black-key height as a fraction of the full key height: <code>100%</code> spans the
               whole keyboard, <code>0%</code> hides them. Defaults to real piano proportions
             </td>
           </tr>
           <tr>
-            <td><code>--mq-piano-border-color</code></td>
-            <td><code>&lt;color&gt;</code></td>
-            <td><code>transparent</code></td>
-            <td>Base color for all borders (outer + inner)</td>
+            <td data-label="Property"><code>--mq-piano-border-color</code></td>
+            <td data-label="Type"><code>&lt;color&gt;</code></td>
+            <td data-label="Default"><code>transparent</code></td>
+            <td data-label="Description">Base color for all borders (outer + inner)</td>
           </tr>
           <tr>
-            <td><code>--mq-piano-border-width</code></td>
-            <td><code>&lt;length&gt;</code></td>
-            <td><code>1px</code></td>
-            <td>Base width for all borders (outer + inner)</td>
+            <td data-label="Property"><code>--mq-piano-border-width</code></td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default"><code>1px</code></td>
+            <td data-label="Description">Base width for all borders (outer + inner)</td>
           </tr>
           <tr>
-            <td><code>--mq-piano-border-color-outer</code></td>
-            <td><code>&lt;color&gt;</code></td>
-            <td>falls back to <code>border-color</code></td>
-            <td>Color of the outer border around the keyboard</td>
+            <td data-label="Property"><code>--mq-piano-border-color-outer</code></td>
+            <td data-label="Type"><code>&lt;color&gt;</code></td>
+            <td data-label="Default">falls back to <code>border-color</code></td>
+            <td data-label="Description">Color of the outer border around the keyboard</td>
           </tr>
           <tr>
-            <td><code>--mq-piano-border-color-inner</code></td>
-            <td><code>&lt;color&gt;</code></td>
-            <td>falls back to <code>border-color</code></td>
-            <td>Color of borders between keys</td>
+            <td data-label="Property"><code>--mq-piano-border-color-inner</code></td>
+            <td data-label="Type"><code>&lt;color&gt;</code></td>
+            <td data-label="Default">falls back to <code>border-color</code></td>
+            <td data-label="Description">Color of borders between keys</td>
           </tr>
           <tr>
-            <td><code>--mq-piano-border-width-outer</code></td>
-            <td><code>&lt;length&gt;</code></td>
-            <td>falls back to <code>border-width</code></td>
-            <td>Width of the outer border around the keyboard</td>
+            <td data-label="Property"><code>--mq-piano-border-width-outer</code></td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default">falls back to <code>border-width</code></td>
+            <td data-label="Description">Width of the outer border around the keyboard</td>
           </tr>
           <tr>
-            <td><code>--mq-piano-border-width-inner</code></td>
-            <td><code>&lt;length&gt;</code></td>
-            <td>falls back to <code>border-width</code></td>
-            <td>Width of borders between keys</td>
+            <td data-label="Property"><code>--mq-piano-border-width-inner</code></td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default">falls back to <code>border-width</code></td>
+            <td data-label="Description">Width of borders between keys</td>
           </tr>
         </tbody>
       </table>
@@ -340,28 +388,28 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>key</code></td>
-            <td>All keys, white and black</td>
+            <td data-label="Part"><code>key</code></td>
+            <td data-label="Description">All keys, white and black</td>
           </tr>
           <tr>
-            <td><code>key-white</code></td>
-            <td>White keys only</td>
+            <td data-label="Part"><code>key-white</code></td>
+            <td data-label="Description">White keys only</td>
           </tr>
           <tr>
-            <td><code>key-black</code></td>
-            <td>Black keys only</td>
+            <td data-label="Part"><code>key-black</code></td>
+            <td data-label="Description">Black keys only</td>
           </tr>
           <tr>
-            <td><code>note-c</code> … <code>note-b</code></td>
-            <td>
+            <td data-label="Part"><code>note-c</code> … <code>note-b</code></td>
+            <td data-label="Description">
               White keys by pitch-class, octave-agnostic: <code>note-c</code>, <code>note-d</code>,
               <code>note-e</code>, <code>note-f</code>, <code>note-g</code>, <code>note-a</code>,
               <code>note-b</code>
             </td>
           </tr>
           <tr>
-            <td><code>note-cs</code>/<code>note-db</code> …</td>
-            <td>
+            <td data-label="Part"><code>note-cs</code>/<code>note-db</code> …</td>
+            <td data-label="Description">
               Black keys by pitch-class, both enharmonic aliases exposed:
               <code>note-cs</code>/<code>note-db</code>, <code>note-ds</code>/<code>note-eb</code>,
               <code>note-fs</code>/<code>note-gb</code>, <code>note-gs</code>/<code>note-ab</code>,
@@ -369,8 +417,8 @@
             </td>
           </tr>
           <tr>
-            <td><code>note-c3</code>, <code>note-fs4</code> …</td>
-            <td>
+            <td data-label="Part"><code>note-c3</code>, <code>note-fs4</code> …</td>
+            <td data-label="Description">
               A single key by absolute pitch (octave-specific). Black keys expose both enharmonic
               names: <code>note-cs3</code>/<code>note-db3</code>
             </td>
@@ -390,8 +438,8 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>note-{name}{octave}</code></td>
-            <td>
+            <td data-label="Slot"><code>note-{name}{octave}</code></td>
+            <td data-label="Description">
               Per-note content — e.g. <code>note-C3</code>, <code>note-Fs4</code>,
               <code>note-Db3</code>. Black keys expose both enharmonic names. Use <code>s</code> for
               sharp (♯) since <code>#</code> is not valid in slot names.
