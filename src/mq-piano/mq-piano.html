@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>&lt;mq-piano&gt; — demo</title>
 
+    <!-- Shared page chrome (layout, typography, API tables, responsive). -->
+    <link rel="stylesheet" href="../demo.css" />
+
     <!-- mq-piano ships unstyled; these base styles keep the plain examples visible. Class-scoped
          ::part rules below override them per example. -->
     <style>
@@ -20,289 +23,17 @@
       mq-piano::part(key-black) {
         background-color: #222222;
       }
-    </style>
-
-    <style>
-      :root {
-        --bg: #fafaf8;
-        --fg: #1a1a1a;
-        --muted: #6b6b6b;
-        --accent: #c0392b;
-        --card: #fff;
-        --line: #e6e6e2;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: system-ui, sans-serif;
-        line-height: 1.6;
-        background: var(--bg);
-        color: var(--fg);
-        margin: 0 auto;
-        padding: 3rem 2rem 6rem;
-        max-width: 80rem;
-      }
-
-      header {
-        margin-bottom: 1rem;
-        padding-bottom: 1.5rem;
-      }
-
-      h1 {
-        font-size: 2.4rem;
-        margin: 0 0 0.25rem;
-      }
-
-      h1 code {
-        background: var(--fg);
-        color: var(--bg);
-        padding: 0.1em 0.3em;
-        border-radius: 4px;
-      }
-
-      header p {
-        color: var(--muted);
-        margin: 0.5rem 0 0;
-      }
-
-      header a {
-        color: var(--accent);
-      }
-
-      /* Group divider — sits between cards, not inside them. */
-      h2 {
-        font-size: 1.75rem;
-        letter-spacing: -0.01em;
-        margin: 3rem 0 1.25rem;
-        padding-bottom: 0.4rem;
-        border-bottom: 2px solid var(--fg);
-      }
-
-      header + h2 {
-        margin-top: 2rem;
-      }
-
-      section {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 1.75rem 2rem 2rem;
-        margin-bottom: 1.5rem;
-      }
-
-      /* Demo subtitle inside a card. */
-      section h3 {
-        font-size: 1.05rem;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--accent);
-        margin: 0 0 0.4rem;
-      }
-
-      .desc {
-        color: var(--muted);
-        margin: 0 0 1.5rem;
-      }
-
-      .desc code,
-      .api code,
-      h2 code,
-      h3 code,
-      .caption code,
-      footer code {
-        background: #f0f0ec;
-        padding: 0.1em 0.35em;
-        border-radius: 4px;
-        font-size: 0.88em;
-        color: var(--fg);
-      }
-
-      .demo {
-        height: 240px;
-      }
-
-      .row {
-        display: flex;
-        gap: 1.5rem;
-        flex-wrap: wrap;
-      }
-
-      .row > * {
-        flex: 1;
-        min-width: 220px;
-      }
 
       .row mq-piano {
         height: 200px;
       }
 
-      .caption {
-        font-size: 0.85rem;
-        color: var(--muted);
-        margin: 0.6rem 0 0;
-      }
-
-      footer {
-        color: var(--muted);
-        font-size: 0.85rem;
-        text-align: center;
-        margin-top: 4rem;
-      }
-
-      .api table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.88rem;
-      }
-
-      .api th {
-        text-align: left;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--muted);
-        border-bottom: 2px solid var(--line);
-        padding: 0.3rem 0.75rem 0.3rem 0;
-        font-weight: 600;
-      }
-
-      .api td {
-        padding: 0.3rem 0.75rem 0.3rem 0;
-        border-bottom: 1px solid var(--line);
-        vertical-align: top;
-        white-space: nowrap;
-      }
-
-      /* Description is always the last column — let it wrap, keep the rest intact. */
-      .api td:last-child {
-        white-space: normal;
-      }
-
-      /* Narrow screens: the nowrap columns overflow, so collapse each API table
-         into stacked cards — every row becomes a labelled block, labels pulled
-         from each cell's data-label. */
-      @media (max-width: 1000px) {
-        .api table,
-        .api tbody,
-        .api tr,
-        .api td {
-          display: block;
-        }
-
-        .api thead {
-          /* Header row is redundant once labels move into each cell. */
-          display: none;
-        }
-
-        .api tr {
-          border: 1px solid var(--line);
-          border-radius: 10px;
-          padding: 0.85rem 1rem;
-          margin-bottom: 0.85rem;
-        }
-
-        .api td {
-          border: none;
-          white-space: normal;
-          padding: 0.25rem 0;
-        }
-
-        .api td::before {
-          content: attr(data-label);
-          display: block;
-          font-size: 0.68rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          font-weight: 600;
-          color: var(--muted);
-          margin-bottom: 0.1rem;
-        }
-
-        /* First cell heads the card. */
-        .api td:first-child {
-          margin-bottom: 0.5rem;
-          padding-bottom: 0.5rem;
-          border-bottom: 1px solid var(--line);
-        }
-      }
-
-      /* Height-driven examples impose a width through the locked ratio that
-         overflows a narrow viewport — drop the fixed height so the available
-         width drives the layout and the height follows the ratio. */
+      /* The locked ratio turns a fixed height into a width that overflows a
+         narrow viewport — let the available width drive layout instead. */
       @media (max-width: 768px) {
-        .demo,
         .row mq-piano {
           height: auto;
         }
-      }
-
-      /* Single breakpoint: two-up rows stack into one column. Drop flex entirely
-         — a column flex with flex:1 children mis-sizes the ratio-driven pianos
-         (they overflow their box) — and space the stacked examples with a margin. */
-      @media (max-width: 1150px) {
-        .row {
-          display: block;
-        }
-        .row > * + * {
-          margin-top: 1.5rem;
-        }
-      }
-
-      /* Below this width the floating-card look wastes horizontal space — sections
-         go full-bleed as bands separated by a hairline. The body loses its side
-         padding, so the bare top-level blocks (header / h2 / footer) get their own
-         inset, matching the sections' inner padding so titles and content align. */
-      @media (max-width: 1000px) {
-        body {
-          padding-left: 0;
-          padding-right: 0;
-        }
-
-        header,
-        h2,
-        footer {
-          padding-left: 2rem;
-          padding-right: 2rem;
-        }
-
-        /* The section's own top hairline now separates groups, so the title drops
-           its underline and grows to carry the hierarchy on its own. */
-        h2 {
-          border-bottom: none;
-          padding-bottom: 0;
-          font-size: 2.5em;
-        }
-
-        section {
-          border-radius: 0;
-          border-top: none;
-          border-right: none;
-          border-left: none;
-          margin-bottom: 0;
-        }
-
-        /* The first section after a group title has no band above it to draw the
-           separating line — give it its own top hairline. */
-        h2 + section {
-          border-top: 1px solid var(--line);
-        }
-      }
-
-      pre {
-        background: #f0f0ec;
-        padding: 0.75rem 1rem;
-        border-radius: 6px;
-        overflow-x: auto;
-        font-size: 0.88rem;
-        margin: 0.5rem 0;
-      }
-
-      pre code {
-        background: none;
-        padding: 0;
       }
     </style>
     <script type="module" src="./mq-piano.ts"></script>
@@ -872,8 +603,8 @@
     <section>
       <p class="desc">
         A four-octave keyboard at real proportions with classic black-and-white keys, annotated with
-        a <strong>C7</strong> chord on the third octave — each key in the chord carries its note name
-        on a pill (dark on white keys, light on the black <code>B♭</code>). The two lower
+        a <strong>C7</strong> chord on the third octave — each key in the chord carries its note
+        name on a pill (dark on white keys, light on the black <code>B♭</code>). The two lower
         <code>C</code> keys are tinted to mark the chord's root pitch-class.
       </p>
       <style>
@@ -936,7 +667,9 @@
         <div slot="note-G4" class="pill on-white">G</div>
         <div slot="note-Bb4" class="pill on-black">B♭</div>
       </mq-piano>
-      <p class="caption">C7 chord (C – E – G – B♭) on the third octave · root pitch-class tinted below</p>
+      <p class="caption">
+        C7 chord (C – E – G – B♭) on the third octave · root pitch-class tinted below
+      </p>
     </section>
 
     <footer><code>&lt;mq-piano&gt;</code> · musique</footer>
