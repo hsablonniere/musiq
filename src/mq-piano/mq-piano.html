@@ -229,6 +229,28 @@
         }
       }
 
+      /* Height-driven examples impose a width through the locked ratio that
+         overflows a narrow viewport — drop the fixed height so the available
+         width drives the layout and the height follows the ratio. */
+      @media (max-width: 768px) {
+        .demo,
+        .row mq-piano {
+          height: auto;
+        }
+      }
+
+      /* Single breakpoint: two-up rows stack into one column. Drop flex entirely
+         — a column flex with flex:1 children mis-sizes the ratio-driven pianos
+         (they overflow their box) — and space the stacked examples with a margin. */
+      @media (max-width: 1150px) {
+        .row {
+          display: block;
+        }
+        .row > * + * {
+          margin-top: 1.5rem;
+        }
+      }
+
       pre {
         background: #f0f0ec;
         padding: 0.75rem 1rem;
