@@ -251,6 +251,46 @@
         }
       }
 
+      /* Below this width the floating-card look wastes horizontal space — sections
+         go full-bleed as bands separated by a hairline. The body loses its side
+         padding, so the bare top-level blocks (header / h2 / footer) get their own
+         inset, matching the sections' inner padding so titles and content align. */
+      @media (max-width: 1000px) {
+        body {
+          padding-left: 0;
+          padding-right: 0;
+        }
+
+        header,
+        h2,
+        footer {
+          padding-left: 2rem;
+          padding-right: 2rem;
+        }
+
+        /* The section's own top hairline now separates groups, so the title drops
+           its underline and grows to carry the hierarchy on its own. */
+        h2 {
+          border-bottom: none;
+          padding-bottom: 0;
+          font-size: 2.5em;
+        }
+
+        section {
+          border-radius: 0;
+          border-top: none;
+          border-right: none;
+          border-left: none;
+          margin-bottom: 0;
+        }
+
+        /* The first section after a group title has no band above it to draw the
+           separating line — give it its own top hairline. */
+        h2 + section {
+          border-top: 1px solid var(--line);
+        }
+      }
+
       pre {
         background: #f0f0ec;
         padding: 0.75rem 1rem;
