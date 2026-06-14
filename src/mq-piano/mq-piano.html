@@ -435,6 +435,16 @@
             <td data-label="Default">falls back to <code>border-width</code></td>
             <td data-label="Description">Width of borders between keys</td>
           </tr>
+          <tr>
+            <td data-label="Property"><code>--mq-piano-border-radius</code></td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default"><code>0</code></td>
+            <td data-label="Description">
+              Corner radius of the outer frame; the keyboard is always clipped to it (<code
+                >overflow: clip</code
+              >), so the corner keys follow the rounding
+            </td>
+          </tr>
         </tbody>
       </table>
     </section>
@@ -637,6 +647,48 @@
     </section>
 
     <section>
+      <h3>Corner radius</h3>
+      <p class="desc">
+        <code>--mq-piano-border-radius</code> rounds the outer frame. The keyboard is always clipped
+        to its frame (<code>overflow: clip</code>), so the corner keys follow the rounding — no
+        wrapper or <code>overflow</code> of your own needed.
+      </p>
+      <style>
+        .radius-demo {
+          --mq-piano-border-color: #d0d0d0;
+          --mq-piano-border-color-outer: #111;
+          --mq-piano-border-width-outer: 2px;
+        }
+        .radius-demo::part(key-white) {
+          background: #fff;
+        }
+        .radius-demo::part(key-black) {
+          background: #161616;
+        }
+      </style>
+      <div class="row">
+        <div>
+          <mq-piano
+            class="radius-demo"
+            start-note="F3"
+            end-note="E4"
+            style="--mq-piano-border-radius: 0.4em"
+          ></mq-piano>
+          <p class="caption"><code>--mq-piano-border-radius: 0.4em</code></p>
+        </div>
+        <div>
+          <mq-piano
+            class="radius-demo"
+            start-note="F3"
+            end-note="E4"
+            style="--mq-piano-border-radius: 1.2em"
+          ></mq-piano>
+          <p class="caption"><code>--mq-piano-border-radius: 1.2em</code></p>
+        </div>
+      </div>
+    </section>
+
+    <section>
       <h3>Keys</h3>
       <p class="desc">
         Style keys by category (<code>::part(key-white)</code> / <code>::part(key-black)</code>),
@@ -827,8 +879,7 @@
       <style>
         .showcase {
           container-type: inline-size;
-          border-radius: 0.5em;
-          overflow: hidden;
+          --mq-piano-border-radius: 0.5em;
           --mq-piano-border-color: #d0d0d0;
           --mq-piano-border-color-outer: #111;
           --mq-piano-border-width-outer: 2px;

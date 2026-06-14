@@ -162,6 +162,7 @@ const KEYBOARD_DEPTH_MM = 150;
  * @cssprop --mq-piano-border-color-inner - Color of inter-key separators (falls back to `--mq-piano-border-color`).
  * @cssprop --mq-piano-border-width-outer - Width of the outer frame (falls back to `--mq-piano-border-width`).
  * @cssprop --mq-piano-border-width-inner - Width of inter-key separators (falls back to `--mq-piano-border-width`).
+ * @cssprop [--mq-piano-border-radius=0] - Corner radius of the outer frame; the keyboard is always clipped to it (`overflow: clip`), so the corner keys follow the rounding.
  */
 @customElement("mq-piano")
 export class MqPiano extends LitElement {
@@ -306,6 +307,10 @@ export class MqPiano extends LitElement {
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: var(--mq-piano-black-key-height, 64%) 1fr;
+      border-radius: var(--mq-piano-border-radius, 0);
+      /* Clip the keys to the (optionally rounded) frame. Neutral at radius 0
+         since the keys already fill the host; only visible once rounded. */
+      overflow: clip;
     }
 
     .layer {
