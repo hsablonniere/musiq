@@ -90,8 +90,21 @@
               Show note names on active keys (English notation: A, B, C, D, E, F, G)
             </td>
           </tr>
+          <tr>
+            <td data-label="Attribute"><code>mode</code> <span class="ref">*</span></td>
+            <td data-label="Property"><code>mode</code></td>
+            <td data-label="Type"><code>'accurate' | 'centered'</code></td>
+            <td data-label="Default"><code>centered</code></td>
+            <td data-label="Description">
+              Black key positioning: <code>accurate</code> uses real piano geometry,
+              <code>centered</code> centers them between white keys
+            </td>
+          </tr>
         </tbody>
       </table>
+      <p class="desc" style="margin-top: 0.75rem">
+        <span class="ref">*</span> forwarded to the inner <code>mq-piano</code>.
+      </p>
     </section>
 
     <section class="api">
@@ -315,6 +328,25 @@
         <mq-piano-chord name="Bbm" style="--mq-piano-chord-active-color: #c0392b"></mq-piano-chord>
         <mq-piano-chord name="Bbm" style="--mq-piano-chord-active-color: #27ae60"></mq-piano-chord>
         <mq-piano-chord name="Bbm" style="--mq-piano-chord-active-color: #8e44ad"></mq-piano-chord>
+      </div>
+    </section>
+
+    <h2>Mode</h2>
+    <section>
+      <p class="desc">
+        Forwarded to the inner <code>mq-piano</code>. <code>centered</code> (default) gives every
+        white key the same width with black keys centered between them; <code>accurate</code> uses
+        real piano geometry.
+      </p>
+      <div class="row">
+        <div>
+          <mq-piano-chord name="F#maj7" note-labels></mq-piano-chord>
+          <p class="caption"><code>mode="centered"</code> (default)</p>
+        </div>
+        <div>
+          <mq-piano-chord name="F#maj7" mode="accurate" note-labels></mq-piano-chord>
+          <p class="caption"><code>mode="accurate"</code></p>
+        </div>
       </div>
     </section>
 

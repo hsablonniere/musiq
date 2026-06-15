@@ -8,6 +8,7 @@ import { pianoExportParts } from "../mq-piano/mq-piano.js";
 export class MqPianoChord extends LitElement {
   @property() accessor name: string = "";
   @property({ type: Boolean, attribute: "note-labels" }) accessor noteLabels: boolean = false;
+  @property({ reflect: true }) accessor mode: "accurate" | "centered" = "centered";
 
   render() {
     const info = Chord.get(this.name);
@@ -26,7 +27,7 @@ export class MqPianoChord extends LitElement {
       <mq-piano
         start-note=${startNoteForKeys}
         end-note=${endNoteForKeys}
-        mode="centered"
+        mode=${this.mode}
         exportparts=${pianoExportParts(startNoteForKeys, endNoteForKeys)}
       >
         ${notes.map(
