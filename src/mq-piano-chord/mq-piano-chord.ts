@@ -2,7 +2,7 @@ import { css, html, LitElement, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { Chord } from "tonal";
 import { assignOctaves, isBlackKey, noteToPianoKeysName } from "../utils.js";
-import "../mq-piano/mq-piano.js";
+import { pianoExportParts } from "../mq-piano/mq-piano.js";
 
 @customElement("mq-piano-chord")
 export class MqPianoChord extends LitElement {
@@ -27,7 +27,7 @@ export class MqPianoChord extends LitElement {
         start-note=${startNoteForKeys}
         end-note=${endNoteForKeys}
         mode="centered"
-        exportparts="key, key-white, key-black"
+        exportparts=${pianoExportParts(startNoteForKeys, endNoteForKeys)}
       >
         ${notes.map(
           (note) => html`

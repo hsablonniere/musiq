@@ -119,6 +119,37 @@ function isBlack(semitone: number): boolean {
   return NOTES_BY_SEMITONE[semitone % 12].type === "black";
 }
 
+/**
+ * Build the `exportparts` value a parent needs to forward mq-piano's full part
+ * surface for a given note range: the key categories (`key`, `key-white`,
+ * `key-black`), every pitch-class part (octave-agnostic, both enharmonics for
+ * black keys) and every absolute-pitch part within range.
+ *
+ * `exportparts` has no wildcard, so a parent that re-exposes these parts must
+ * enumerate them. This keeps mq-piano the single source of truth for the part
+ * names; callers pass only their range.
+ *
+ * Falls back to the key categories alone when the range is nullish/inverted.
+ */
+export function pianoExportParts(startNote: string, endNote: string): string {
+  const start = parseSemitone(startNote);
+  const end = parseSemitone(endNote);
+  if (start == null || end == null || end < start) return "key, key-white, key-black";
+
+  const pitchClasses = new Set<string>();
+  const absolute: string[] = [];
+  for (let semitone = start; semitone <= end; semitone++) {
+    const note = NOTES_BY_SEMITONE[semitone % 12];
+    const octave = Math.floor(semitone / 12);
+    for (const noteName of note.names) {
+      const name = noteName.toLowerCase();
+      pitchClasses.add(`note-${name}`);
+      absolute.push(`note-${name}${octave}`);
+    }
+  }
+  return ["key", "key-white", "key-black", ...pitchClasses, ...absolute].join(", ");
+}
+
 const DEFAULT_START_NOTE = "C3";
 const DEFAULT_END_NOTE = "E4";
 const DEFAULT_START_SEMITONE = parseSemitone(DEFAULT_START_NOTE)!;
