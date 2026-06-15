@@ -72,13 +72,13 @@
         </thead>
         <tbody>
           <tr>
-            <td data-label="Attribute"><code>chord</code></td>
-            <td data-label="Property"><code>chord</code></td>
+            <td data-label="Attribute"><code>name</code></td>
+            <td data-label="Property"><code>name</code></td>
             <td data-label="Type"><code>string</code></td>
             <td data-label="Default">—</td>
             <td data-label="Description">
-              Chord name (e.g. <code>"C"</code>, <code>"Ebm"</code>, <code>"F#maj7"</code>). Supports
-              slash chords for inversions (<code>"C/E"</code>)
+              Chord name (e.g. <code>"C"</code>, <code>"Ebm"</code>, <code>"F#maj7"</code>).
+              Supports slash chords for inversions (<code>"C/E"</code>)
             </td>
           </tr>
           <tr>
@@ -204,7 +204,7 @@
         </thead>
         <tbody>
           <tr>
-            <td data-label="Part"><code>title</code></td>
+            <td data-label="Part"><code>name</code></td>
             <td data-label="Description">Chord name heading above the keyboard</td>
           </tr>
           <tr>
@@ -261,9 +261,9 @@
     <section>
       <p class="desc">Major, minor, diminished.</p>
       <div class="row">
-        <mq-piano-chord chord="C"></mq-piano-chord>
-        <mq-piano-chord chord="Ebm"></mq-piano-chord>
-        <mq-piano-chord chord="F#dim"></mq-piano-chord>
+        <mq-piano-chord name="C"></mq-piano-chord>
+        <mq-piano-chord name="Ebm"></mq-piano-chord>
+        <mq-piano-chord name="F#dim"></mq-piano-chord>
       </div>
     </section>
 
@@ -271,9 +271,9 @@
     <section>
       <p class="desc">Major 7, minor 7, dominant 7.</p>
       <div class="row">
-        <mq-piano-chord chord="Bbmaj7"></mq-piano-chord>
-        <mq-piano-chord chord="C#m7"></mq-piano-chord>
-        <mq-piano-chord chord="Ab7"></mq-piano-chord>
+        <mq-piano-chord name="Bbmaj7"></mq-piano-chord>
+        <mq-piano-chord name="C#m7"></mq-piano-chord>
+        <mq-piano-chord name="Ab7"></mq-piano-chord>
       </div>
     </section>
 
@@ -283,9 +283,9 @@
         Display note names on active keys with the <code>note-labels</code> attribute.
       </p>
       <div class="row">
-        <mq-piano-chord chord="F#maj7" note-labels></mq-piano-chord>
-        <mq-piano-chord chord="Bbm7" note-labels></mq-piano-chord>
-        <mq-piano-chord chord="Eb7" note-labels></mq-piano-chord>
+        <mq-piano-chord name="F#maj7" note-labels></mq-piano-chord>
+        <mq-piano-chord name="Bbm7" note-labels></mq-piano-chord>
+        <mq-piano-chord name="Eb7" note-labels></mq-piano-chord>
       </div>
     </section>
 
@@ -294,15 +294,15 @@
       <p class="desc">Chord over a specific bass note.</p>
       <div class="row">
         <div>
-          <mq-piano-chord chord="C" note-labels></mq-piano-chord>
+          <mq-piano-chord name="C" note-labels></mq-piano-chord>
           <p class="caption">Root position</p>
         </div>
         <div>
-          <mq-piano-chord chord="C/E" note-labels></mq-piano-chord>
+          <mq-piano-chord name="C/E" note-labels></mq-piano-chord>
           <p class="caption">1st inversion</p>
         </div>
         <div>
-          <mq-piano-chord chord="C/G" note-labels></mq-piano-chord>
+          <mq-piano-chord name="C/G" note-labels></mq-piano-chord>
           <p class="caption">2nd inversion</p>
         </div>
       </div>
@@ -312,9 +312,9 @@
     <section>
       <p class="desc">Customize via <code>--mq-piano-chord-active-color</code>.</p>
       <div class="row">
-        <mq-piano-chord chord="Bbm" style="--mq-piano-chord-active-color: #c0392b"></mq-piano-chord>
-        <mq-piano-chord chord="Bbm" style="--mq-piano-chord-active-color: #27ae60"></mq-piano-chord>
-        <mq-piano-chord chord="Bbm" style="--mq-piano-chord-active-color: #8e44ad"></mq-piano-chord>
+        <mq-piano-chord name="Bbm" style="--mq-piano-chord-active-color: #c0392b"></mq-piano-chord>
+        <mq-piano-chord name="Bbm" style="--mq-piano-chord-active-color: #27ae60"></mq-piano-chord>
+        <mq-piano-chord name="Bbm" style="--mq-piano-chord-active-color: #8e44ad"></mq-piano-chord>
       </div>
     </section>
 

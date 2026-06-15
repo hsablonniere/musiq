@@ -6,13 +6,13 @@ import { pianoExportParts } from "../mq-piano/mq-piano.js";
 
 @customElement("mq-piano-chord")
 export class MqPianoChord extends LitElement {
-  @property() accessor chord: string = "";
+  @property() accessor name: string = "";
   @property({ type: Boolean, attribute: "note-labels" }) accessor noteLabels: boolean = false;
 
   render() {
-    const info = Chord.get(this.chord);
+    const info = Chord.get(this.name);
     if (info.empty || info.notes.length === 0) {
-      return html`<div class="error">Unknown chord: ${this.chord}</div>`;
+      return html`<div class="error">Unknown chord: ${this.name}</div>`;
     }
 
     const notes = assignOctaves(info.notes, 4);
@@ -22,7 +22,7 @@ export class MqPianoChord extends LitElement {
     const endNoteForKeys = `B${rootOctave + 1}`;
 
     return html`
-      ${this.chord ? html`<div class="title" part="title">${this.chord}</div>` : nothing}
+      ${this.name ? html`<div class="name" part="name">${this.name}</div>` : nothing}
       <mq-piano
         start-note=${startNoteForKeys}
         end-note=${endNoteForKeys}
@@ -31,7 +31,10 @@ export class MqPianoChord extends LitElement {
       >
         ${notes.map(
           (note) => html`
-            <div slot="note-${noteToPianoKeysName(note)}" class="active-fill${isBlackKey(note) ? " black" : ""}">
+            <div
+              slot="note-${noteToPianoKeysName(note)}"
+              class="active-fill${isBlackKey(note) ? " black" : ""}"
+            >
               ${this.noteLabels
                 ? html`<span class="label"
                     >${note.replace(/\d+$/, "").replace("#", "♯").replace("b", "♭")}</span
@@ -50,7 +53,7 @@ export class MqPianoChord extends LitElement {
       flex-direction: column;
     }
 
-    .title {
+    .name {
       text-align: center;
       font-weight: bold;
       font-size: 1.2em;
