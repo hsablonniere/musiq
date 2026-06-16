@@ -32,7 +32,7 @@ export class MqPianoChord extends LitElement {
   render() {
     const info = Chord.get(this.name);
     if (info.empty || info.notes.length === 0) {
-      return html`<div class="error">Unknown chord: ${this.name}</div>`;
+      return html`<div class="error" part="error">Unknown chord: ${this.name}</div>`;
     }
 
     const notes = assignOctaves(info.notes, 4);
@@ -120,7 +120,6 @@ export class MqPianoChord extends LitElement {
 
     .error {
       font-family: system-ui, sans-serif;
-      color: #c0392b;
       font-style: italic;
       padding: 1em;
     }
