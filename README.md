@@ -36,7 +36,7 @@ Piano keyboard with chord visualization. Pass a chord name, get highlighted keys
 
 ### `<mq-piano-scale>`
 
-Piano keyboard with scale visualization. Major, minor, pentatonic, blues, modes (dorian, phrygian, lydian…), and more. Distinct root color, `note-labels`, and `degree-labels`.
+Piano keyboard with scale visualization. Major, minor, pentatonic, blues, modes (dorian, phrygian, lydian…), and more. Ships unstyled — theme the scale keys and the tonic via `::part()`. `note-labels` and `degree-labels`.
 
 **[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-piano-scale/mq-piano-scale.html)**
 

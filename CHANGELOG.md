@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Breaking Changes
+
+- `<mq-piano-scale>` — reworked to match `<mq-piano>`/`<mq-piano-chord>`: ships unstyled (theme via `::part()`); renamed the `scale` attribute/property to `name` and the `title` part to `name`; replaced the `--mq-piano-scale-active-color`/`--mq-piano-scale-root-color` custom properties with the `key-in-scale`/`key-tonic` parts; added a reflected `mode` property defaulting to `accurate`
+
 ## 0.0.4
 
 ### Bug Fixes
