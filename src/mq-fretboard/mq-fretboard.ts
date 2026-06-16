@@ -1,4 +1,5 @@
 import { css, html, LitElement, nothing } from "lit";
+import type { PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 const STANDARD_MARKERS = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
@@ -23,6 +24,21 @@ export class MqFretboard extends LitElement {
   @property({ type: Boolean, reflect: true, attribute: "left-handed" })
   accessor leftHanded: boolean = false;
   @property({ attribute: "extra-slots" }) accessor extraSlots: string = "";
+
+  willUpdate(changed: PropertyValues) {
+    if (changed.has("strings") && this.strings < 1) {
+      console.warn(`mq-fretboard: invalid strings "${this.strings}", falling back to 6`);
+      this.strings = 6;
+    }
+    if (changed.has("startFret") && this.startFret < 1) {
+      console.warn(`mq-fretboard: invalid start-fret "${this.startFret}", falling back to 1`);
+      this.startFret = 1;
+    }
+    if ((changed.has("startFret") || changed.has("endFret")) && this.endFret < this.startFret) {
+      console.warn(`mq-fretboard: end-fret before start-fret, clamping to start-fret`);
+      this.endFret = this.startFret;
+    }
+  }
 
   private _place(neckPos: string, stringPos: string): string {
     return this.orientation === "vertical"
