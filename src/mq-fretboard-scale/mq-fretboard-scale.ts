@@ -13,7 +13,7 @@ interface ScaleDot {
 
 @customElement("mq-fretboard-scale")
 export class MqFretboardScale extends LitElement {
-  @property() accessor scale: string = "";
+  @property() accessor name: string = "";
   @property() accessor tuning: string = "E,A,D,G,B,E";
   @property({ type: Number, attribute: "start-fret" }) accessor startFret: number = 0;
   @property({ type: Number, attribute: "end-fret" }) accessor endFret: number = 12;
@@ -31,9 +31,9 @@ export class MqFretboardScale extends LitElement {
   accessor inlays: boolean = false;
 
   render() {
-    const info = Scale.get(this.scale);
+    const info = Scale.get(this.name);
     if (info.empty || info.notes.length === 0) {
-      return html`<div class="error">Unknown scale: ${this.scale}</div>`;
+      return html`<div class="error">Unknown scale: ${this.name}</div>`;
     }
 
     const scaleNotes = info.notes;
@@ -69,7 +69,7 @@ export class MqFretboardScale extends LitElement {
     }
 
     return html`
-      ${this.scale ? html`<div class="title" part="title">${this.scale}</div>` : nothing}
+      ${this.name ? html`<div class="name" part="name">${this.name}</div>` : nothing}
       <mq-fretboard
         .strings=${stringCount}
         start-fret=${fbStartFret}
@@ -100,7 +100,7 @@ export class MqFretboardScale extends LitElement {
       flex-direction: column;
     }
 
-    .title {
+    .name {
       text-align: center;
       font-weight: bold;
       font-size: 1.2em;
