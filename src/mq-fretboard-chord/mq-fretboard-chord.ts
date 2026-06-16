@@ -70,13 +70,46 @@ function lookupChord(data: InstrumentData, key: string, suffix: string): ChordEn
   return chords.find((c) => c.suffix === suffix) ?? null;
 }
 
+/**
+ * Fretboard chord diagram. Pass a chord name and an instrument (guitar or
+ * ukulele) and a playable voicing is rendered on a vertical fretboard — fretted
+ * notes, open/muted strings and barres, with optional finger numbers. Voicings
+ * come from `@tombatossals/chords-db`; pick among them with `position`.
+ *
+ * Ships **unstyled** like `mq-fretboard`: neither the neck nor the chord markers
+ * carry color of their own. Theme the neck through the inner `mq-fretboard`'s
+ * `--mq-fretboard-*` custom properties, and the markers via `::part(marker)`,
+ * `::part(marker-open)`, `::part(marker-muted)` and `::part(marker-barre)`.
+ *
+ * @csspart name - The chord name heading above the fretboard.
+ * @csspart marker - A fretted note.
+ * @csspart marker-open - An open-string indicator (○) above the nut.
+ * @csspart marker-muted - A muted-string indicator (✕) above the nut.
+ * @csspart marker-barre - A barre spanning several strings at one fret.
+ * @csspart finger - A finger-number label on a marker (only with `finger-labels`).
+ * @csspart error - The fallback shown for an unknown chord.
+ * @csspart fret-number - A fret-number label (exported from the inner `mq-fretboard`).
+ *
+ * @cssprop --mq-fretboard-neck-color - Fill of the neck background (consumed by the inner `mq-fretboard`).
+ * @cssprop --mq-fretboard-nut-color - Color of the nut (consumed by the inner `mq-fretboard`).
+ * @cssprop --mq-fretboard-fret-color - Color of the fret wires (consumed by the inner `mq-fretboard`).
+ * @cssprop --mq-fretboard-string-color - Color of the strings (consumed by the inner `mq-fretboard`).
+ * @cssprop [--mq-fretboard-nut-width=3px] - Thickness of the nut (consumed by the inner `mq-fretboard`).
+ * @cssprop [--mq-fretboard-fret-width=1px] - Thickness of the fret wires (consumed by the inner `mq-fretboard`).
+ * @cssprop [--mq-fretboard-string-width=1px] - Thickness of the strings (consumed by the inner `mq-fretboard`).
+ */
 @customElement("mq-fretboard-chord")
 export class MqFretboardChord extends LitElement {
+  /** Chord name, e.g. `C`, `Am`, `F#maj7`, `Bbdim`. */
   @property() accessor name: string = "";
+  /** Instrument whose chord voicings to use. */
   @property() accessor instrument: Instrument = "guitar";
+  /** Index of the voicing to show among those available for the chord (0-based). */
   @property({ type: Number }) accessor position: number = 0;
+  /** Mirror the diagram for left-handed players. */
   @property({ type: Boolean, reflect: true, attribute: "left-handed" })
   accessor leftHanded: boolean = false;
+  /** Show finger numbers (1–4) on the markers and barres. */
   @property({ type: Boolean, attribute: "finger-labels" }) accessor fingerLabels: boolean = false;
 
   render() {
