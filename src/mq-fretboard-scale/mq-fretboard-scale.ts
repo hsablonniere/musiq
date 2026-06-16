@@ -108,14 +108,6 @@ export class MqFretboardScale extends LitElement {
       flex-direction: column;
     }
 
-    .name {
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.2em;
-      margin-bottom: 0.4em;
-      font-family: system-ui, sans-serif;
-    }
-
     mq-fretboard {
       flex: 1;
       min-height: 0;
