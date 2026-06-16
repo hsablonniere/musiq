@@ -266,7 +266,11 @@
           </tr>
           <tr>
             <td data-label="Part"><code>key-pressed</code></td>
-            <td data-label="Description">The marker covering a key held by the chord</td>
+            <td data-label="Description">
+              The marker covering a key held by the chord. Combine it with any key part to theme by
+              note, e.g. <code>::part(key-white key-pressed)</code>,
+              <code>::part(note-c key-pressed)</code>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -347,6 +351,25 @@
         <mq-piano-chord class="pressed-red" name="Bbm"></mq-piano-chord>
         <mq-piano-chord class="pressed-green" name="Bbm"></mq-piano-chord>
         <mq-piano-chord class="pressed-purple" name="Bbm"></mq-piano-chord>
+      </div>
+    </section>
+
+    <section>
+      <p class="desc">
+        <code>key-pressed</code> combines with any key part, so a single key in the chord can be
+        themed on its own — here the root pitch-class is picked out with
+        <code>::part(note-bb key-pressed)</code>.
+      </p>
+      <style>
+        .pressed-root::part(key-pressed) {
+          background-color: #4a90d9;
+        }
+        .pressed-root::part(note-bb key-pressed) {
+          background-color: #c0392b;
+        }
+      </style>
+      <div class="row">
+        <mq-piano-chord class="pressed-root" name="Bbm" note-labels></mq-piano-chord>
       </div>
     </section>
 
