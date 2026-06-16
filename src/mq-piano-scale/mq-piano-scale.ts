@@ -9,6 +9,7 @@ export class MqPianoScale extends LitElement {
   @property() accessor name: string = "";
   @property({ type: Boolean, attribute: "note-labels" }) accessor noteLabels: boolean = false;
   @property({ type: Boolean, attribute: "degree-labels" }) accessor degreeLabels: boolean = false;
+  @property({ reflect: true }) accessor mode: "accurate" | "centered" = "accurate";
 
   render() {
     const info = Scale.get(this.name);
@@ -27,7 +28,7 @@ export class MqPianoScale extends LitElement {
       <mq-piano
         start-note=${startNoteForKeys}
         end-note=${endNoteForKeys}
-        mode="centered"
+        mode=${this.mode}
         exportparts="key, key-white, key-black"
       >
         ${notesWithOctave.map((note, i) => {
