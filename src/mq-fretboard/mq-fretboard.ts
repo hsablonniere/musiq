@@ -5,13 +5,47 @@ import { customElement, property } from "lit/decorators.js";
 const STANDARD_MARKERS = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
 const DOUBLE_MARKERS = new Set([12, 24]);
 
+/**
+ * Fretboard diagram for stringed instruments. Configurable string count and
+ * fret range, horizontal or vertical orientation, left-handed flip, optional
+ * inlays and fret numbers. Named slots place content on any string/fret
+ * position, including multi-string barres.
+ *
+ * Ships **unstyled**: the neck, nut, frets, strings and inlays carry no color
+ * of their own. Theme via the `--mq-fretboard-*` custom properties — set the
+ * `-color` ones to make the structure visible. Dimension properties (widths,
+ * inlay size) keep sensible defaults.
+ *
+ * @slot s{n}-marker - Content above string n (1-based), e.g. an open/muted indicator: `s1-marker`, `s6-marker`.
+ * @slot s{n}-f{fret} - Content at the intersection of string n and a fret: `s1-f3`, `s6-f12`.
+ * @slot s{from}-s{to}-f{fret} - Content spanning strings {from}–{to} at one fret (a barre); declare it via the `extra-slots` attribute, e.g. `s1-s3-f5`.
+ *
+ * @csspart fret-number - A fret-number label (shown via the `fret-numbers` attribute).
+ *
+ * @cssprop --mq-fretboard-neck-color - Fill of the neck background.
+ * @cssprop --mq-fretboard-nut-color - Color of the nut.
+ * @cssprop --mq-fretboard-fret-color - Color of the fret wires.
+ * @cssprop --mq-fretboard-string-color - Color of the strings.
+ * @cssprop --mq-fretboard-inlay-color - Color of the inlay markers.
+ * @cssprop [--mq-fretboard-nut-width=3px] - Thickness of the nut.
+ * @cssprop [--mq-fretboard-nut-radius=0] - Corner radius of the nut.
+ * @cssprop [--mq-fretboard-fret-width=1px] - Thickness of the fret wires.
+ * @cssprop [--mq-fretboard-string-width=1px] - Thickness of the strings.
+ * @cssprop [--mq-fretboard-inlay-size=6px] - Diameter of the inlay markers.
+ */
 @customElement("mq-fretboard")
 export class MqFretboard extends LitElement {
+  /** Number of strings. */
   @property({ type: Number }) accessor strings: number = 6;
+  /** First fret shown (1-based); fret 1 renders the nut. */
   @property({ type: Number, attribute: "start-fret" }) accessor startFret: number = 1;
+  /** Last fret shown. */
   @property({ type: Number, attribute: "end-fret" }) accessor endFret: number = 12;
+  /** Layout direction: `horizontal` or `vertical`. */
   @property({ reflect: true }) accessor orientation: "horizontal" | "vertical" = "horizontal";
+  /** Which fret numbers to show: `all`, a comma-separated list (e.g. `3,5,7`), or empty for none. */
   @property({ attribute: "fret-numbers" }) accessor fretNumbers: string = "";
+  /** Show inlay position markers at the standard frets (3, 5, 7, 9, 12, …). */
   @property({
     attribute: "inlays",
     converter: {
@@ -20,9 +54,12 @@ export class MqFretboard extends LitElement {
     },
   })
   accessor inlays: boolean = false;
+  /** Extend the neck, nut and frets to the outer edge instead of stopping at the outermost strings. */
   @property({ type: Boolean, attribute: "full-neck" }) accessor fullNeck: boolean = false;
+  /** Flip horizontally for left-handed players; slotted content stays readable. */
   @property({ type: Boolean, reflect: true, attribute: "left-handed" })
   accessor leftHanded: boolean = false;
+  /** Comma-separated barre slots in `s{from}-s{to}-f{fret}` form (e.g. `s1-s5-f1`), each enabling a multi-string slot at that fret. */
   @property({ attribute: "extra-slots" }) accessor extraSlots: string = "";
 
   willUpdate(changed: PropertyValues) {
