@@ -1,8 +1,8 @@
 import { css, html, LitElement, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { Scale } from "tonal";
-import { assignOctaves, isBlackKey, noteToPianoKeysName } from "../utils.js";
-import "../mq-piano/mq-piano.js";
+import { assignOctaves, isBlackKey, keyMarkerParts, noteToPianoKeysName } from "../utils.js";
+import { pianoExportParts } from "../mq-piano/mq-piano.js";
 
 @customElement("mq-piano-scale")
 export class MqPianoScale extends LitElement {
@@ -14,7 +14,7 @@ export class MqPianoScale extends LitElement {
   render() {
     const info = Scale.get(this.name);
     if (info.empty || info.notes.length === 0) {
-      return html`<div class="error">Unknown scale: ${this.name}</div>`;
+      return html`<div class="error" part="error">Unknown scale: ${this.name}</div>`;
     }
 
     const notesWithOctave = assignOctaves([...info.notes, info.notes[0]], 4);
@@ -29,23 +29,27 @@ export class MqPianoScale extends LitElement {
         start-note=${startNoteForKeys}
         end-note=${endNoteForKeys}
         mode=${this.mode}
-        exportparts="key, key-white, key-black"
+        exportparts=${pianoExportParts(startNoteForKeys, endNoteForKeys)}
       >
         ${notesWithOctave.map((note, i) => {
           const isRoot = i === 0 || i === notesWithOctave.length - 1;
           const degree = i === notesWithOctave.length - 1 ? 1 : i + 1;
           const black = isBlackKey(note);
+          const markers = isRoot ? "key-in-scale key-tonic" : "key-in-scale";
           return html`
             <div
               slot="note-${noteToPianoKeysName(note)}"
-              class="active-fill${isRoot ? " root" : ""}${black ? " black" : ""}"
+              part=${keyMarkerParts(markers, note, black)}
+              class="fill"
             >
               ${this.noteLabels
-                ? html`<span class="label"
+                ? html`<span class="label" part="label"
                     >${note.replace(/\d+$/, "").replace("#", "♯").replace("b", "♭")}</span
                   >`
                 : nothing}
-              ${this.degreeLabels ? html`<span class="degree">${degree}</span>` : nothing}
+              ${this.degreeLabels
+                ? html`<span class="degree" part="degree">${degree}</span>`
+                : nothing}
             </div>
           `;
         })}
@@ -55,70 +59,34 @@ export class MqPianoScale extends LitElement {
 
   static styles = css`
     :host {
-      display: flex;
-      flex-direction: column;
+      display: block;
+      /* Lets consumers size labels/markers in cqi units, proportional to the
+         keyboard, without knowing the actual key size. */
+      container-type: inline-size;
     }
 
-    .name {
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.2em;
-      margin-bottom: 0.4em;
-      font-family: system-ui, sans-serif;
-    }
-
-    mq-piano {
-      flex: 1;
-      min-height: 0;
-    }
-
+    /* mq-piano fills the host width on its own (block-level) and derives its
+       height from its locked aspect ratio — nothing to size here.
+       Layout glue only (no theming): make each key a column so the slotted
+       marker can stretch to fill it and bottom-align its labels. */
     mq-piano::part(key-white),
     mq-piano::part(key-black) {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
     }
 
-    .active-fill {
-      width: 100%;
-      height: 100%;
-      background: var(--mq-piano-scale-active-color, #27ae60);
+    /* The marker ships unstyled — fill/size/color come from ::part(key-in-scale).
+       Stack the optional note + degree labels at the bottom; font-size set on the
+       marker (cqi via ::part) is inherited by both spans. */
+    .fill {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
     }
 
-    .active-fill.root {
-      background: var(--mq-piano-scale-root-color, var(--mq-piano-scale-active-color, #1e8449));
-    }
-
-    .active-fill.black {
-      border-left: 1px solid #000;
-      border-right: 1px solid #000;
-      border-bottom: 1px solid #000;
-      box-sizing: border-box;
-    }
-
-    .label {
-      font-family: system-ui, sans-serif;
-      font-size: 0.55em;
-      font-weight: bold;
-      padding-bottom: 0.2em;
-      color: #fff;
-    }
-
-    .degree {
-      font-family: system-ui, sans-serif;
-      font-size: 0.45em;
-      padding-bottom: 0.4em;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
     .error {
-      font-family: system-ui, sans-serif;
-      color: #c0392b;
       font-style: italic;
       padding: 1em;
     }
