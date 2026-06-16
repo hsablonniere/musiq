@@ -73,6 +73,9 @@ export class MqPianoChord extends LitElement {
     :host {
       display: flex;
       flex-direction: column;
+      /* Lets consumers size labels/markers in cqi units, proportional to the
+         keyboard, without knowing the actual key size. */
+      container-type: inline-size;
     }
 
     .name {
