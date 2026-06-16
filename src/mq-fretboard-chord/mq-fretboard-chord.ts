@@ -161,7 +161,7 @@ export class MqFretboardChord extends LitElement {
           const finger = fingers[i];
           return html`<div slot="s${s}-f${actualFret}" class="marker" part="marker">
             ${this.fingerLabels && finger > 0
-              ? html`<span class="finger">${finger}</span>`
+              ? html`<span class="finger" part="finger">${finger}</span>`
               : nothing}
           </div>`;
         })}
@@ -173,7 +173,7 @@ export class MqFretboardChord extends LitElement {
               part="marker-barre"
             >
               ${this.fingerLabels && barre.finger > 0
-                ? html`<span class="finger">${barre.finger}</span>`
+                ? html`<span class="finger" part="finger">${barre.finger}</span>`
                 : nothing}
             </div>
           `,
@@ -209,13 +209,6 @@ export class MqFretboardChord extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .finger {
-      font-size: 0.6em;
-      font-weight: bold;
-      line-height: 1;
-      font-family: system-ui, sans-serif;
     }
 
     .error {
