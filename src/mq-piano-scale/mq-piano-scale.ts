@@ -6,14 +6,14 @@ import "../mq-piano/mq-piano.js";
 
 @customElement("mq-piano-scale")
 export class MqPianoScale extends LitElement {
-  @property() accessor scale: string = "";
+  @property() accessor name: string = "";
   @property({ type: Boolean, attribute: "note-labels" }) accessor noteLabels: boolean = false;
   @property({ type: Boolean, attribute: "degree-labels" }) accessor degreeLabels: boolean = false;
 
   render() {
-    const info = Scale.get(this.scale);
+    const info = Scale.get(this.name);
     if (info.empty || info.notes.length === 0) {
-      return html`<div class="error">Unknown scale: ${this.scale}</div>`;
+      return html`<div class="error">Unknown scale: ${this.name}</div>`;
     }
 
     const notesWithOctave = assignOctaves([...info.notes, info.notes[0]], 4);
@@ -23,7 +23,7 @@ export class MqPianoScale extends LitElement {
     const endNoteForKeys = `B${rootOctave + 1}`;
 
     return html`
-      ${this.scale ? html`<div class="title" part="title">${this.scale}</div>` : nothing}
+      ${this.name ? html`<div class="name" part="name">${this.name}</div>` : nothing}
       <mq-piano
         start-note=${startNoteForKeys}
         end-note=${endNoteForKeys}
@@ -58,7 +58,7 @@ export class MqPianoScale extends LitElement {
       flex-direction: column;
     }
 
-    .title {
+    .name {
       text-align: center;
       font-weight: bold;
       font-size: 1.2em;

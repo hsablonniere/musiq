@@ -216,8 +216,8 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>scale</code></td>
-            <td><code>scale</code></td>
+            <td><code>name</code></td>
+            <td><code>name</code></td>
             <td><code>string</code></td>
             <td>—</td>
             <td>
@@ -279,7 +279,7 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>title</code></td>
+            <td><code>name</code></td>
             <td>Scale name heading above the keyboard</td>
           </tr>
           <tr>
@@ -301,9 +301,9 @@
     <section>
       <h2>Basic — major & minor scales</h2>
       <div class="row">
-        <mq-piano-scale scale="C major"></mq-piano-scale>
-        <mq-piano-scale scale="G major"></mq-piano-scale>
-        <mq-piano-scale scale="A minor"></mq-piano-scale>
+        <mq-piano-scale name="C major"></mq-piano-scale>
+        <mq-piano-scale name="G major"></mq-piano-scale>
+        <mq-piano-scale name="A minor"></mq-piano-scale>
       </div>
     </section>
 
@@ -313,9 +313,9 @@
         Display note names on active keys with the <code>note-labels</code> attribute.
       </p>
       <div class="row">
-        <mq-piano-scale scale="Bb major" note-labels></mq-piano-scale>
-        <mq-piano-scale scale="F# minor" note-labels></mq-piano-scale>
-        <mq-piano-scale scale="Eb major" note-labels></mq-piano-scale>
+        <mq-piano-scale name="Bb major" note-labels></mq-piano-scale>
+        <mq-piano-scale name="F# minor" note-labels></mq-piano-scale>
+        <mq-piano-scale name="Eb major" note-labels></mq-piano-scale>
       </div>
     </section>
 
@@ -323,8 +323,8 @@
       <h2>Degree labels</h2>
       <p class="desc">Show scale degree numbers with the <code>degree-labels</code> attribute.</p>
       <div class="row">
-        <mq-piano-scale scale="C major" degree-labels></mq-piano-scale>
-        <mq-piano-scale scale="A minor" degree-labels note-labels></mq-piano-scale>
+        <mq-piano-scale name="C major" degree-labels></mq-piano-scale>
+        <mq-piano-scale name="A minor" degree-labels note-labels></mq-piano-scale>
       </div>
     </section>
 
@@ -333,15 +333,15 @@
       <p class="desc">Church modes from C</p>
       <div class="row">
         <div>
-          <mq-piano-scale scale="D dorian" note-labels></mq-piano-scale>
+          <mq-piano-scale name="D dorian" note-labels></mq-piano-scale>
           <p class="caption">Dorian</p>
         </div>
         <div>
-          <mq-piano-scale scale="E phrygian" note-labels></mq-piano-scale>
+          <mq-piano-scale name="E phrygian" note-labels></mq-piano-scale>
           <p class="caption">Phrygian</p>
         </div>
         <div>
-          <mq-piano-scale scale="F lydian" note-labels></mq-piano-scale>
+          <mq-piano-scale name="F lydian" note-labels></mq-piano-scale>
           <p class="caption">Lydian</p>
         </div>
       </div>
@@ -352,15 +352,15 @@
       <p class="desc">Pentatonic, blues, whole tone.</p>
       <div class="row">
         <div>
-          <mq-piano-scale scale="C major pentatonic" note-labels></mq-piano-scale>
+          <mq-piano-scale name="C major pentatonic" note-labels></mq-piano-scale>
           <p class="caption">Major pentatonic</p>
         </div>
         <div>
-          <mq-piano-scale scale="A blues" note-labels></mq-piano-scale>
+          <mq-piano-scale name="A blues" note-labels></mq-piano-scale>
           <p class="caption">Blues</p>
         </div>
         <div>
-          <mq-piano-scale scale="C whole tone" note-labels></mq-piano-scale>
+          <mq-piano-scale name="C whole tone" note-labels></mq-piano-scale>
           <p class="caption">Whole tone</p>
         </div>
       </div>
@@ -374,15 +374,15 @@
       </p>
       <div class="row">
         <mq-piano-scale
-          scale="C major"
+          name="C major"
           style="--mq-piano-scale-active-color: #c0392b; --mq-piano-scale-root-color: #962d22"
         ></mq-piano-scale>
         <mq-piano-scale
-          scale="C major"
+          name="C major"
           style="--mq-piano-scale-active-color: #4a90d9; --mq-piano-scale-root-color: #2c5f8a"
         ></mq-piano-scale>
         <mq-piano-scale
-          scale="C major"
+          name="C major"
           style="--mq-piano-scale-active-color: #8e44ad; --mq-piano-scale-root-color: #6c3483"
         ></mq-piano-scale>
       </div>
