@@ -8,47 +8,73 @@
     <!-- Shared page chrome (layout, typography, API tables, responsive). -->
     <link rel="stylesheet" href="../demo.css" />
 
-    <!-- Component-specific bits only; shared chrome lives in demo.css. -->
+    <!-- mq-piano-chord ships unstyled; this base theme colors the keyboard and the
+         pressed (chord) keys. Pressed rules come AFTER the inactive ones: a marker
+         reuses its key's parts, and ::part() adds no per-ident specificity, so
+         source order decides. Per-example overrides further down. -->
     <style>
-      /* mq-piano ships unstyled; these base styles keep the keyboard visible.
-         Same base chrome as the <mq-piano> demo (parts exported through
-         mq-piano-chord, custom props inherit across the shadow boundary). */
       mq-piano-chord {
         --mq-piano-border-color: #d0d0d0;
         --mq-piano-border-color-outer: #b0b0b0;
-        --mq-piano-border-color-inner: #d0d0d0;
         --mq-piano-border-width: 1px;
       }
+
+      /* Inactive keys. */
       mq-piano-chord::part(key-white) {
-        background-color: #fafafa;
+        background: #fafafa;
       }
       mq-piano-chord::part(key-black) {
-        background-color: #222222;
+        background: #222;
       }
-      /* Pressed keys ship unstyled too — the demo gives them a fill and a
-         readable label color. */
+
+      /* Pressed (chord) keys — one color for both, a darker shade for blacks.
+         font-size sits on the marker (cqi, proportional to the keyboard) so the
+         label inherits it: bigger on the wide white keys, smaller on the narrow
+         black ones. */
       mq-piano-chord::part(key-pressed) {
-        background-color: #4a90d9;
-      }
-      mq-piano-chord::part(label) {
+        background: #3578c0;
         color: #fff;
       }
-
-      .row mq-piano-chord {
-        height: 200px;
+      mq-piano-chord::part(key-white key-pressed) {
+        font-size: 4.5cqi;
+      }
+      mq-piano-chord::part(key-black key-pressed) {
+        background: #2c5aa0;
+        font-size: 2.5cqi;
       }
 
-      /* The locked ratio turns a fixed height into a width that overflows a
-         narrow viewport — let the available width drive layout instead. */
-      @media (max-width: 768px) {
-        .row mq-piano-chord {
-          height: auto;
-        }
+      /* Labels and title (font-size AND color inherited from the marker above,
+         so the text contrast follows whatever each pressed key is painted). */
+      mq-piano-chord::part(label) {
+        font-family: system-ui, sans-serif;
+        font-weight: bold;
+        padding-bottom: 0.6em;
+      }
+      mq-piano-chord::part(name) {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 0.4rem;
+        font-family: system-ui, sans-serif;
+      }
+      mq-piano-chord::part(error) {
+        color: var(--accent);
       }
 
       /* API footnote marker — same accent as the section subtitles (h3). */
       .ref {
         color: var(--accent);
+      }
+
+      /* Per-example active-color overrides. */
+      .active-red::part(key-pressed) {
+        background: #c0392b;
+      }
+      .active-green::part(key-pressed) {
+        background: #27ae60;
+      }
+      .active-purple::part(key-pressed) {
+        background: #8e44ad;
       }
     </style>
     <script type="module" src="./mq-piano-chord.ts"></script>
@@ -57,10 +83,10 @@
     <header>
       <h1><code>&lt;mq-piano-chord&gt;</code></h1>
       <p>
-        Piano keyboard with chord visualization. Pass a chord name, get highlighted keys. Supports
-        inversions via slash chords (<code>C/E</code>, <code>C/G</code>) and
-        <code>note-labels</code>. Ships unstyled — theme pressed keys via
-        <code>::part(key-pressed)</code>.
+        Piano keyboard with chord visualization. Pass a chord name, get its notes highlighted as
+        pressed keys. Supports inversions via slash chords (<code>C/E</code>, <code>C/G</code>) and
+        <code>note-labels</code>. Ships unstyled — theme the keyboard and the pressed keys via
+        <code>::part()</code>.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
@@ -101,7 +127,7 @@
             <td data-label="Type"><code>boolean</code></td>
             <td data-label="Default"><code>false</code></td>
             <td data-label="Description">
-              Show note names on active keys (English notation: A, B, C, D, E, F, G)
+              Show note names on pressed keys (English notation: A, B, C, D, E, F, G)
             </td>
           </tr>
           <tr>
@@ -214,6 +240,12 @@
 
     <section class="api">
       <h3>CSS Parts</h3>
+      <p class="desc">
+        This component is unstyled. Theme inactive keys with the <code>key-*</code> /
+        <code>note-*</code> parts, and pressed keys by combining <code>key-pressed</code> with any
+        of them — <code>::part()</code> matches an element carrying <em>all</em> the listed names,
+        in any order.
+      </p>
       <table>
         <thead>
           <tr>
@@ -229,12 +261,12 @@
           <tr>
             <td data-label="Part"><code>label</code></td>
             <td data-label="Description">
-              A note-name label on a pressed key (only with <code>note-labels</code>)
+              Note-name label on a pressed key (with <code>note-labels</code>)
             </td>
           </tr>
           <tr>
             <td data-label="Part"><code>error</code></td>
-            <td data-label="Description">The fallback shown for an unknown chord</td>
+            <td data-label="Description">Fallback shown for an unknown chord</td>
           </tr>
           <tr>
             <td data-label="Part"><code>key</code> <span class="ref">*</span></td>
@@ -274,16 +306,17 @@
               <code>note-c4</code>, <code>note-fs4</code> … <span class="ref">*</span>
             </td>
             <td data-label="Description">
-              A single key by absolute pitch (range <code>C4</code>–<code>B5</code>). Black keys
-              expose both enharmonic names: <code>note-cs4</code>/<code>note-db4</code>
+              A single key by absolute pitch. Black keys expose both enharmonic names:
+              <code>note-cs4</code>/<code>note-db4</code>
             </td>
           </tr>
           <tr>
             <td data-label="Part"><code>key-pressed</code></td>
             <td data-label="Description">
-              The marker covering a key held by the chord. Combine it with any key part to theme by
-              note, e.g. <code>::part(key-white key-pressed)</code>,
-              <code>::part(note-c key-pressed)</code>
+              Marker covering a key held by the chord. Combine it with any key part:
+              <code>::part(key-pressed)</code> (all), <code>::part(key-white key-pressed)</code>,
+              <code>::part(key-black key-pressed)</code>, <code>::part(note-c key-pressed)</code>,
+              <code>::part(note-c4 key-pressed)</code>
             </td>
           </tr>
         </tbody>
@@ -294,116 +327,373 @@
       </p>
     </section>
 
-    <h2>Basic — triads</h2>
-    <section>
-      <p class="desc">Major, minor, diminished.</p>
-      <div class="row">
-        <mq-piano-chord name="C"></mq-piano-chord>
-        <mq-piano-chord name="Ebm"></mq-piano-chord>
-        <mq-piano-chord name="F#dim"></mq-piano-chord>
-      </div>
-    </section>
+    <h2>Name</h2>
 
-    <h2>Basic — seventh chords</h2>
     <section>
-      <p class="desc">Major 7, minor 7, dominant 7.</p>
-      <div class="row">
-        <mq-piano-chord name="Bbmaj7"></mq-piano-chord>
-        <mq-piano-chord name="C#m7"></mq-piano-chord>
-        <mq-piano-chord name="Ab7"></mq-piano-chord>
-      </div>
-    </section>
-
-    <h2>Note labels</h2>
-    <section>
+      <h3>Triads</h3>
       <p class="desc">
-        Display note names on active keys with the <code>note-labels</code> attribute.
+        <code>name</code> accepts any chord
+        <a
+          href="https://tonaljs.github.io/tonal/docs/groups/chords"
+          target="_blank"
+          rel="noreferrer"
+          >tonal</a
+        >
+        understands.
       </p>
       <div class="row">
-        <mq-piano-chord name="F#maj7" note-labels></mq-piano-chord>
-        <mq-piano-chord name="Bbm7" note-labels></mq-piano-chord>
-        <mq-piano-chord name="Eb7" note-labels></mq-piano-chord>
+        <div>
+          <mq-piano-chord name="C"></mq-piano-chord>
+          <p class="caption">major</p>
+        </div>
+        <div>
+          <mq-piano-chord name="Ebm"></mq-piano-chord>
+          <p class="caption">minor</p>
+        </div>
+        <div>
+          <mq-piano-chord name="F#dim"></mq-piano-chord>
+          <p class="caption">diminished</p>
+        </div>
       </div>
     </section>
 
-    <h2>Inversions — slash chords</h2>
     <section>
-      <p class="desc">Chord over a specific bass note.</p>
+      <h3>Extended chords</h3>
+      <p class="desc">
+        <code>name</code> also accepts every extension in
+        <a
+          href="https://tonaljs.github.io/tonal/docs/groups/chords"
+          target="_blank"
+          rel="noreferrer"
+          >tonal</a
+        >'s catalog.
+      </p>
       <div class="row">
         <div>
-          <mq-piano-chord name="C" note-labels></mq-piano-chord>
-          <p class="caption">Root position</p>
+          <mq-piano-chord name="Bbmaj7"></mq-piano-chord>
+          <p class="caption">major 7</p>
         </div>
         <div>
-          <mq-piano-chord name="C/E" note-labels></mq-piano-chord>
+          <mq-piano-chord name="C9"></mq-piano-chord>
+          <p class="caption">dominant 9</p>
+        </div>
+        <div>
+          <mq-piano-chord name="F11"></mq-piano-chord>
+          <p class="caption">dominant 11</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3>Inversions — slash chords</h3>
+      <p class="desc">
+        <code>name</code> accepts slash notation for inversions — a chord over a specific bass note.
+      </p>
+      <div class="row">
+        <div>
+          <mq-piano-chord name="Cm"></mq-piano-chord>
+          <p class="caption">root position</p>
+        </div>
+        <div>
+          <mq-piano-chord name="Cm/Eb"></mq-piano-chord>
           <p class="caption">1st inversion</p>
         </div>
         <div>
-          <mq-piano-chord name="C/G" note-labels></mq-piano-chord>
+          <mq-piano-chord name="Cm/G"></mq-piano-chord>
           <p class="caption">2nd inversion</p>
         </div>
       </div>
     </section>
 
-    <h2>Style — pressed keys</h2>
+    <h2>Note labels</h2>
+
     <section>
+      <h3>Triads</h3>
       <p class="desc">
-        Pressed keys ship unstyled — fill them via <code>::part(key-pressed)</code>.
+        The <code>note-labels</code> attribute prints each note's name on its pressed key — style
+        them with <code>::part(label)</code>.
       </p>
-      <style>
-        .pressed-red::part(key-pressed) {
-          background-color: #c0392b;
-        }
-        .pressed-green::part(key-pressed) {
-          background-color: #27ae60;
-        }
-        .pressed-purple::part(key-pressed) {
-          background-color: #8e44ad;
-        }
-      </style>
       <div class="row">
-        <mq-piano-chord class="pressed-red" name="Bbm"></mq-piano-chord>
-        <mq-piano-chord class="pressed-green" name="Bbm"></mq-piano-chord>
-        <mq-piano-chord class="pressed-purple" name="Bbm"></mq-piano-chord>
+        <div>
+          <mq-piano-chord name="C" note-labels></mq-piano-chord>
+          <p class="caption">major</p>
+        </div>
+        <div>
+          <mq-piano-chord name="Ebm" note-labels></mq-piano-chord>
+          <p class="caption">minor</p>
+        </div>
+        <div>
+          <mq-piano-chord name="F#dim" note-labels></mq-piano-chord>
+          <p class="caption">diminished</p>
+        </div>
       </div>
     </section>
 
     <section>
-      <p class="desc">
-        <code>key-pressed</code> combines with any key part, so a single key in the chord can be
-        themed on its own — here the root pitch-class is picked out with
-        <code>::part(note-bb key-pressed)</code>.
-      </p>
-      <style>
-        .pressed-root::part(key-pressed) {
-          background-color: #4a90d9;
-        }
-        .pressed-root::part(note-bb key-pressed) {
-          background-color: #c0392b;
-        }
-      </style>
+      <h3>Extended chords</h3>
+      <p class="desc">Labels keep up with denser voicings.</p>
       <div class="row">
-        <mq-piano-chord class="pressed-root" name="Bbm" note-labels></mq-piano-chord>
+        <div>
+          <mq-piano-chord name="Bbmaj7" note-labels></mq-piano-chord>
+          <p class="caption">major 7</p>
+        </div>
+        <div>
+          <mq-piano-chord name="C9" note-labels></mq-piano-chord>
+          <p class="caption">dominant 9</p>
+        </div>
+        <div>
+          <mq-piano-chord name="F11" note-labels></mq-piano-chord>
+          <p class="caption">dominant 11</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3>Inversions — slash chords</h3>
+      <p class="desc">The bass note is labelled like any other.</p>
+      <div class="row">
+        <div>
+          <mq-piano-chord name="Cm" note-labels></mq-piano-chord>
+          <p class="caption">root position</p>
+        </div>
+        <div>
+          <mq-piano-chord name="Cm/Eb" note-labels></mq-piano-chord>
+          <p class="caption">1st inversion</p>
+        </div>
+        <div>
+          <mq-piano-chord name="Cm/G" note-labels></mq-piano-chord>
+          <p class="caption">2nd inversion</p>
+        </div>
       </div>
     </section>
 
     <h2>Mode</h2>
+
     <section>
+      <h3><code>centered</code> vs <code>accurate</code></h3>
       <p class="desc">
-        Forwarded to the inner <code>mq-piano</code>. <code>centered</code> (default) gives every
-        white key the same width with black keys centered between them; <code>accurate</code> uses
-        real piano geometry.
+        <code>mode</code> is forwarded to <code>mq-piano</code>. The default
+        <code>centered</code> evens out the white keys; <code>accurate</code> switches to real piano
+        geometry.
       </p>
       <div class="row">
         <div>
-          <mq-piano-chord name="F#maj7" note-labels></mq-piano-chord>
+          <mq-piano-chord name="Ab7" note-labels></mq-piano-chord>
           <p class="caption"><code>mode="centered"</code> (default)</p>
         </div>
         <div>
-          <mq-piano-chord name="F#maj7" mode="accurate" note-labels></mq-piano-chord>
+          <mq-piano-chord name="Ab7" mode="accurate" note-labels></mq-piano-chord>
           <p class="caption"><code>mode="accurate"</code></p>
         </div>
       </div>
+    </section>
+
+    <h2>Style</h2>
+
+    <section>
+      <h3>Pressed keys — <code>::part(key-pressed)</code></h3>
+      <p class="desc">
+        The marker over each chord note is the one part unique to this component. Recolor every
+        pressed key with <code>::part(key-pressed)</code>.
+      </p>
+      <div class="row">
+        <mq-piano-chord class="active-red" name="Bbm"></mq-piano-chord>
+        <mq-piano-chord class="active-green" name="Bbm"></mq-piano-chord>
+        <mq-piano-chord class="active-purple" name="Bbm"></mq-piano-chord>
+      </div>
+    </section>
+
+    <section>
+      <h3>Target white, black, or a single note</h3>
+      <p class="desc">
+        <code>::part()</code> matches an element carrying <em>all</em> the listed names, so
+        combining <code>key-pressed</code> with a key part reaches a subset: white vs black, or a
+        single note.
+      </p>
+      <style>
+        /* Distinct shades for pressed white and pressed black keys. */
+        .split::part(key-white key-pressed) {
+          background: #e9b949;
+          color: #1a1a1a;
+        }
+        .split::part(key-black key-pressed) {
+          background: #0f7a64;
+        }
+        /* Tint every C, then layer a marker on the pressed one. text-decoration
+           and color combine on top of the shared tint — note-c keeps painting the
+           background, so the pressed C stays in the family instead of being
+           recolored. */
+        .root::part(note-c) {
+          background: #f6d6d0;
+        }
+        .root::part(note-c key-pressed) {
+          color: #1a1a1a;
+          text-decoration: underline 0.15em #c0392b;
+          text-underline-offset: 0.15em;
+        }
+      </style>
+      <div class="row">
+        <div>
+          <mq-piano-chord class="split" name="C7" note-labels></mq-piano-chord>
+          <p class="caption">
+            <code>::part(key-white key-pressed)</code> · <code>::part(key-black key-pressed)</code>
+          </p>
+        </div>
+        <div>
+          <mq-piano-chord class="root" name="C" note-labels></mq-piano-chord>
+          <p class="caption">
+            <code>::part(key-pressed)</code> blue · <code>::part(note-c)</code> rose on both C ·
+            <code>::part(note-c key-pressed)</code> underlines the pressed one
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3>Chord name — <code>::part(name)</code></h3>
+      <p class="desc">
+        The chord <code>name</code> above the keyboard is this component's own part, styled
+        independently of the keys — same component, two styles.
+      </p>
+      <style>
+        /* Style 1 — centered accent pill. */
+        .name-pill::part(name) {
+          width: fit-content;
+          margin: 0 auto 0.5rem;
+          padding: 0.1em 0.7em;
+          border-radius: 999px;
+          background: var(--accent);
+          color: #fff;
+          font:
+            600 0.9rem system-ui,
+            sans-serif;
+          letter-spacing: 0.02em;
+        }
+        /* Style 2 — left-aligned tag with an accent underline. */
+        .name-underline::part(name) {
+          width: fit-content;
+          margin: 0 0 0.5rem;
+          padding-bottom: 0.12em;
+          border-bottom: 3px solid var(--accent);
+          color: #1a1a1a;
+          text-align: left;
+          font:
+            700 1.1rem system-ui,
+            sans-serif;
+        }
+      </style>
+      <div class="row">
+        <div>
+          <mq-piano-chord class="name-pill" name="Cmaj7"></mq-piano-chord>
+          <p class="caption">Accent pill, centered</p>
+        </div>
+        <div>
+          <mq-piano-chord class="name-underline" name="Am7"></mq-piano-chord>
+          <p class="caption">Underlined tag, left-aligned</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3>Note labels — <code>::part(label)</code></h3>
+      <p class="desc">
+        With <code>note-labels</code>, each pressed key carries a <code>::part(label)</code>. Print
+        it straight onto the filled key, or turn it into a free-standing dot and leave the keys
+        their own color.
+      </p>
+      <style>
+        /* Style 2 — labels as dots, keys left untouched. The marker background is
+           cleared so each key keeps its base color; per-key custom properties
+           (set on the marker, inherited by the label) size and tint each dot:
+           dark on white keys, light on the narrow black ones. */
+        .label-dots::part(key-pressed) {
+          background: none;
+        }
+        .label-dots::part(key-white key-pressed) {
+          --dot: 4.8cqi;
+          --dot-bg: #111;
+          --dot-fg: #fff;
+        }
+        .label-dots::part(key-black key-pressed) {
+          --dot: 3cqi;
+          --dot-bg: #fafafa;
+          --dot-fg: #111;
+        }
+        .label-dots::part(label) {
+          width: var(--dot);
+          height: var(--dot);
+          margin-bottom: 1cqi;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          background: var(--dot-bg);
+          color: var(--dot-fg);
+          font-size: calc(var(--dot) * 0.46);
+        }
+      </style>
+      <div class="row">
+        <div>
+          <mq-piano-chord name="C7" note-labels></mq-piano-chord>
+          <p class="caption">Labels printed on the filled key</p>
+        </div>
+        <div>
+          <mq-piano-chord class="label-dots" name="C7" note-labels></mq-piano-chord>
+          <p class="caption">Labels as dots, keys keep their own color</p>
+        </div>
+      </div>
+    </section>
+
+    <h2>Putting it all together</h2>
+
+    <section>
+      <p class="desc">
+        A fully themed <strong>Cm7</strong> (C – E♭ – G – B♭): dark frame, classic black-and-white
+        keys, warm pressed markers (a darker shade on the black keys), the root <code>C</code>
+        singled out, note labels, and a pill heading — every layer reached through
+        <code>::part()</code>.
+      </p>
+      <style>
+        .showcase {
+          --mq-piano-border-radius: 0.5em;
+          --mq-piano-border-color: #d6d6d6;
+          --mq-piano-border-color-outer: #111;
+          --mq-piano-border-width-outer: 2px;
+        }
+        .showcase::part(key-white) {
+          background: #fff;
+        }
+        .showcase::part(key-black) {
+          background: #161616;
+          border-radius: 0 0 0.4cqi 0.4cqi;
+        }
+        /* Pressed keys: warm on white, a deeper shade on the narrow black keys. */
+        .showcase::part(key-white key-pressed) {
+          background: #c0521f;
+        }
+        .showcase::part(key-black key-pressed) {
+          background: #b34a22;
+          border-radius: 0 0 0.4cqi 0.4cqi;
+        }
+        /* Single out the root pitch-class (declared last so it wins over key-white). */
+        .showcase::part(note-c key-pressed) {
+          background: #c0392b;
+        }
+        .showcase::part(name) {
+          width: fit-content;
+          margin: 0 auto 0.6rem;
+          padding: 0.12em 0.8em;
+          border-radius: 999px;
+          background: #111;
+          color: #fff;
+          font:
+            700 1rem system-ui,
+            sans-serif;
+          letter-spacing: 0.04em;
+        }
+      </style>
+      <mq-piano-chord class="showcase" name="Cm7" note-labels></mq-piano-chord>
     </section>
 
     <footer><code>&lt;mq-piano-chord&gt;</code> · musique</footer>
