@@ -42,10 +42,42 @@ function renderChordName(name: string) {
   )}${bass ? html`/${glyphs(bass)}` : nothing}`;
 }
 
+/**
+ * Piano keyboard with chord visualization. Pass a chord name, get its notes
+ * highlighted as pressed keys. Supports inversions via slash chords
+ * (`C/E`, `C/G`) and optional note labels.
+ *
+ * Ships **unstyled** like `mq-piano`: keys and pressed markers carry no color of
+ * their own. Theme via `::part()` — inactive keys with the parts exported from
+ * the inner `mq-piano` (`key-white`, `key-black`, `note-c`, …), pressed keys by
+ * combining `key-pressed` with any of those.
+ *
+ * @csspart name - The chord name heading above the keyboard.
+ * @csspart label - A note-name label on a pressed key (only with `note-labels`).
+ * @csspart error - The fallback shown for an unknown chord.
+ * @csspart key - Every key (exported from the inner `mq-piano`).
+ * @csspart key-white - White keys (exported from the inner `mq-piano`).
+ * @csspart key-black - Black keys (exported from the inner `mq-piano`).
+ * @csspart note-{name} - Keys by pitch-class, octave-agnostic (exported from the inner `mq-piano`).
+ * @csspart note-{name}{octave} - A single key by absolute pitch (exported from the inner `mq-piano`).
+ * @csspart key-pressed - The marker covering a key held by the chord; combine it with any key part, e.g. `::part(key-white key-pressed)`, `::part(note-c key-pressed)`.
+ *
+ * @cssprop [--mq-piano-black-key-height=64%] - Black-key height as a percentage of the full key height (consumed by the inner `mq-piano`).
+ * @cssprop [--mq-piano-border-color=transparent] - Base color for all borders (consumed by the inner `mq-piano`).
+ * @cssprop [--mq-piano-border-width=1px] - Base width for all borders (consumed by the inner `mq-piano`).
+ * @cssprop --mq-piano-border-color-outer - Color of the outer frame, falls back to `--mq-piano-border-color` (consumed by the inner `mq-piano`).
+ * @cssprop --mq-piano-border-color-inner - Color of inter-key separators, falls back to `--mq-piano-border-color` (consumed by the inner `mq-piano`).
+ * @cssprop --mq-piano-border-width-outer - Width of the outer frame, falls back to `--mq-piano-border-width` (consumed by the inner `mq-piano`).
+ * @cssprop --mq-piano-border-width-inner - Width of inter-key separators, falls back to `--mq-piano-border-width` (consumed by the inner `mq-piano`).
+ * @cssprop [--mq-piano-border-radius=0] - Corner radius of the outer frame (consumed by the inner `mq-piano`).
+ */
 @customElement("mq-piano-chord")
 export class MqPianoChord extends LitElement {
+  /** Chord name, e.g. `C`, `Ebm`, `F#maj7`, or a slash chord like `C/E`. */
   @property() accessor name: string = "";
+  /** Show English note names (A–G) on the pressed keys. */
   @property({ type: Boolean, attribute: "note-labels" }) accessor noteLabels: boolean = false;
+  /** Forwarded to `mq-piano`; defaults to `centered` for a tidier chord shape. */
   @property({ reflect: true }) accessor mode: "accurate" | "centered" = "centered";
 
   render() {
