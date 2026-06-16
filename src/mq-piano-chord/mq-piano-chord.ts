@@ -23,6 +23,25 @@ function pressedParts(note: string, black: boolean): string {
   return parts.join(" ");
 }
 
+/**
+ * Render a chord name with proper musical typography: real accidental glyphs
+ * (`♯`/`♭`) and extensions/alterations raised as superscript. Uses tonal's
+ * tokenizer to split root / quality / slash bass, so the slash of a slash chord
+ * (`C/E`) stays inline while the `/` inside `6/9` rides up with the extension.
+ */
+function renderChordName(name: string) {
+  const glyphs = (s: string) => s.replaceAll("#", "♯").replaceAll("b", "♭");
+  const [tonic, quality, bass] = Chord.tokenize(name);
+  // Split quality into alternating runs: extension chars (digits, accidentals,
+  // `+`, `/`) vs quality text (`maj`, `m`, `sus`, `dim`, `aug`, `add`). No
+  // accidental is ever a letter here, so every b/# inside quality is an
+  // alteration to raise alongside its number.
+  const segments = quality.match(/[\d#b/+]+|[^\d#b/+]+/g) ?? [];
+  return html`${glyphs(tonic)}${segments.map((seg) =>
+    /[\d#b/+]/.test(seg[0]) ? html`<sup>${glyphs(seg)}</sup>` : seg,
+  )}${bass ? html`/${glyphs(bass)}` : nothing}`;
+}
+
 @customElement("mq-piano-chord")
 export class MqPianoChord extends LitElement {
   @property() accessor name: string = "";
@@ -42,7 +61,9 @@ export class MqPianoChord extends LitElement {
     const endNoteForKeys = `B${rootOctave + 1}`;
 
     return html`
-      ${this.name ? html`<div class="name" part="name">${this.name}</div>` : nothing}
+      ${this.name
+        ? html`<div class="name" part="name">${renderChordName(this.name)}</div>`
+        : nothing}
       <mq-piano
         start-note=${startNoteForKeys}
         end-note=${endNoteForKeys}
@@ -84,6 +105,14 @@ export class MqPianoChord extends LitElement {
       font-size: 1.2em;
       margin-bottom: 0.4em;
       font-family: system-ui, sans-serif;
+    }
+
+    /* Extensions/alterations raised as superscript; line-height:0 keeps them
+       from inflating the heading's line box. */
+    .name sup {
+      font-size: 0.65em;
+      vertical-align: 0.35em;
+      line-height: 0;
     }
 
     mq-piano {
