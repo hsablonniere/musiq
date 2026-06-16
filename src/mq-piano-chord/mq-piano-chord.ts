@@ -1,27 +1,8 @@
 import { css, html, LitElement, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { Chord, Note } from "tonal";
-import { assignOctaves, isBlackKey, noteToPianoKeysName } from "../utils.js";
+import { Chord } from "tonal";
+import { assignOctaves, isBlackKey, keyMarkerParts, noteToPianoKeysName } from "../utils.js";
 import { pianoExportParts } from "../mq-piano/mq-piano.js";
-
-/**
- * Part list for a pressed-key marker: `key-pressed` plus the same parts
- * mq-piano puts on the key it covers (category + pitch-class + absolute pitch,
- * both enharmonic spellings for black keys). Lets consumers target pressed keys
- * by combining `key-pressed` with any key part, e.g. `::part(key-white
- * key-pressed)` or `::part(note-c key-pressed)`.
- */
-function pressedParts(note: string, black: boolean): string {
-  const parts = ["key-pressed", "key", black ? "key-black" : "key-white"];
-  const spellings = black ? [note, Note.enharmonic(note)] : [note];
-  for (const spelling of spellings) {
-    const match = spelling.match(/^([A-G][#b]?)(\d+)$/);
-    if (match == null) continue;
-    const pc = match[1].replace("#", "s").toLowerCase();
-    parts.push(`note-${pc}`, `note-${pc}${match[2]}`);
-  }
-  return parts.join(" ");
-}
 
 /**
  * Render a chord name with proper musical typography: real accidental glyphs
@@ -107,7 +88,7 @@ export class MqPianoChord extends LitElement {
           return html`
             <div
               slot="note-${noteToPianoKeysName(note)}"
-              part=${pressedParts(note, black)}
+              part=${keyMarkerParts("key-pressed", note, black)}
               class="fill"
             >
               ${this.noteLabels

@@ -40,9 +40,7 @@ export class MqFretboardScale extends LitElement {
     const scaleChromas = scaleNotes.map((n) => Note.chroma(n)!);
     const rootChroma = scaleChromas[0];
 
-    const tuningPCs = this.tuning
-      .split(",")
-      .map((s) => s.trim());
+    const tuningPCs = this.tuning.split(",").map((s) => s.trim());
     const stringCount = tuningPCs.length;
 
     const fbStartFret = Math.max(1, this.startFret);

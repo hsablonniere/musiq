@@ -187,8 +187,8 @@
     <header>
       <h1><code>&lt;mq-piano-scale&gt;</code></h1>
       <p>
-        Piano keyboard with scale visualization. Major, minor, pentatonic, blues,
-        modes (dorian, phrygian, lydian…), and more. Distinct root color,
+        Piano keyboard with scale visualization. Major, minor, pentatonic, blues, modes (dorian,
+        phrygian, lydian…), and more. Distinct root color,
         <code>note-labels</code>, and <code>degree-labels</code>.
       </p>
       <p><a href="../../">← Back to index</a></p>
@@ -220,7 +220,14 @@
             <td><code>scale</code></td>
             <td><code>string</code></td>
             <td>—</td>
-            <td>Scale name (e.g. <code>"C major"</code>, <code>"A minor pentatonic"</code>, <code>"D dorian"</code>). See <a href="https://github.com/tonaljs/tonal/tree/main/packages/scale-type">tonal scale-type</a> for the full list of supported scales</td>
+            <td>
+              Scale name (e.g. <code>"C major"</code>, <code>"A minor pentatonic"</code>,
+              <code>"D dorian"</code>). See
+              <a href="https://github.com/tonaljs/tonal/tree/main/packages/scale-type"
+                >tonal scale-type</a
+              >
+              for the full list of supported scales
+            </td>
           </tr>
           <tr>
             <td><code>note-labels</code></td>
@@ -302,7 +309,9 @@
 
     <section>
       <h2>Note labels</h2>
-      <p class="desc">Display note names on active keys with the <code>note-labels</code> attribute.</p>
+      <p class="desc">
+        Display note names on active keys with the <code>note-labels</code> attribute.
+      </p>
       <div class="row">
         <mq-piano-scale scale="Bb major" note-labels></mq-piano-scale>
         <mq-piano-scale scale="F# minor" note-labels></mq-piano-scale>
@@ -359,7 +368,10 @@
 
     <section>
       <h2>Style — active color</h2>
-      <p class="desc">Customize via <code>--mq-piano-scale-active-color</code> and <code>--mq-piano-scale-root-color</code>.</p>
+      <p class="desc">
+        Customize via <code>--mq-piano-scale-active-color</code> and
+        <code>--mq-piano-scale-root-color</code>.
+      </p>
       <div class="row">
         <mq-piano-scale
           scale="C major"
