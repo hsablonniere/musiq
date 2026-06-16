@@ -88,9 +88,13 @@ export class MqFretboardScale extends LitElement {
               part="${d.isRoot ? "marker marker-tonic" : "marker"}"
             >
               ${this.noteLabels
-                ? html`<span class="label">${d.note.replace("#", "♯").replace("b", "♭")}</span>`
+                ? html`<span class="label" part="label"
+                    >${d.note.replace("#", "♯").replace("b", "♭")}</span
+                  >`
                 : nothing}
-              ${this.degreeLabels ? html`<span class="degree">${d.degree}</span>` : nothing}
+              ${this.degreeLabels
+                ? html`<span class="degree" part="degree">${d.degree}</span>`
+                : nothing}
             </div>
           `;
         })}
@@ -126,21 +130,6 @@ export class MqFretboardScale extends LitElement {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-    }
-
-    .label {
-      font-family: system-ui, sans-serif;
-      font-size: 0.5em;
-      font-weight: bold;
-      color: #fff;
-      line-height: 1;
-    }
-
-    .degree {
-      font-family: system-ui, sans-serif;
-      font-size: 0.4em;
-      color: rgba(255, 255, 255, 0.8);
-      line-height: 1;
     }
 
     .error {
