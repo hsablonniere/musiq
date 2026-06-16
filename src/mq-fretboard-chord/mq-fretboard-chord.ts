@@ -72,7 +72,7 @@ function lookupChord(data: InstrumentData, key: string, suffix: string): ChordEn
 
 @customElement("mq-fretboard-chord")
 export class MqFretboardChord extends LitElement {
-  @property() accessor chord: string = "";
+  @property() accessor name: string = "";
   @property() accessor instrument: Instrument = "guitar";
   @property({ type: Number }) accessor position: number = 0;
   @property({ type: Boolean, reflect: true, attribute: "left-handed" })
@@ -80,12 +80,12 @@ export class MqFretboardChord extends LitElement {
   @property({ type: Boolean, attribute: "finger-labels" }) accessor fingerLabels: boolean = false;
 
   render() {
-    const parsed = parseChordName(this.chord);
-    if (!parsed) return html`<div class="error">Unknown chord: ${this.chord}</div>`;
+    const parsed = parseChordName(this.name);
+    if (!parsed) return html`<div class="error">Unknown chord: ${this.name}</div>`;
 
     const data = INSTRUMENT_DATA[this.instrument] ?? INSTRUMENT_DATA.guitar;
     const entry = lookupChord(data, parsed.key, parsed.suffix);
-    if (!entry) return html`<div class="error">Unknown chord: ${this.chord}</div>`;
+    if (!entry) return html`<div class="error">Unknown chord: ${this.name}</div>`;
 
     const pos = entry.positions[this.position] ?? entry.positions[0];
     if (!pos) return nothing;
@@ -137,7 +137,7 @@ export class MqFretboardChord extends LitElement {
     const fretNumbers = startFret > 1 ? String(startFret) : "";
 
     return html`
-      ${this.chord ? html`<div class="title" part="title">${this.chord}</div>` : nothing}
+      ${this.name ? html`<div class="name" part="name">${this.name}</div>` : nothing}
       <mq-fretboard
         .strings=${stringCount}
         start-fret=${startFret}
@@ -188,7 +188,7 @@ export class MqFretboardChord extends LitElement {
       flex-direction: column;
     }
 
-    .title {
+    .name {
       text-align: center;
       font-weight: bold;
       font-size: 1.2em;
