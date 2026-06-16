@@ -124,59 +124,41 @@ export class MqPianoChord extends LitElement {
 
   static styles = css`
     :host {
-      display: flex;
-      flex-direction: column;
+      display: block;
       /* Lets consumers size labels/markers in cqi units, proportional to the
          keyboard, without knowing the actual key size. */
       container-type: inline-size;
     }
 
-    .name {
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.2em;
-      margin-bottom: 0.4em;
-      font-family: system-ui, sans-serif;
-    }
-
     /* Extensions/alterations raised as superscript; line-height:0 keeps them
-       from inflating the heading's line box. */
+       from inflating the heading's line box. This is structural to the musical
+       typography, not theming — the heading's look is set via ::part(name). */
     .name sup {
       font-size: 0.65em;
       vertical-align: 0.35em;
       line-height: 0;
     }
 
-    mq-piano {
-      flex: 1;
-      min-height: 0;
-    }
-
+    /* mq-piano fills the host width on its own (block-level) and derives its
+       height from its locked aspect ratio — nothing to size here.
+       Layout glue only (no theming): make each key a column so the slotted
+       marker can stretch to fill it and bottom-align its label. */
     mq-piano::part(key-white),
     mq-piano::part(key-black) {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
     }
 
+    /* The label ships unstyled — size/weight/color come from ::part(label),
+       font-size inherited from the pressed marker (cqi). */
     .fill {
-      width: 100%;
-      height: 100%;
+      flex: 1;
       display: flex;
       align-items: flex-end;
       justify-content: center;
     }
 
-    .label {
-      font-family: system-ui, sans-serif;
-      font-size: 0.55em;
-      font-weight: bold;
-      padding-bottom: 0.5em;
-    }
-
     .error {
-      font-family: system-ui, sans-serif;
       font-style: italic;
       padding: 1em;
     }
