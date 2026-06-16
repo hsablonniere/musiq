@@ -81,11 +81,11 @@ export class MqFretboardChord extends LitElement {
 
   render() {
     const parsed = parseChordName(this.name);
-    if (!parsed) return html`<div class="error">Unknown chord: ${this.name}</div>`;
+    if (!parsed) return html`<div class="error" part="error">Unknown chord: ${this.name}</div>`;
 
     const data = INSTRUMENT_DATA[this.instrument] ?? INSTRUMENT_DATA.guitar;
     const entry = lookupChord(data, parsed.key, parsed.suffix);
-    if (!entry) return html`<div class="error">Unknown chord: ${this.name}</div>`;
+    if (!entry) return html`<div class="error" part="error">Unknown chord: ${this.name}</div>`;
 
     const pos = entry.positions[this.position] ?? entry.positions[0];
     if (!pos) return nothing;
@@ -212,8 +212,6 @@ export class MqFretboardChord extends LitElement {
     }
 
     .error {
-      font-family: system-ui, sans-serif;
-      color: #c0392b;
       font-style: italic;
       padding: 1em;
     }
