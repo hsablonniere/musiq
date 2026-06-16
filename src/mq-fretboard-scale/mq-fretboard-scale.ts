@@ -82,7 +82,11 @@ export class MqFretboardScale extends LitElement {
         ${dots.map((d) => {
           const slotName = d.fret === 0 ? `s${d.string}-marker` : `s${d.string}-f${d.fret}`;
           return html`
-            <div slot="${slotName}" class="dot${d.isRoot ? " root" : ""}" part="dot">
+            <div
+              slot="${slotName}"
+              class="marker"
+              part="${d.isRoot ? "marker marker-tonic" : "marker"}"
+            >
               ${this.noteLabels
                 ? html`<span class="label">${d.note.replace("#", "♯").replace("b", "♭")}</span>`
                 : nothing}
@@ -113,20 +117,15 @@ export class MqFretboardScale extends LitElement {
       min-height: 0;
     }
 
-    .dot {
-      width: 1.4em;
-      height: 1.4em;
-      border-radius: 50%;
-      background: var(--mq-fretboard-scale-active-color, #2980b9);
-      margin: 0.2em 0.4em;
+    /* Markers ship unstyled — size, shape and color come from ::part(marker)
+       and ::part(marker-tonic). The tonic carries both parts, so ::part(marker)
+       covers it too and ::part(marker-tonic) overrides (source order wins).
+       Layout glue only: stack the optional note/degree labels. */
+    .marker {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-    }
-
-    .dot.root {
-      background: var(--mq-fretboard-scale-root-color, #c0392b);
     }
 
     .label {
