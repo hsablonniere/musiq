@@ -33,7 +33,7 @@ export class MqFretboardScale extends LitElement {
   render() {
     const info = Scale.get(this.name);
     if (info.empty || info.notes.length === 0) {
-      return html`<div class="error">Unknown scale: ${this.name}</div>`;
+      return html`<div class="error" part="error">Unknown scale: ${this.name}</div>`;
     }
 
     const scaleNotes = info.notes;
@@ -133,8 +133,6 @@ export class MqFretboardScale extends LitElement {
     }
 
     .error {
-      font-family: system-ui, sans-serif;
-      color: #c0392b;
       font-style: italic;
       padding: 1em;
     }
