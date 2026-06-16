@@ -221,12 +221,6 @@ export class MqFretboardChord extends LitElement {
       flex-direction: column;
     }
 
-    .name {
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-
     mq-fretboard {
       flex: 1;
       min-height: 0;
