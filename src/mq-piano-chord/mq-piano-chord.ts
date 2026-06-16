@@ -77,8 +77,8 @@ export class MqPianoChord extends LitElement {
   @property() accessor name: string = "";
   /** Show English note names (A–G) on the pressed keys. */
   @property({ type: Boolean, attribute: "note-labels" }) accessor noteLabels: boolean = false;
-  /** Forwarded to `mq-piano`; defaults to `centered` for a tidier chord shape. */
-  @property({ reflect: true }) accessor mode: "accurate" | "centered" = "centered";
+  /** Forwarded to `mq-piano`; defaults to `accurate` for real piano geometry. */
+  @property({ reflect: true }) accessor mode: "accurate" | "centered" = "accurate";
 
   render() {
     const info = Chord.get(this.name);

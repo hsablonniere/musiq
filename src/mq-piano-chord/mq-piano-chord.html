@@ -134,7 +134,7 @@
             <td data-label="Attribute"><code>mode</code> <span class="ref">*</span></td>
             <td data-label="Property"><code>mode</code></td>
             <td data-label="Type"><code>'accurate' | 'centered'</code></td>
-            <td data-label="Default"><code>centered</code></td>
+            <td data-label="Default"><code>accurate</code></td>
             <td data-label="Description">
               Black key positioning: <code>accurate</code> uses real piano geometry,
               <code>centered</code> centers them between white keys
@@ -470,20 +470,20 @@
     <h2>Mode</h2>
 
     <section>
-      <h3><code>centered</code> vs <code>accurate</code></h3>
+      <h3><code>accurate</code> vs <code>centered</code></h3>
       <p class="desc">
         <code>mode</code> is forwarded to <code>mq-piano</code>. The default
-        <code>centered</code> evens out the white keys; <code>accurate</code> switches to real piano
-        geometry.
+        <code>accurate</code> uses real piano geometry; <code>centered</code> evens out the white
+        keys with the black keys centered between them.
       </p>
       <div class="row">
         <div>
           <mq-piano-chord name="Ab7" note-labels></mq-piano-chord>
-          <p class="caption"><code>mode="centered"</code> (default)</p>
+          <p class="caption"><code>mode="accurate"</code> (default)</p>
         </div>
         <div>
-          <mq-piano-chord name="Ab7" mode="accurate" note-labels></mq-piano-chord>
-          <p class="caption"><code>mode="accurate"</code></p>
+          <mq-piano-chord name="Ab7" mode="centered" note-labels></mq-piano-chord>
+          <p class="caption"><code>mode="centered"</code></p>
         </div>
       </div>
     </section>
