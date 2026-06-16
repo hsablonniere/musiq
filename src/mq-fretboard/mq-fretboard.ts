@@ -200,7 +200,7 @@ export class MqFretboard extends LitElement {
     }
 
     .nut {
-      background-color: var(--mq-fretboard-nut-color, #000);
+      background-color: var(--mq-fretboard-nut-color);
       border-radius: var(--mq-fretboard-nut-radius, 0);
     }
 
@@ -213,7 +213,7 @@ export class MqFretboard extends LitElement {
     }
 
     .fret {
-      background-color: var(--mq-fretboard-fret-color, #000);
+      background-color: var(--mq-fretboard-fret-color);
     }
 
     :host(:not([orientation="vertical"])) .fret {
@@ -235,7 +235,7 @@ export class MqFretboard extends LitElement {
     }
 
     .string {
-      background-color: var(--mq-fretboard-string-color, #000);
+      background-color: var(--mq-fretboard-string-color);
     }
 
     :host(:not([orientation="vertical"])) .string {
@@ -247,7 +247,7 @@ export class MqFretboard extends LitElement {
     }
 
     .inlay {
-      background-color: var(--mq-fretboard-inlay-color, #000);
+      background-color: var(--mq-fretboard-inlay-color);
       width: var(--mq-fretboard-inlay-size, 6px);
       height: var(--mq-fretboard-inlay-size, 6px);
       border-radius: 50%;
