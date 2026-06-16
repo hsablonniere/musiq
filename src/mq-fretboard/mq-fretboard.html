@@ -4,166 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>&lt;mq-fretboard&gt; — demo</title>
+
+    <!-- Shared page chrome (layout, typography, API tables, responsive). -->
+    <link rel="stylesheet" href="../demo.css" />
+
+    <!-- mq-fretboard ships unstyled; these base styles keep the plain examples visible. Class-scoped
+         rules below override them per example. -->
     <style>
-      :root {
-        --bg: #fafaf8;
-        --fg: #1a1a1a;
-        --muted: #6b6b6b;
-        --accent: #c0392b;
-        --card: #fff;
-        --line: #e6e6e2;
+      mq-fretboard {
+        --mq-fretboard-neck-color: #f7f2e7;
+        --mq-fretboard-nut-color: #3a342b;
+        --mq-fretboard-fret-color: #b3ad9e;
+        --mq-fretboard-string-color: #8a8377;
+        --mq-fretboard-inlay-color: #ddd6c5;
       }
 
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: system-ui, sans-serif;
-        line-height: 1.6;
-        background: var(--bg);
-        color: var(--fg);
-        margin: 0 auto;
-        padding: 3rem 2rem 6rem;
-        max-width: 80rem;
-      }
-
-      header {
-        border-bottom: 2px solid var(--fg);
-        margin-bottom: 3rem;
-        padding-bottom: 1.5rem;
-      }
-
-      h1 {
-        font-size: 2.4rem;
-        margin: 0 0 0.25rem;
-      }
-
-      h1 code {
-        background: var(--fg);
-        color: var(--bg);
-        padding: 0.1em 0.3em;
-        border-radius: 4px;
-      }
-
-      header p {
-        color: var(--muted);
-        margin: 0.5rem 0 0;
-      }
-
-      header a {
-        color: var(--accent);
-      }
-
-      section {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 1.75rem 2rem 2rem;
-        margin-bottom: 2rem;
-      }
-
-      h2 {
-        font-size: 1.05rem;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--accent);
-        margin: 0 0 0.4rem;
-      }
-
-      h3 {
-        font-size: 1.4rem;
-        margin: 0 0 0.5rem;
-      }
-
-      .desc {
-        color: var(--muted);
-        margin: 0 0 1.5rem;
-        max-width: 46rem;
-      }
-
-      .desc code,
-      .api code,
-      h2 code,
-      footer code {
-        background: #f0f0ec;
-        padding: 0.1em 0.35em;
-        border-radius: 4px;
-        font-size: 0.88em;
-        color: var(--fg);
-      }
-
-      .row {
-        display: flex;
-        gap: 2rem;
-        flex-wrap: wrap;
-        align-items: start;
-      }
-
-      .demo-box {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-
-      .caption {
-        font-size: 0.85rem;
-        color: var(--muted);
-        text-align: center;
-      }
-
-      footer {
-        color: var(--muted);
-        font-size: 0.85rem;
-        text-align: center;
-        margin-top: 4rem;
-      }
-
-      .api h3 {
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--muted);
-        margin: 1.5rem 0 0.4rem;
-      }
-
-      .api h3:first-of-type {
-        margin-top: 0.25rem;
-      }
-
-      .api table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.88rem;
-      }
-
-      .api th {
-        text-align: left;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--muted);
-        border-bottom: 2px solid var(--line);
-        padding: 0.3rem 0.75rem 0.3rem 0;
-        font-weight: 600;
-      }
-
-      .api td {
-        padding: 0.3rem 0.75rem 0.3rem 0;
-        border-bottom: 1px solid var(--line);
-        vertical-align: top;
-      }
-
-      .api .swatch {
-        display: inline-block;
-        width: 1em;
-        height: 1em;
-        border-radius: 2px;
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        vertical-align: baseline;
-        margin-right: 0.3em;
-      }
-
+      /* Slotted markers — page-side content, styled by the page, not the component. */
       .note {
         display: flex;
         align-items: center;
@@ -224,20 +80,6 @@
       [orientation="horizontal"] .barre {
         width: 1.5em;
       }
-
-      pre {
-        background: #f0f0ec;
-        padding: 0.75rem 1rem;
-        border-radius: 6px;
-        overflow-x: auto;
-        font-size: 0.88rem;
-        margin: 0.5rem 0;
-      }
-
-      pre code {
-        background: none;
-        padding: 0;
-      }
     </style>
     <script type="module" src="./mq-fretboard.ts"></script>
   </head>
@@ -245,23 +87,24 @@
     <header>
       <h1><code>&lt;mq-fretboard&gt;</code></h1>
       <p>
-        Guitar/bass fretboard with slot-based content placement. The component positions, you style.
-        Horizontal or vertical orientation, configurable string count and fret range,
-        <code>inlays</code>, <code>full-neck</code>, <code>left-handed</code>, and multi-string span
-        slots for barres via <code>extra-slots</code>.
+        Fretboard diagram for stringed instruments. Configurable string count and fret range,
+        horizontal or vertical orientation, <code>left-handed</code> flip, <code>inlays</code>,
+        <code>full-neck</code>, and multi-string span slots for barres via <code>extra-slots</code>.
+        Ships unstyled — theme the structure through the <code>--mq-fretboard-*</code> custom
+        properties. Named slots place content on any string/fret position. The component positions,
+        you style.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
 
+    <h2>Install</h2>
     <section>
-      <h2>Install</h2>
       <pre><code>npm install @hsablonniere/musiq</code></pre>
       <pre><code>import '@hsablonniere/musiq/mq-fretboard';</code></pre>
     </section>
 
+    <h2>API</h2>
     <section class="api">
-      <h2>API</h2>
-
       <h3>Attributes / Properties</h3>
       <table>
         <thead>
@@ -275,164 +118,163 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>strings</code></td>
-            <td><code>strings</code></td>
-            <td><code>number</code></td>
-            <td><code>6</code></td>
-            <td>Number of strings (4 = ukulele, 5 = bass, 6 = guitar, etc.)</td>
-          </tr>
-          <tr>
-            <td><code>start-fret</code></td>
-            <td><code>startFret</code></td>
-            <td><code>number</code></td>
-            <td><code>1</code></td>
-            <td>First fret displayed. When &gt; 1, the nut is replaced by a fret line</td>
-          </tr>
-          <tr>
-            <td><code>end-fret</code></td>
-            <td><code>endFret</code></td>
-            <td><code>number</code></td>
-            <td><code>12</code></td>
-            <td>Last fret displayed</td>
-          </tr>
-          <tr>
-            <td><code>orientation</code></td>
-            <td><code>orientation</code></td>
-            <td><code>"horizontal" | "vertical"</code></td>
-            <td><code>"horizontal"</code></td>
-            <td>Layout direction of the fretboard</td>
-          </tr>
-          <tr>
-            <td><code>fret-numbers</code></td>
-            <td><code>fretNumbers</code></td>
-            <td><code>string</code></td>
-            <td><code>""</code></td>
-            <td>
-              Frets to label: <code>"all"</code> or comma-separated list (e.g.
-              <code>"3,5,7,9,12"</code>). Empty string (default) hides all fret numbers
+            <td data-label="Attribute"><code>strings</code></td>
+            <td data-label="Property"><code>strings</code></td>
+            <td data-label="Type"><code>number</code></td>
+            <td data-label="Default"><code>6</code></td>
+            <td data-label="Description">
+              Number of strings (4 = ukulele, 5 = bass, 6 = guitar, …)
             </td>
           </tr>
           <tr>
-            <td><code>inlays</code></td>
-            <td><code>inlays</code></td>
-            <td><code>boolean</code></td>
-            <td><code>false</code></td>
-            <td>Show position dots at standard frets (3, 5, 7, 9, 12…). Double dot at 12 and 24</td>
+            <td data-label="Attribute"><code>start-fret</code></td>
+            <td data-label="Property"><code>startFret</code></td>
+            <td data-label="Type"><code>number</code></td>
+            <td data-label="Default"><code>1</code></td>
+            <td data-label="Description">
+              First fret displayed. When &gt; 1, the nut is replaced by a fret line
+            </td>
           </tr>
           <tr>
-            <td><code>full-neck</code></td>
-            <td><code>fullNeck</code></td>
-            <td><code>boolean</code></td>
-            <td><code>false</code></td>
-            <td>Extend frets and nut edge to edge (instead of string to string)</td>
+            <td data-label="Attribute"><code>end-fret</code></td>
+            <td data-label="Property"><code>endFret</code></td>
+            <td data-label="Type"><code>number</code></td>
+            <td data-label="Default"><code>12</code></td>
+            <td data-label="Description">Last fret displayed</td>
           </tr>
           <tr>
-            <td><code>left-handed</code></td>
-            <td><code>leftHanded</code></td>
-            <td><code>boolean</code></td>
-            <td><code>false</code></td>
-            <td>Mirror the fretboard for left-handed players</td>
+            <td data-label="Attribute"><code>orientation</code></td>
+            <td data-label="Property"><code>orientation</code></td>
+            <td data-label="Type"><code>'horizontal' | 'vertical'</code></td>
+            <td data-label="Default"><code>horizontal</code></td>
+            <td data-label="Description">Layout direction of the fretboard</td>
           </tr>
           <tr>
-            <td><code>extra-slots</code></td>
-            <td><code>extraSlots</code></td>
-            <td><code>string</code></td>
-            <td><code>""</code></td>
-            <td>
-              Comma-separated multi-string span slots (e.g. <code>"s1-s6-f5"</code>) for barres or
+            <td data-label="Attribute"><code>fret-numbers</code></td>
+            <td data-label="Property"><code>fretNumbers</code></td>
+            <td data-label="Type"><code>string</code></td>
+            <td data-label="Default"><code>""</code></td>
+            <td data-label="Description">
+              Frets to label: <code>all</code> or a comma-separated list (e.g.
+              <code>3,5,7,9,12</code>). Empty (default) hides them
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Attribute"><code>inlays</code></td>
+            <td data-label="Property"><code>inlays</code></td>
+            <td data-label="Type"><code>boolean</code></td>
+            <td data-label="Default"><code>false</code></td>
+            <td data-label="Description">
+              Show position dots at standard frets (3, 5, 7, 9, 12…). Double dot at 12 and 24
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Attribute"><code>full-neck</code></td>
+            <td data-label="Property"><code>fullNeck</code></td>
+            <td data-label="Type"><code>boolean</code></td>
+            <td data-label="Default"><code>false</code></td>
+            <td data-label="Description">
+              Extend frets and nut edge to edge (instead of string to string)
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Attribute"><code>left-handed</code></td>
+            <td data-label="Property"><code>leftHanded</code></td>
+            <td data-label="Type"><code>boolean</code></td>
+            <td data-label="Default"><code>false</code></td>
+            <td data-label="Description">Mirror the fretboard for left-handed players</td>
+          </tr>
+          <tr>
+            <td data-label="Attribute"><code>extra-slots</code></td>
+            <td data-label="Property"><code>extraSlots</code></td>
+            <td data-label="Type"><code>string</code></td>
+            <td data-label="Default"><code>""</code></td>
+            <td data-label="Description">
+              Comma-separated multi-string span slots (e.g. <code>s1-s6-f5</code>) for barres or
               capos
             </td>
           </tr>
         </tbody>
       </table>
+    </section>
 
-      <h3>Slots</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Slot</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>s{N}-marker</code></td>
-            <td>Before the nut (open strings, muted markers)</td>
-          </tr>
-          <tr>
-            <td><code>s{N}-f{F}</code></td>
-            <td>Fret F on string N</td>
-          </tr>
-          <tr>
-            <td><code>s{A}-s{B}-f{F}</code></td>
-            <td>Fret F spanning strings A to B (requires <code>extra-slots</code>)</td>
-          </tr>
-        </tbody>
-      </table>
-
+    <section class="api">
       <h3>CSS Custom Properties</h3>
       <table>
         <thead>
           <tr>
             <th>Property</th>
+            <th>Type</th>
             <th>Default</th>
             <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><code>--mq-fretboard-fret-color</code></td>
-            <td><span class="swatch" style="background: #000"></span><code>#000</code></td>
-            <td>Fret wire color</td>
+            <td data-label="Property"><code>--mq-fretboard-neck-color</code></td>
+            <td data-label="Type"><code>&lt;color&gt;</code></td>
+            <td data-label="Default"><code>none</code></td>
+            <td data-label="Description">Fill of the neck background</td>
           </tr>
           <tr>
-            <td><code>--mq-fretboard-fret-width</code></td>
-            <td><code>1px</code></td>
-            <td>Fret wire thickness</td>
+            <td data-label="Property"><code>--mq-fretboard-nut-color</code></td>
+            <td data-label="Type"><code>&lt;color&gt;</code></td>
+            <td data-label="Default"><code>none</code></td>
+            <td data-label="Description">Color of the nut</td>
           </tr>
           <tr>
-            <td><code>--mq-fretboard-string-color</code></td>
-            <td><span class="swatch" style="background: #000"></span><code>#000</code></td>
-            <td>String color</td>
+            <td data-label="Property"><code>--mq-fretboard-fret-color</code></td>
+            <td data-label="Type"><code>&lt;color&gt;</code></td>
+            <td data-label="Default"><code>none</code></td>
+            <td data-label="Description">Color of the fret wires</td>
           </tr>
           <tr>
-            <td><code>--mq-fretboard-string-width</code></td>
-            <td><code>1px</code></td>
-            <td>String thickness</td>
+            <td data-label="Property"><code>--mq-fretboard-string-color</code></td>
+            <td data-label="Type"><code>&lt;color&gt;</code></td>
+            <td data-label="Default"><code>none</code></td>
+            <td data-label="Description">Color of the strings</td>
           </tr>
           <tr>
-            <td><code>--mq-fretboard-nut-color</code></td>
-            <td><span class="swatch" style="background: #000"></span><code>#000</code></td>
-            <td>Nut color (thick bar at fret 0)</td>
+            <td data-label="Property"><code>--mq-fretboard-inlay-color</code></td>
+            <td data-label="Type"><code>&lt;color&gt;</code></td>
+            <td data-label="Default"><code>none</code></td>
+            <td data-label="Description">Color of the inlay position markers</td>
           </tr>
           <tr>
-            <td><code>--mq-fretboard-nut-width</code></td>
-            <td><code>3px</code></td>
-            <td>Nut thickness</td>
+            <td data-label="Property"><code>--mq-fretboard-nut-width</code></td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default"><code>3px</code></td>
+            <td data-label="Description">Thickness of the nut</td>
           </tr>
           <tr>
-            <td><code>--mq-fretboard-nut-radius</code></td>
-            <td><code>0</code></td>
-            <td>Nut border radius</td>
+            <td data-label="Property"><code>--mq-fretboard-nut-radius</code></td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default"><code>0</code></td>
+            <td data-label="Description">Corner radius of the nut</td>
           </tr>
           <tr>
-            <td><code>--mq-fretboard-neck-color</code></td>
-            <td><code>none</code></td>
-            <td>Neck background color</td>
+            <td data-label="Property"><code>--mq-fretboard-fret-width</code></td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default"><code>1px</code></td>
+            <td data-label="Description">Thickness of the fret wires</td>
           </tr>
           <tr>
-            <td><code>--mq-fretboard-inlay-color</code></td>
-            <td><span class="swatch" style="background: #000"></span><code>#000</code></td>
-            <td>Inlay position dot color</td>
+            <td data-label="Property"><code>--mq-fretboard-string-width</code></td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default"><code>1px</code></td>
+            <td data-label="Description">Thickness of the strings</td>
           </tr>
           <tr>
-            <td><code>--mq-fretboard-inlay-size</code></td>
-            <td><code>6px</code></td>
-            <td>Inlay position dot diameter</td>
+            <td data-label="Property"><code>--mq-fretboard-inlay-size</code></td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default"><code>6px</code></td>
+            <td data-label="Description">Diameter of the inlay markers</td>
           </tr>
         </tbody>
       </table>
+    </section>
 
+    <section class="api">
       <h3>CSS Parts</h3>
       <table>
         <thead>
@@ -443,15 +285,47 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>fret-number</code></td>
-            <td>Fret number labels below (horizontal) or beside (vertical) each fret</td>
+            <td data-label="Part"><code>fret-number</code></td>
+            <td data-label="Description">
+              Fret-number labels below (horizontal) or beside (vertical) each fret
+            </td>
           </tr>
         </tbody>
       </table>
     </section>
 
+    <section class="api">
+      <h3>Slots</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Slot</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Slot"><code>s{N}-marker</code></td>
+            <td data-label="Description">Before the nut — open-string or muted indicators</td>
+          </tr>
+          <tr>
+            <td data-label="Slot"><code>s{N}-f{F}</code></td>
+            <td data-label="Description">Fret F on string N</td>
+          </tr>
+          <tr>
+            <td data-label="Slot"><code>s{A}-s{B}-f{F}</code></td>
+            <td data-label="Description">
+              Fret F spanning strings A to B (requires <code>extra-slots</code>)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <h2>Basics</h2>
+
     <section>
-      <h2>Default</h2>
+      <h3>Default</h3>
       <p class="desc">
         Default configuration: 6-string guitar, frets 1–12, horizontal orientation.
       </p>
@@ -459,72 +333,104 @@
     </section>
 
     <section>
-      <h2>Fret numbers</h2>
+      <h3>Fret numbers</h3>
       <p class="desc">
-        Set to <code>"all"</code> to label every fret, or a comma-separated list for specific frets.
+        Set <code>fret-numbers="all"</code> to label every fret, or a comma-separated list for
+        specific frets.
       </p>
-      <div class="demo-box">
-        <mq-fretboard fret-numbers="all"></mq-fretboard>
-        <p class="caption">fret-numbers="all"</p>
-      </div>
-      <div class="demo-box" style="margin-top: 1.5rem">
-        <mq-fretboard fret-numbers="3,5,7,9,12"></mq-fretboard>
-        <p class="caption">fret-numbers="3,5,7,9,12"</p>
-      </div>
+      <mq-fretboard fret-numbers="all"></mq-fretboard>
+      <p class="caption"><code>fret-numbers="all"</code></p>
+      <mq-fretboard fret-numbers="3,5,7,9,12" style="margin-top: 1.5rem"></mq-fretboard>
+      <p class="caption"><code>fret-numbers="3,5,7,9,12"</code></p>
     </section>
 
     <section>
-      <h2>Vertical</h2>
+      <h3>Custom range</h3>
       <p class="desc">
-        With <code>orientation="vertical"</code>, the neck goes top to bottom. Fret numbers on the
-        left.
+        Display any fret range. When <code>start-fret</code> &gt; 1, a fret line replaces the nut.
+      </p>
+      <mq-fretboard start-fret="5" end-fret="9" fret-numbers="all"></mq-fretboard>
+      <p class="caption"><code>start-fret="5" end-fret="9"</code></p>
+      <mq-fretboard
+        start-fret="1"
+        end-fret="24"
+        fret-numbers="3,5,7,9,12,15,17,19,21,24"
+        style="margin-top: 1.5rem"
+      ></mq-fretboard>
+      <p class="caption"><code>start-fret="1" end-fret="24"</code></p>
+    </section>
+
+    <section>
+      <h3>Other instruments</h3>
+      <p class="desc">
+        Set the number of strings — ukulele (4), bass (5), guitar (6), 7-string, and so on.
       </p>
       <div class="row">
-        <div class="demo-box">
-          <mq-fretboard
-            orientation="vertical"
-            fret-numbers="3,5,7,9,12"
-            style="width: 16rem"
-          ></mq-fretboard>
+        <div>
+          <mq-fretboard strings="4" end-fret="7" fret-numbers="all"></mq-fretboard>
+          <p class="caption"><code>strings="4"</code> (ukulele) — frets 1–7</p>
+        </div>
+        <div>
+          <mq-fretboard strings="5" fret-numbers="3,5,7,9,12"></mq-fretboard>
+          <p class="caption"><code>strings="5"</code> (bass) — frets 1–12</p>
+        </div>
+      </div>
+    </section>
+
+    <h2>Neck features</h2>
+
+    <section>
+      <h3>Full neck</h3>
+      <p class="desc">
+        By default, frets and nut span from the first to the last string. Add
+        <code>full-neck</code> to extend them edge to edge.
+      </p>
+      <div class="row">
+        <div>
+          <mq-fretboard end-fret="5" fret-numbers="all"></mq-fretboard>
+          <p class="caption">string to string (default)</p>
+        </div>
+        <div>
+          <mq-fretboard end-fret="5" fret-numbers="all" full-neck></mq-fretboard>
+          <p class="caption"><code>full-neck</code></p>
         </div>
       </div>
     </section>
 
     <section>
-      <h2>Scale pattern — slotted content</h2>
+      <h3>Inlays</h3>
       <p class="desc">
-        A minor pentatonic — position 1. Place content via named slots:
-        <code>s{string}-f{fret}</code> for fretted notes. The component positions, you style.
-        <span style="color: #c0392b">●</span> = root, <span style="color: #2980b9">●</span> = scale
-        tone.
+        Position dots at standard frets (3, 5, 7, 9, 12, 15…), double at 12 and 24. Off by default;
+        add the <code>inlays</code> attribute to enable.
       </p>
-      <mq-fretboard start-fret="5" end-fret="8" fret-numbers="all">
-        <span slot="s1-f5" class="note root"><span>A</span></span>
-        <span slot="s1-f8" class="note"><span>C</span></span>
-        <span slot="s2-f5" class="note"><span>D</span></span>
-        <span slot="s2-f7" class="note"><span>E</span></span>
-        <span slot="s3-f5" class="note"><span>G</span></span>
-        <span slot="s3-f7" class="note root"><span>A</span></span>
-        <span slot="s4-f5" class="note"><span>C</span></span>
-        <span slot="s4-f7" class="note"><span>D</span></span>
-        <span slot="s5-f5" class="note"><span>E</span></span>
-        <span slot="s5-f8" class="note"><span>G</span></span>
-        <span slot="s6-f5" class="note root"><span>A</span></span>
-        <span slot="s6-f8" class="note"><span>C</span></span>
-      </mq-fretboard>
+      <div class="row">
+        <div>
+          <mq-fretboard end-fret="12" fret-numbers="3,5,7,9,12"></mq-fretboard>
+          <p class="caption">without inlays (default)</p>
+        </div>
+        <div>
+          <mq-fretboard end-fret="12" fret-numbers="3,5,7,9,12" inlays></mq-fretboard>
+          <p class="caption">with <code>inlays</code></p>
+        </div>
+      </div>
     </section>
 
+    <h2>Orientation</h2>
+
     <section>
-      <h2>Full neck scale</h2>
-      <p class="desc">Full 12-fret display with the complete A minor pentatonic scale.</p>
-      <mq-fretboard fret-numbers="3,5,7,9,12">
-        <span slot="s1-marker" class="note marker open"><span>E</span></span>
+      <h3>Vertical</h3>
+      <p class="desc">
+        With <code>orientation="vertical"</code>, the neck runs top to bottom and fret numbers move
+        to the left.
+      </p>
+      <mq-fretboard orientation="vertical" fret-numbers="3,5,7,9,12" style="width: 16rem">
+        <span slot="s1-marker" class="note open"><span>E</span></span>
         <span slot="s1-f3" class="note"><span>G</span></span>
         <span slot="s1-f5" class="note root"><span>A</span></span>
         <span slot="s1-f8" class="note"><span>C</span></span>
         <span slot="s1-f10" class="note"><span>D</span></span>
         <span slot="s1-f12" class="note"><span>E</span></span>
-        <span slot="s2-marker" class="note marker open root"><span>A</span></span>
+        <span slot="s2-marker" class="note open root"><span>A</span></span>
         <span slot="s2-f3" class="note"><span>C</span></span>
         <span slot="s2-f5" class="note"><span>D</span></span>
         <span slot="s2-f7" class="note"><span>E</span></span>
@@ -535,7 +441,7 @@
         <span slot="s3-f7" class="note root"><span>A</span></span>
         <span slot="s3-f10" class="note"><span>C</span></span>
         <span slot="s3-f12" class="note"><span>D</span></span>
-        <span slot="s4-marker" class="note marker open"><span>G</span></span>
+        <span slot="s4-marker" class="note open"><span>G</span></span>
         <span slot="s4-f2" class="note root"><span>A</span></span>
         <span slot="s4-f5" class="note"><span>C</span></span>
         <span slot="s4-f7" class="note"><span>D</span></span>
@@ -546,84 +452,168 @@
         <span slot="s5-f5" class="note"><span>E</span></span>
         <span slot="s5-f8" class="note"><span>G</span></span>
         <span slot="s5-f10" class="note root"><span>A</span></span>
-        <span slot="s6-marker" class="note marker open"><span>E</span></span>
+        <span slot="s6-marker" class="note open"><span>E</span></span>
         <span slot="s6-f3" class="note"><span>G</span></span>
         <span slot="s6-f5" class="note root"><span>A</span></span>
         <span slot="s6-f8" class="note"><span>C</span></span>
         <span slot="s6-f10" class="note"><span>D</span></span>
         <span slot="s6-f12" class="note"><span>E</span></span>
       </mq-fretboard>
+      <p class="caption">A minor pentatonic · vertical</p>
     </section>
 
     <section>
-      <h2>Custom range</h2>
+      <h3>Left-handed</h3>
       <p class="desc">
-        Display any fret range. When <code>start-fret</code> &gt; 1, a fret line replaces the nut.
+        Add <code>left-handed</code> to mirror the fretboard. Slotted content stays readable. Works
+        in both orientations.
       </p>
-      <div class="demo-box">
-        <mq-fretboard start-fret="5" end-fret="9" fret-numbers="all"></mq-fretboard>
-        <p class="caption">start-fret="5" end-fret="9"</p>
-      </div>
-      <div class="demo-box" style="margin-top: 1.5rem">
-        <mq-fretboard
-          start-fret="1"
-          end-fret="24"
-          fret-numbers="3,5,7,9,12,15,17,19,21,24"
-        ></mq-fretboard>
-        <p class="caption">start-fret="1" end-fret="24"</p>
+      <div class="row">
+        <div>
+          <mq-fretboard left-handed fret-numbers="3,5,7,9,12">
+            <span slot="s1-marker" class="note open"><span>E</span></span>
+            <span slot="s1-f3" class="note"><span>G</span></span>
+            <span slot="s1-f5" class="note root"><span>A</span></span>
+            <span slot="s1-f8" class="note"><span>C</span></span>
+            <span slot="s2-marker" class="note open root"><span>A</span></span>
+            <span slot="s2-f5" class="note"><span>D</span></span>
+            <span slot="s2-f7" class="note"><span>E</span></span>
+            <span slot="s3-f5" class="note"><span>G</span></span>
+            <span slot="s3-f7" class="note root"><span>A</span></span>
+            <span slot="s4-marker" class="note open"><span>G</span></span>
+            <span slot="s4-f5" class="note"><span>C</span></span>
+            <span slot="s4-f7" class="note"><span>D</span></span>
+            <span slot="s5-f5" class="note"><span>E</span></span>
+            <span slot="s5-f8" class="note"><span>G</span></span>
+            <span slot="s6-marker" class="note open"><span>E</span></span>
+            <span slot="s6-f5" class="note root"><span>A</span></span>
+            <span slot="s6-f8" class="note"><span>C</span></span>
+          </mq-fretboard>
+          <p class="caption">horizontal · <code>left-handed</code></p>
+        </div>
+        <div>
+          <mq-fretboard
+            left-handed
+            orientation="vertical"
+            fret-numbers="3,5,7"
+            style="width: 14rem"
+          >
+            <span slot="s1-marker" class="note open"><span>E</span></span>
+            <span slot="s1-f3" class="note"><span>G</span></span>
+            <span slot="s1-f5" class="note root"><span>A</span></span>
+            <span slot="s2-marker" class="note open root"><span>A</span></span>
+            <span slot="s2-f5" class="note"><span>D</span></span>
+            <span slot="s2-f7" class="note"><span>E</span></span>
+            <span slot="s3-f5" class="note"><span>G</span></span>
+            <span slot="s3-f7" class="note root"><span>A</span></span>
+            <span slot="s4-f5" class="note"><span>C</span></span>
+            <span slot="s4-f7" class="note"><span>D</span></span>
+            <span slot="s5-f5" class="note"><span>E</span></span>
+            <span slot="s6-marker" class="note open"><span>E</span></span>
+            <span slot="s6-f5" class="note root"><span>A</span></span>
+          </mq-fretboard>
+          <p class="caption">vertical · <code>left-handed</code></p>
+        </div>
       </div>
     </section>
 
+    <h2>Slots</h2>
+
     <section>
-      <h2>Other instruments</h2>
+      <h3>Open strings, muted &amp; fretted notes</h3>
       <p class="desc">
-        Set the number of strings. Works for ukulele (4), bass (5), guitar (6), 7-string, etc.
+        Place content via named slots: <code>s{string}-f{fret}</code> for fretted notes,
+        <code>s{string}-marker</code> before the nut for open/muted indicators. The component
+        positions, you style. <span style="color: #c0392b">●</span> = root,
+        <span style="color: #2980b9">●</span> = scale tone, ○ = open string.
       </p>
-      <div class="demo-box">
-        <mq-fretboard strings="4" end-fret="7" fret-numbers="all"></mq-fretboard>
-        <p class="caption">strings="4" (ukulele) — frets 1–7</p>
-      </div>
-      <div class="demo-box" style="margin-top: 1.5rem">
-        <mq-fretboard strings="5" fret-numbers="3,5,7,9,12"></mq-fretboard>
-        <p class="caption">strings="5" (bass) — frets 1–12</p>
-      </div>
+      <mq-fretboard fret-numbers="3,5,7,9,12">
+        <span slot="s1-marker" class="note open"><span>E</span></span>
+        <span slot="s1-f3" class="note"><span>G</span></span>
+        <span slot="s1-f5" class="note root"><span>A</span></span>
+        <span slot="s1-f8" class="note"><span>C</span></span>
+        <span slot="s1-f10" class="note"><span>D</span></span>
+        <span slot="s1-f12" class="note"><span>E</span></span>
+        <span slot="s2-marker" class="note open root"><span>A</span></span>
+        <span slot="s2-f3" class="note"><span>C</span></span>
+        <span slot="s2-f5" class="note"><span>D</span></span>
+        <span slot="s2-f7" class="note"><span>E</span></span>
+        <span slot="s2-f10" class="note"><span>G</span></span>
+        <span slot="s2-f12" class="note root"><span>A</span></span>
+        <span slot="s3-f2" class="note"><span>E</span></span>
+        <span slot="s3-f5" class="note"><span>G</span></span>
+        <span slot="s3-f7" class="note root"><span>A</span></span>
+        <span slot="s3-f10" class="note"><span>C</span></span>
+        <span slot="s3-f12" class="note"><span>D</span></span>
+        <span slot="s4-marker" class="note open"><span>G</span></span>
+        <span slot="s4-f2" class="note root"><span>A</span></span>
+        <span slot="s4-f5" class="note"><span>C</span></span>
+        <span slot="s4-f7" class="note"><span>D</span></span>
+        <span slot="s4-f9" class="note"><span>E</span></span>
+        <span slot="s4-f12" class="note"><span>G</span></span>
+        <span slot="s5-f1" class="note"><span>C</span></span>
+        <span slot="s5-f3" class="note"><span>D</span></span>
+        <span slot="s5-f5" class="note"><span>E</span></span>
+        <span slot="s5-f8" class="note"><span>G</span></span>
+        <span slot="s5-f10" class="note root"><span>A</span></span>
+        <span slot="s6-marker" class="note open"><span>E</span></span>
+        <span slot="s6-f3" class="note"><span>G</span></span>
+        <span slot="s6-f5" class="note root"><span>A</span></span>
+        <span slot="s6-f8" class="note"><span>C</span></span>
+        <span slot="s6-f10" class="note"><span>D</span></span>
+        <span slot="s6-f12" class="note"><span>E</span></span>
+      </mq-fretboard>
+      <p class="caption">A minor pentatonic · full neck</p>
     </section>
 
     <section>
-      <h2>Fret drawing mode</h2>
+      <h3>Multi-string spans — barres</h3>
       <p class="desc">
-        By default, frets and nut span from the first to the last string. Add
-        <code>full-neck</code> to extend them edge to edge.
+        Declare span slots via <code>extra-slots="s1-s6-f5"</code> (comma-separated). Each entry
+        creates an <code>s{A}-s{B}-f{F}</code> slot stretching across strings A to B at fret F —
+        barres, capos, or any multi-string element.
       </p>
-      <div class="demo-box">
-        <mq-fretboard end-fret="5" fret-numbers="all"></mq-fretboard>
-        <p class="caption">String to string (default)</p>
-      </div>
-      <div class="demo-box" style="margin-top: 1.5rem">
-        <mq-fretboard end-fret="5" fret-numbers="all" full-neck></mq-fretboard>
-        <p class="caption">full-neck</p>
+      <div class="row">
+        <div>
+          <mq-fretboard start-fret="5" end-fret="8" fret-numbers="all" extra-slots="s1-s6-f5">
+            <span slot="s1-s6-f5" class="barre root">A</span>
+            <span slot="s2-f7" class="note"><span>E</span></span>
+            <span slot="s3-f7" class="note root"><span>A</span></span>
+            <span slot="s4-f7" class="note"><span>D</span></span>
+            <span slot="s5-f8" class="note"><span>G</span></span>
+            <span slot="s6-f8" class="note"><span>C</span></span>
+          </mq-fretboard>
+          <p class="caption">horizontal — barre at fret 5 (strings 1–6)</p>
+        </div>
+        <div>
+          <mq-fretboard
+            orientation="vertical"
+            start-fret="5"
+            end-fret="8"
+            fret-numbers="all"
+            extra-slots="s1-s6-f5"
+            style="width: 16rem"
+          >
+            <span slot="s1-s6-f5" class="barre root">A</span>
+            <span slot="s2-f7" class="note"><span>E</span></span>
+            <span slot="s3-f7" class="note root"><span>A</span></span>
+            <span slot="s4-f7" class="note"><span>D</span></span>
+            <span slot="s5-f8" class="note"><span>G</span></span>
+            <span slot="s6-f8" class="note"><span>C</span></span>
+          </mq-fretboard>
+          <p class="caption">vertical — same barre pattern</p>
+        </div>
       </div>
     </section>
 
+    <h2>Style</h2>
+
     <section>
-      <h2>Inlays</h2>
+      <h3>Custom properties &amp; parts</h3>
       <p class="desc">
-        Position dots at standard frets (3, 5, 7, 9, 12, 15…). Double dot at 12 and 24. Disabled by
-        default. Add <code>inlays</code> attribute to enable.
+        Theme the structure through the <code>--mq-fretboard-*</code> custom properties and style
+        the fret numbers via <code>::part(fret-number)</code>.
       </p>
-      <div class="demo-box">
-        <mq-fretboard end-fret="12" fret-numbers="3,5,7,9,12"></mq-fretboard>
-        <p class="caption">Without inlays (default)</p>
-      </div>
-      <div class="demo-box" style="margin-top: 1.5rem">
-        <mq-fretboard end-fret="12" fret-numbers="3,5,7,9,12" inlays></mq-fretboard>
-        <p class="caption">With inlays</p>
-      </div>
-    </section>
-
-    <section>
-      <h2>Style — CSS parts &amp; custom properties</h2>
-      <p class="desc">Style structural elements via CSS parts and custom properties.</p>
       <style>
         .warm-fretboard {
           --mq-fretboard-neck-color: #f5e6c8;
@@ -647,164 +637,6 @@
         fret-numbers="3,5,7,9,12"
         inlays
       ></mq-fretboard>
-    </section>
-
-    <section>
-      <h2>Vertical scale</h2>
-      <p class="desc">Same scale pattern as above, but in vertical orientation.</p>
-      <mq-fretboard orientation="vertical" fret-numbers="3,5,7,9,12" style="width: 16rem">
-        <span slot="s1-marker" class="note marker open"><span>E</span></span>
-        <span slot="s1-f3" class="note"><span>G</span></span>
-        <span slot="s1-f5" class="note root"><span>A</span></span>
-        <span slot="s1-f8" class="note"><span>C</span></span>
-        <span slot="s1-f10" class="note"><span>D</span></span>
-        <span slot="s1-f12" class="note"><span>E</span></span>
-        <span slot="s2-marker" class="note marker open root"><span>A</span></span>
-        <span slot="s2-f3" class="note"><span>C</span></span>
-        <span slot="s2-f5" class="note"><span>D</span></span>
-        <span slot="s2-f7" class="note"><span>E</span></span>
-        <span slot="s2-f10" class="note"><span>G</span></span>
-        <span slot="s2-f12" class="note root"><span>A</span></span>
-        <span slot="s3-f2" class="note"><span>E</span></span>
-        <span slot="s3-f5" class="note"><span>G</span></span>
-        <span slot="s3-f7" class="note root"><span>A</span></span>
-        <span slot="s3-f10" class="note"><span>C</span></span>
-        <span slot="s3-f12" class="note"><span>D</span></span>
-        <span slot="s4-marker" class="note marker open"><span>G</span></span>
-        <span slot="s4-f2" class="note root"><span>A</span></span>
-        <span slot="s4-f5" class="note"><span>C</span></span>
-        <span slot="s4-f7" class="note"><span>D</span></span>
-        <span slot="s4-f9" class="note"><span>E</span></span>
-        <span slot="s4-f12" class="note"><span>G</span></span>
-        <span slot="s5-f1" class="note"><span>C</span></span>
-        <span slot="s5-f3" class="note"><span>D</span></span>
-        <span slot="s5-f5" class="note"><span>E</span></span>
-        <span slot="s5-f8" class="note"><span>G</span></span>
-        <span slot="s5-f10" class="note root"><span>A</span></span>
-        <span slot="s6-marker" class="note marker open"><span>E</span></span>
-        <span slot="s6-f3" class="note"><span>G</span></span>
-        <span slot="s6-f5" class="note root"><span>A</span></span>
-        <span slot="s6-f8" class="note"><span>C</span></span>
-        <span slot="s6-f10" class="note"><span>D</span></span>
-        <span slot="s6-f12" class="note"><span>E</span></span>
-      </mq-fretboard>
-    </section>
-
-    <section>
-      <h2>Left-handed</h2>
-      <p class="desc">
-        Mirror the fretboard for left-handed players. Works with both orientations.
-      </p>
-      <div class="demo-box">
-        <mq-fretboard left-handed fret-numbers="3,5,7,9,12">
-          <span slot="s1-marker" class="note marker open"><span>E</span></span>
-          <span slot="s1-f3" class="note"><span>G</span></span>
-          <span slot="s1-f5" class="note root"><span>A</span></span>
-          <span slot="s1-f8" class="note"><span>C</span></span>
-          <span slot="s1-f10" class="note"><span>D</span></span>
-          <span slot="s1-f12" class="note"><span>E</span></span>
-          <span slot="s2-marker" class="note marker open root"><span>A</span></span>
-          <span slot="s2-f3" class="note"><span>C</span></span>
-          <span slot="s2-f5" class="note"><span>D</span></span>
-          <span slot="s2-f7" class="note"><span>E</span></span>
-          <span slot="s2-f10" class="note"><span>G</span></span>
-          <span slot="s2-f12" class="note root"><span>A</span></span>
-          <span slot="s3-f2" class="note"><span>E</span></span>
-          <span slot="s3-f5" class="note"><span>G</span></span>
-          <span slot="s3-f7" class="note root"><span>A</span></span>
-          <span slot="s3-f10" class="note"><span>C</span></span>
-          <span slot="s3-f12" class="note"><span>D</span></span>
-          <span slot="s4-marker" class="note marker open"><span>G</span></span>
-          <span slot="s4-f2" class="note root"><span>A</span></span>
-          <span slot="s4-f5" class="note"><span>C</span></span>
-          <span slot="s4-f7" class="note"><span>D</span></span>
-          <span slot="s4-f9" class="note"><span>E</span></span>
-          <span slot="s4-f12" class="note"><span>G</span></span>
-          <span slot="s5-f1" class="note"><span>C</span></span>
-          <span slot="s5-f3" class="note"><span>D</span></span>
-          <span slot="s5-f5" class="note"><span>E</span></span>
-          <span slot="s5-f8" class="note"><span>G</span></span>
-          <span slot="s5-f10" class="note root"><span>A</span></span>
-          <span slot="s6-marker" class="note marker open"><span>E</span></span>
-          <span slot="s6-f3" class="note"><span>G</span></span>
-          <span slot="s6-f5" class="note root"><span>A</span></span>
-          <span slot="s6-f8" class="note"><span>C</span></span>
-          <span slot="s6-f10" class="note"><span>D</span></span>
-          <span slot="s6-f12" class="note"><span>E</span></span>
-        </mq-fretboard>
-        <p class="caption">Horizontal — left-handed</p>
-      </div>
-      <div class="demo-box" style="margin-top: 1.5rem">
-        <mq-fretboard
-          left-handed
-          orientation="vertical"
-          fret-numbers="3,5,7,9,12"
-          style="width: 16rem"
-        >
-          <span slot="s1-marker" class="note marker open"><span>E</span></span>
-          <span slot="s1-f3" class="note"><span>G</span></span>
-          <span slot="s1-f5" class="note root"><span>A</span></span>
-          <span slot="s1-f8" class="note"><span>C</span></span>
-          <span slot="s2-marker" class="note marker open root"><span>A</span></span>
-          <span slot="s2-f3" class="note"><span>C</span></span>
-          <span slot="s2-f5" class="note"><span>D</span></span>
-          <span slot="s2-f7" class="note"><span>E</span></span>
-          <span slot="s3-f2" class="note"><span>E</span></span>
-          <span slot="s3-f5" class="note"><span>G</span></span>
-          <span slot="s3-f7" class="note root"><span>A</span></span>
-          <span slot="s4-marker" class="note marker open"><span>G</span></span>
-          <span slot="s4-f2" class="note root"><span>A</span></span>
-          <span slot="s4-f5" class="note"><span>C</span></span>
-          <span slot="s4-f7" class="note"><span>D</span></span>
-          <span slot="s5-f1" class="note"><span>C</span></span>
-          <span slot="s5-f3" class="note"><span>D</span></span>
-          <span slot="s5-f5" class="note"><span>E</span></span>
-          <span slot="s5-f8" class="note"><span>G</span></span>
-          <span slot="s6-marker" class="note marker open"><span>E</span></span>
-          <span slot="s6-f3" class="note"><span>G</span></span>
-          <span slot="s6-f5" class="note root"><span>A</span></span>
-          <span slot="s6-f8" class="note"><span>C</span></span>
-        </mq-fretboard>
-        <p class="caption">Vertical — left-handed</p>
-      </div>
-    </section>
-
-    <section>
-      <h2>Extra slots — multi-string spans</h2>
-      <p class="desc">
-        Declare span slots via <code>extra-slots="s1-s6-f5"</code> (comma-separated). Each entry
-        creates a <code>s{A}-s{B}-f{F}</code> slot that stretches across strings A to B at fret F.
-        Useful for barres, capos, or any element spanning multiple strings.
-      </p>
-      <div class="demo-box">
-        <mq-fretboard start-fret="5" end-fret="8" fret-numbers="all" extra-slots="s1-s6-f5">
-          <span slot="s1-s6-f5" class="barre root">A</span>
-          <span slot="s2-f7" class="note"><span>E</span></span>
-          <span slot="s3-f7" class="note root"><span>A</span></span>
-          <span slot="s4-f7" class="note"><span>D</span></span>
-          <span slot="s5-f8" class="note"><span>G</span></span>
-          <span slot="s6-f8" class="note"><span>C</span></span>
-        </mq-fretboard>
-        <p class="caption">Horizontal — barre at fret 5 (strings 1–6) + individual notes</p>
-      </div>
-      <div class="demo-box" style="margin-top: 1.5rem">
-        <mq-fretboard
-          orientation="vertical"
-          start-fret="5"
-          end-fret="8"
-          fret-numbers="all"
-          extra-slots="s1-s6-f5"
-          style="width: 16rem"
-        >
-          <span slot="s1-s6-f5" class="barre root">A</span>
-          <span slot="s2-f7" class="note"><span>E</span></span>
-          <span slot="s3-f7" class="note root"><span>A</span></span>
-          <span slot="s4-f7" class="note"><span>D</span></span>
-          <span slot="s5-f8" class="note"><span>G</span></span>
-          <span slot="s6-f8" class="note"><span>C</span></span>
-        </mq-fretboard>
-        <p class="caption">Vertical — same barre pattern</p>
-      </div>
     </section>
 
     <footer><code>&lt;mq-fretboard&gt;</code> · musique</footer>
