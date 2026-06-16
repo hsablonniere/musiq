@@ -55,7 +55,7 @@ export class MqPianoChord extends LitElement {
             <div
               slot="note-${noteToPianoKeysName(note)}"
               part=${pressedParts(note, black)}
-              class="fill${black ? " black" : ""}"
+              class="fill"
             >
               ${this.noteLabels
                 ? html`<span class="label" part="label"
@@ -102,13 +102,6 @@ export class MqPianoChord extends LitElement {
       display: flex;
       align-items: flex-end;
       justify-content: center;
-    }
-
-    .fill.black {
-      border-left: 1px solid #000;
-      border-right: 1px solid #000;
-      border-bottom: 1px solid #000;
-      box-sizing: border-box;
     }
 
     .label {
