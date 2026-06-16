@@ -151,15 +151,15 @@ export class MqFretboardChord extends LitElement {
         ${frets.map((fret, i) => {
           const s = i + 1;
           if (fret === -1) {
-            return html`<div slot="s${s}-marker" class="marker muted" part="marker">✕</div>`;
+            return html`<div slot="s${s}-marker" class="marker-muted" part="marker-muted">✕</div>`;
           }
           if (fret === 0) {
-            return html`<div slot="s${s}-marker" class="marker open" part="marker">○</div>`;
+            return html`<div slot="s${s}-marker" class="marker-open" part="marker-open">○</div>`;
           }
           if (barreStringIndices.has(i)) return nothing;
           const actualFret = baseFret + fret - 1;
           const finger = fingers[i];
-          return html`<div slot="s${s}-f${actualFret}" class="dot" part="dot">
+          return html`<div slot="s${s}-f${actualFret}" class="marker" part="marker">
             ${this.fingerLabels && finger > 0
               ? html`<span class="finger">${finger}</span>`
               : nothing}
@@ -169,8 +169,8 @@ export class MqFretboardChord extends LitElement {
           (barre) => html`
             <div
               slot="s${barre.fromString}-s${barre.toString}-f${barre.actualFret}"
-              class="barre"
-              part="barre"
+              class="marker-barre"
+              part="marker-barre"
             >
               ${this.fingerLabels && barre.finger > 0
                 ? html`<span class="finger">${barre.finger}</span>`
@@ -199,33 +199,16 @@ export class MqFretboardChord extends LitElement {
       min-height: 0;
     }
 
-    .marker {
-      text-align: center;
-      line-height: 1;
-      margin-bottom: 0.25em;
-    }
-
-    .dot {
-      width: 1.2em;
-      height: 1.2em;
-      border-radius: 50%;
-      background: #000;
-      color: #fff;
+    /* Markers ship unstyled — size, shape and color come from ::part(marker),
+       ::part(marker-open), ::part(marker-muted) and ::part(marker-barre).
+       Layout glue only: center any slotted content (finger labels, glyphs). */
+    .marker,
+    .marker-open,
+    .marker-muted,
+    .marker-barre {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0.4em 0.2em;
-    }
-
-    .barre {
-      height: 1.2em;
-      border-radius: 0.6em;
-      background: #000;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0.2em;
     }
 
     .finger {
