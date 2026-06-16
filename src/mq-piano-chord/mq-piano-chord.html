@@ -10,6 +10,22 @@
 
     <!-- Component-specific bits only; shared chrome lives in demo.css. -->
     <style>
+      /* mq-piano ships unstyled; these base styles keep the keyboard visible.
+         Same base chrome as the <mq-piano> demo (parts exported through
+         mq-piano-chord, custom props inherit across the shadow boundary). */
+      mq-piano-chord {
+        --mq-piano-border-color: #d0d0d0;
+        --mq-piano-border-color-outer: #b0b0b0;
+        --mq-piano-border-color-inner: #d0d0d0;
+        --mq-piano-border-width: 1px;
+      }
+      mq-piano-chord::part(key-white) {
+        background-color: #fafafa;
+      }
+      mq-piano-chord::part(key-black) {
+        background-color: #222222;
+      }
+
       .row mq-piano-chord {
         height: 200px;
       }
