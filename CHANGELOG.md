@@ -4,7 +4,12 @@
 
 ### Breaking Changes
 
+- `<mq-piano>` — ships unstyled: dropped the color defaults so the keyboard renders bare (theme via `::part()` and the `--mq-piano-*` custom properties); removed `preserve-ratio` — the keyboard is now always locked to real piano proportions. Also added full JSDoc
+- `<mq-piano-chord>` — reworked to match `<mq-piano>`: ships unstyled; renamed the `chord` attribute/property to `name` and the `title` part to `name`; replaced the `--mq-piano-chord-active-color` custom property with the `key-pressed` part; dropped the hardcoded marker borders; defaulted the `mode` property to `accurate`
 - `<mq-piano-scale>` — reworked to match `<mq-piano>`/`<mq-piano-chord>`: ships unstyled (theme via `::part()`); renamed the `scale` attribute/property to `name` and the `title` part to `name`; replaced the `--mq-piano-scale-active-color`/`--mq-piano-scale-root-color` custom properties with the `key-in-scale`/`key-tonic` parts; added a reflected `mode` property defaulting to `accurate`
+- `<mq-fretboard>` — ships unstyled: dropped the `#000` color defaults on the nut/fret/string/inlay custom properties (set `--mq-fretboard-{nut,fret,string,inlay}-color` to make the structure visible). Also added input validation and full JSDoc
+- `<mq-fretboard-chord>` — reworked to match `<mq-piano-chord>`: ships unstyled; renamed the `chord` attribute/property to `name` and the `title` part to `name`; replaced the `dot`/`barre`/`marker` parts with `marker`/`marker-barre`/`marker-open`/`marker-muted` (no default color or shape); exposed the `finger` and `error` parts
+- `<mq-fretboard-scale>` — reworked to match `<mq-piano-scale>`: ships unstyled; renamed the `scale` attribute/property to `name` and the `title` part to `name`; replaced the `--mq-fretboard-scale-active-color`/`--mq-fretboard-scale-root-color` custom properties and the `dot` part with the `marker`/`marker-tonic` parts; exposed the `label`, `degree` and `error` parts
 
 ## 0.0.4
 

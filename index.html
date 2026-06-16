@@ -152,8 +152,9 @@
         <h2><code>&lt;mq-piano-chord&gt;</code></h2>
         <p>
           Piano keyboard with chord visualization. Pass a chord name, get highlighted keys.
-          Supports inversions via slash chords (<code>C/E</code>, <code>C/G</code>),
-          <code>note-labels</code>, and customizable active color.
+          Supports inversions via slash chords (<code>C/E</code>, <code>C/G</code>) and
+          <code>note-labels</code>. Ships unstyled — theme the pressed keys via
+          <code>::part(key-pressed)</code>.
         </p>
       </a>
 
@@ -172,17 +173,18 @@
           Guitar/bass fretboard with slot-based content placement. The component positions,
           you style. Horizontal or vertical orientation, configurable string count and fret range,
           <code>inlays</code>, <code>full-neck</code>, <code>left-handed</code>, and
-          multi-string span slots for barres via <code>extra-slots</code>.
+          multi-string span slots for barres via <code>extra-slots</code>. Ships unstyled — theme
+          the structure via the <code>--mq-fretboard-*</code> custom properties.
         </p>
       </a>
 
       <a href="src/mq-fretboard-chord/mq-fretboard-chord.html">
         <h2><code>&lt;mq-fretboard-chord&gt;</code></h2>
         <p>
-          Fretboard with chord diagram. Pass a chord name, get finger positions with
+          Fretboard chord diagram. Pass a chord <code>name</code>, get finger positions with
           open/muted string indicators and barre support. Guitar and ukulele, multiple
           voicings via <code>position</code>, <code>finger-labels</code>, and
-          <code>left-handed</code>.
+          <code>left-handed</code>. Ships unstyled — theme the markers via <code>::part()</code>.
         </p>
       </a>
 
@@ -191,7 +193,8 @@
         <p>
           Fretboard with scale visualization across the full neck. Custom tunings
           (drop D, ukulele…), configurable fret range, <code>note-labels</code>,
-          <code>degree-labels</code>, and <code>left-handed</code>.
+          <code>degree-labels</code>, and <code>left-handed</code>. Ships unstyled — theme the
+          notes and tonic via <code>::part()</code>.
         </p>
       </a>
 
