@@ -25,6 +25,10 @@
       mq-piano-chord::part(key-black) {
         background-color: #222222;
       }
+      /* Pressed keys ship unstyled too — the demo gives them a fill. */
+      mq-piano-chord::part(key-pressed) {
+        background-color: #4a90d9;
+      }
 
       .row mq-piano-chord {
         height: 200px;
@@ -36,17 +40,6 @@
         .row mq-piano-chord {
           height: auto;
         }
-      }
-
-      /* Color swatch in the CSS custom properties table. */
-      .api .swatch {
-        display: inline-block;
-        width: 1em;
-        height: 1em;
-        border-radius: 2px;
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        vertical-align: baseline;
-        margin-right: 0.3em;
       }
 
       /* API footnote marker — same accent as the section subtitles (h3). */
@@ -61,8 +54,9 @@
       <h1><code>&lt;mq-piano-chord&gt;</code></h1>
       <p>
         Piano keyboard with chord visualization. Pass a chord name, get highlighted keys. Supports
-        inversions via slash chords (<code>C/E</code>, <code>C/G</code>), <code>note-labels</code>,
-        and customizable active color.
+        inversions via slash chords (<code>C/E</code>, <code>C/G</code>) and
+        <code>note-labels</code>. Ships unstyled — theme pressed keys via
+        <code>::part(key-pressed)</code>.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
@@ -135,14 +129,6 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td data-label="Property"><code>--mq-piano-chord-active-color</code></td>
-            <td data-label="Type"><code>&lt;color&gt;</code></td>
-            <td data-label="Default">
-              <span class="swatch" style="background: #4a90d9"></span><code>#4a90d9</code>
-            </td>
-            <td data-label="Description">Fill color for active (chord) keys</td>
-          </tr>
           <tr>
             <td data-label="Property">
               <code>--mq-piano-black-key-height</code> <span class="ref">*</span>
@@ -278,6 +264,10 @@
               expose both enharmonic names: <code>note-cs4</code>/<code>note-db4</code>
             </td>
           </tr>
+          <tr>
+            <td data-label="Part"><code>key-pressed</code></td>
+            <td data-label="Description">The marker covering a key held by the chord</td>
+          </tr>
         </tbody>
       </table>
       <p class="desc" style="margin-top: 0.75rem">
@@ -337,13 +327,26 @@
       </div>
     </section>
 
-    <h2>Style — active color</h2>
+    <h2>Style — pressed keys</h2>
     <section>
-      <p class="desc">Customize via <code>--mq-piano-chord-active-color</code>.</p>
+      <p class="desc">
+        Pressed keys ship unstyled — fill them via <code>::part(key-pressed)</code>.
+      </p>
+      <style>
+        .pressed-red::part(key-pressed) {
+          background-color: #c0392b;
+        }
+        .pressed-green::part(key-pressed) {
+          background-color: #27ae60;
+        }
+        .pressed-purple::part(key-pressed) {
+          background-color: #8e44ad;
+        }
+      </style>
       <div class="row">
-        <mq-piano-chord name="Bbm" style="--mq-piano-chord-active-color: #c0392b"></mq-piano-chord>
-        <mq-piano-chord name="Bbm" style="--mq-piano-chord-active-color: #27ae60"></mq-piano-chord>
-        <mq-piano-chord name="Bbm" style="--mq-piano-chord-active-color: #8e44ad"></mq-piano-chord>
+        <mq-piano-chord class="pressed-red" name="Bbm"></mq-piano-chord>
+        <mq-piano-chord class="pressed-green" name="Bbm"></mq-piano-chord>
+        <mq-piano-chord class="pressed-purple" name="Bbm"></mq-piano-chord>
       </div>
     </section>
 

@@ -34,7 +34,8 @@ export class MqPianoChord extends LitElement {
           (note) => html`
             <div
               slot="note-${noteToPianoKeysName(note)}"
-              class="active-fill${isBlackKey(note) ? " black" : ""}"
+              part="key-pressed"
+              class="fill${isBlackKey(note) ? " black" : ""}"
             >
               ${this.noteLabels
                 ? html`<span class="label"
@@ -75,16 +76,15 @@ export class MqPianoChord extends LitElement {
       justify-content: flex-end;
     }
 
-    .active-fill {
+    .fill {
       width: 100%;
       height: 100%;
-      background: var(--mq-piano-chord-active-color, #4a90d9);
       display: flex;
       align-items: flex-end;
       justify-content: center;
     }
 
-    .active-fill.black {
+    .fill.black {
       border-left: 1px solid #000;
       border-right: 1px solid #000;
       border-bottom: 1px solid #000;
