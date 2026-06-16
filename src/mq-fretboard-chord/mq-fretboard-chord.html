@@ -4,177 +4,69 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>&lt;mq-fretboard-chord&gt; — demo</title>
+
+    <!-- Shared page chrome (layout, typography, API tables, responsive). -->
+    <link rel="stylesheet" href="../demo.css" />
+
+    <!-- mq-fretboard-chord ships unstyled; these base styles keep the plain examples visible.
+         Class-scoped ::part rules below override them per example. -->
     <style>
-      :root {
-        --bg: #fafaf8;
-        --fg: #1a1a1a;
-        --muted: #6b6b6b;
-        --accent: #c0392b;
-        --card: #fff;
-        --line: #e6e6e2;
+      mq-fretboard-chord {
+        --mq-fretboard-neck-color: #fbf8f0;
+        --mq-fretboard-nut-color: #2b2b2b;
+        --mq-fretboard-fret-color: #b3ad9e;
+        --mq-fretboard-string-color: #8a8377;
       }
 
-      * {
-        box-sizing: border-box;
+      mq-fretboard-chord::part(name) {
+        font-weight: bold;
+        font-size: 1.2em;
+        text-align: center;
       }
 
-      body {
-        font-family: system-ui, sans-serif;
-        line-height: 1.6;
-        background: var(--bg);
-        color: var(--fg);
-        margin: 0 auto;
-        padding: 3rem 2rem 6rem;
-        max-width: 80rem;
+      mq-fretboard-chord::part(marker) {
+        width: 1.2em;
+        height: 1.2em;
+        margin: 0.35em 0.2em;
+        border-radius: 50%;
+        background: #2b2b2b;
+        color: #fff;
       }
 
-      header {
-        border-bottom: 2px solid var(--fg);
-        margin-bottom: 3rem;
-        padding-bottom: 1.5rem;
+      mq-fretboard-chord::part(marker-barre) {
+        height: 1.2em;
+        margin: 0.2em;
+        border-radius: 0.6em;
+        background: #2b2b2b;
+        color: #fff;
       }
 
-      h1 {
-        font-size: 2.4rem;
-        margin: 0 0 0.25rem;
+      mq-fretboard-chord::part(marker-open),
+      mq-fretboard-chord::part(marker-muted) {
+        margin-bottom: 0.2em;
+        line-height: 1;
       }
 
-      h1 code {
-        background: var(--fg);
-        color: var(--bg);
-        padding: 0.1em 0.3em;
-        border-radius: 4px;
+      mq-fretboard-chord::part(finger) {
+        font-size: 0.6em;
+        font-weight: bold;
       }
 
-      header p {
-        color: var(--muted);
-        margin: 0.5rem 0 0;
+      mq-fretboard-chord::part(error) {
+        color: #c0392b;
+        font-style: italic;
       }
 
-      header a {
-        color: var(--accent);
-      }
-
-      section {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 1.75rem 2rem 2rem;
-        margin-bottom: 2rem;
-      }
-
-      h2 {
-        font-size: 1.05rem;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--accent);
-        margin: 0 0 0.4rem;
-      }
-
-      h3 {
-        font-size: 1.4rem;
-        margin: 0 0 0.5rem;
-      }
-
-      .desc {
-        color: var(--muted);
-        margin: 0 0 1.5rem;
-        max-width: 46rem;
-      }
-
-      .desc code,
-      .api code,
-      h2 code,
-      footer code {
-        background: #f0f0ec;
-        padding: 0.1em 0.35em;
-        border-radius: 4px;
-        font-size: 0.88em;
-        color: var(--fg);
-      }
-
-      .row {
+      /* Gallery of compact diagrams — keep each at its intrinsic size, no stretch. */
+      .gallery {
         display: flex;
-        gap: 2rem;
         flex-wrap: wrap;
+        gap: 1.5rem 2rem;
         align-items: start;
       }
 
-      .row > div {
+      .gallery > div {
         text-align: center;
-      }
-
-      .caption {
-        font-size: 0.85rem;
-        color: var(--muted);
-        margin: 0.6rem 0 0;
-        text-align: center;
-      }
-
-      footer {
-        color: var(--muted);
-        font-size: 0.85rem;
-        text-align: center;
-        margin-top: 4rem;
-      }
-
-      .api h3 {
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--muted);
-        margin: 1.5rem 0 0.4rem;
-      }
-
-      .api h3:first-of-type {
-        margin-top: 0.25rem;
-      }
-
-      .api table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.88rem;
-      }
-
-      .api th {
-        text-align: left;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--muted);
-        border-bottom: 2px solid var(--line);
-        padding: 0.3rem 0.75rem 0.3rem 0;
-        font-weight: 600;
-      }
-
-      .api td {
-        padding: 0.3rem 0.75rem 0.3rem 0;
-        border-bottom: 1px solid var(--line);
-        vertical-align: top;
-      }
-
-      .api .swatch {
-        display: inline-block;
-        width: 1em;
-        height: 1em;
-        border-radius: 2px;
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        vertical-align: baseline;
-        margin-right: 0.3em;
-      }
-
-      pre {
-        background: #f0f0ec;
-        padding: 0.75rem 1rem;
-        border-radius: 6px;
-        overflow-x: auto;
-        font-size: 0.88rem;
-        margin: 0.5rem 0;
-      }
-
-      pre code {
-        background: none;
-        padding: 0;
       }
     </style>
     <script type="module" src="./mq-fretboard-chord.ts"></script>
@@ -183,22 +75,23 @@
     <header>
       <h1><code>&lt;mq-fretboard-chord&gt;</code></h1>
       <p>
-        Fretboard with chord diagram. Pass a chord name, get finger positions with open/muted string
-        indicators and barre support. Guitar and ukulele, multiple voicings via
-        <code>position</code>, <code>finger-labels</code>, and <code>left-handed</code>.
+        Fretboard chord diagram. Pass a chord <code>name</code>, get finger positions with
+        open/muted string indicators and barre support. Guitar and ukulele, multiple voicings via
+        <code>position</code>, <code>finger-labels</code>, and <code>left-handed</code>. Ships
+        unstyled — theme the neck via <code>--mq-fretboard-*</code> and the markers via
+        <code>::part()</code>.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
 
+    <h2>Install</h2>
     <section>
-      <h2>Install</h2>
       <pre><code>npm install @hsablonniere/musiq</code></pre>
       <pre><code>import '@hsablonniere/musiq/mq-fretboard-chord';</code></pre>
     </section>
 
+    <h2>API</h2>
     <section class="api">
-      <h2>API</h2>
-
       <h3>Attributes / Properties</h3>
       <table>
         <thead>
@@ -212,43 +105,47 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>chord</code></td>
-            <td><code>chord</code></td>
-            <td><code>string</code></td>
-            <td>—</td>
-            <td>Chord name (e.g. <code>"C"</code>, <code>"Am"</code>, <code>"Bbmaj7"</code>)</td>
+            <td data-label="Attribute"><code>name</code></td>
+            <td data-label="Property"><code>name</code></td>
+            <td data-label="Type"><code>string</code></td>
+            <td data-label="Default"><code>""</code></td>
+            <td data-label="Description">
+              Chord name (e.g. <code>C</code>, <code>Am</code>, <code>Bbmaj7</code>)
+            </td>
           </tr>
           <tr>
-            <td><code>instrument</code></td>
-            <td><code>instrument</code></td>
-            <td><code>'guitar' | 'ukulele'</code></td>
-            <td><code>'guitar'</code></td>
-            <td>Target instrument (determines string count and chord voicings)</td>
+            <td data-label="Attribute"><code>instrument</code></td>
+            <td data-label="Property"><code>instrument</code></td>
+            <td data-label="Type"><code>'guitar' | 'ukulele'</code></td>
+            <td data-label="Default"><code>guitar</code></td>
+            <td data-label="Description">Target instrument (string count and chord voicings)</td>
           </tr>
           <tr>
-            <td><code>position</code></td>
-            <td><code>position</code></td>
-            <td><code>number</code></td>
-            <td><code>0</code></td>
-            <td>Voicing index from the chord database (0 = first/most common voicing)</td>
+            <td data-label="Attribute"><code>position</code></td>
+            <td data-label="Property"><code>position</code></td>
+            <td data-label="Type"><code>number</code></td>
+            <td data-label="Default"><code>0</code></td>
+            <td data-label="Description">Voicing index from the chord database (0 = first)</td>
           </tr>
           <tr>
-            <td><code>left-handed</code></td>
-            <td><code>leftHanded</code></td>
-            <td><code>boolean</code></td>
-            <td><code>false</code></td>
-            <td>Mirror the diagram for left-handed players</td>
+            <td data-label="Attribute"><code>left-handed</code></td>
+            <td data-label="Property"><code>leftHanded</code></td>
+            <td data-label="Type"><code>boolean</code></td>
+            <td data-label="Default"><code>false</code></td>
+            <td data-label="Description">Mirror the diagram for left-handed players</td>
           </tr>
           <tr>
-            <td><code>finger-labels</code></td>
-            <td><code>fingerLabels</code></td>
-            <td><code>boolean</code></td>
-            <td><code>false</code></td>
-            <td>Show finger numbers (1–4) on dots and barres</td>
+            <td data-label="Attribute"><code>finger-labels</code></td>
+            <td data-label="Property"><code>fingerLabels</code></td>
+            <td data-label="Type"><code>boolean</code></td>
+            <td data-label="Default"><code>false</code></td>
+            <td data-label="Description">Show finger numbers (1–4) on the markers and barres</td>
           </tr>
         </tbody>
       </table>
+    </section>
 
+    <section class="api">
       <h3>CSS Parts</h3>
       <table>
         <thead>
@@ -259,160 +156,185 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>title</code></td>
-            <td>Chord name heading above the diagram</td>
+            <td data-label="Part"><code>name</code></td>
+            <td data-label="Description">Chord name heading above the diagram</td>
           </tr>
           <tr>
-            <td><code>marker</code></td>
-            <td>Open (○) and muted (✕) string indicators above the nut</td>
+            <td data-label="Part"><code>marker</code></td>
+            <td data-label="Description">A fretted note</td>
           </tr>
           <tr>
-            <td><code>dot</code></td>
-            <td>Fretted note dots on the fretboard</td>
+            <td data-label="Part"><code>marker-open</code></td>
+            <td data-label="Description">Open-string indicator (○) above the nut</td>
           </tr>
           <tr>
-            <td><code>barre</code></td>
-            <td>Barre chord bars spanning multiple strings</td>
+            <td data-label="Part"><code>marker-muted</code></td>
+            <td data-label="Description">Muted-string indicator (✕) above the nut</td>
           </tr>
           <tr>
-            <td><code>fret-number</code></td>
-            <td>Fret number label (forwarded from <code>mq-fretboard</code>)</td>
+            <td data-label="Part"><code>marker-barre</code></td>
+            <td data-label="Description">A barre spanning several strings at one fret</td>
+          </tr>
+          <tr>
+            <td data-label="Part"><code>finger</code></td>
+            <td data-label="Description">
+              Finger-number label (only with <code>finger-labels</code>)
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Part"><code>error</code></td>
+            <td data-label="Description">Fallback shown for an unknown chord</td>
+          </tr>
+          <tr>
+            <td data-label="Part"><code>fret-number</code></td>
+            <td data-label="Description">
+              Fret-number label (forwarded from <code>mq-fretboard</code>)
+            </td>
           </tr>
         </tbody>
       </table>
     </section>
 
+    <h2>Chord types</h2>
+
     <section>
-      <h2>Basic — open chords</h2>
-      <div class="row">
-        <mq-fretboard-chord chord="C"></mq-fretboard-chord>
-        <mq-fretboard-chord chord="Am"></mq-fretboard-chord>
-        <mq-fretboard-chord chord="G"></mq-fretboard-chord>
-        <mq-fretboard-chord chord="E"></mq-fretboard-chord>
-        <mq-fretboard-chord chord="D"></mq-fretboard-chord>
-        <mq-fretboard-chord chord="F"></mq-fretboard-chord>
+      <h3>Open chords</h3>
+      <div class="gallery">
+        <mq-fretboard-chord name="C"></mq-fretboard-chord>
+        <mq-fretboard-chord name="Am"></mq-fretboard-chord>
+        <mq-fretboard-chord name="G"></mq-fretboard-chord>
+        <mq-fretboard-chord name="E"></mq-fretboard-chord>
+        <mq-fretboard-chord name="D"></mq-fretboard-chord>
+        <mq-fretboard-chord name="F"></mq-fretboard-chord>
       </div>
     </section>
 
     <section>
-      <h2>Seventh chords</h2>
-      <div class="row">
-        <mq-fretboard-chord chord="C7"></mq-fretboard-chord>
-        <mq-fretboard-chord chord="Am7"></mq-fretboard-chord>
-        <mq-fretboard-chord chord="G7"></mq-fretboard-chord>
-        <mq-fretboard-chord chord="E7"></mq-fretboard-chord>
-        <mq-fretboard-chord chord="D7"></mq-fretboard-chord>
-        <mq-fretboard-chord chord="F7"></mq-fretboard-chord>
+      <h3>Seventh chords</h3>
+      <div class="gallery">
+        <mq-fretboard-chord name="C7"></mq-fretboard-chord>
+        <mq-fretboard-chord name="Am7"></mq-fretboard-chord>
+        <mq-fretboard-chord name="G7"></mq-fretboard-chord>
+        <mq-fretboard-chord name="E7"></mq-fretboard-chord>
+        <mq-fretboard-chord name="D7"></mq-fretboard-chord>
+        <mq-fretboard-chord name="F7"></mq-fretboard-chord>
       </div>
     </section>
 
     <section>
-      <h2>Finger labels</h2>
-      <p class="desc">Show finger numbers on dots with the <code>finger-labels</code> attribute.</p>
-      <div class="row">
-        <mq-fretboard-chord chord="C" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="Am" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="G" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="E" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="D" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="F" finger-labels></mq-fretboard-chord>
+      <h3>Barre chords</h3>
+      <p class="desc">
+        Barres span several strings at one fret via the <code>marker-barre</code> part.
+      </p>
+      <div class="gallery">
+        <mq-fretboard-chord name="F" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord name="Bm" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord name="C11" finger-labels></mq-fretboard-chord>
       </div>
     </section>
 
     <section>
-      <h2>Voicings — <code>position</code></h2>
-      <p class="desc">A minor — 4 positions</p>
-      <div class="row">
+      <h3>Sharps &amp; flats</h3>
+      <div class="gallery">
+        <mq-fretboard-chord name="F#m" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord name="Bbmaj7" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord name="Ebm7" finger-labels></mq-fretboard-chord>
+      </div>
+    </section>
+
+    <h2>Options</h2>
+
+    <section>
+      <h3>Finger labels</h3>
+      <p class="desc">
+        Show finger numbers on the markers with the <code>finger-labels</code> attribute.
+      </p>
+      <div class="gallery">
+        <mq-fretboard-chord name="C" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord name="Am" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord name="G" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord name="E" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord name="D" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord name="F" finger-labels></mq-fretboard-chord>
+      </div>
+    </section>
+
+    <section>
+      <h3>Voicings — <code>position</code></h3>
+      <p class="desc">A minor across four voicings from the chord database.</p>
+      <div class="gallery">
         <div>
-          <mq-fretboard-chord chord="Am" position="0" finger-labels></mq-fretboard-chord>
+          <mq-fretboard-chord name="Am" position="0" finger-labels></mq-fretboard-chord>
           <p class="caption">position 0</p>
         </div>
         <div>
-          <mq-fretboard-chord chord="Am" position="1" finger-labels></mq-fretboard-chord>
+          <mq-fretboard-chord name="Am" position="1" finger-labels></mq-fretboard-chord>
           <p class="caption">position 1</p>
         </div>
         <div>
-          <mq-fretboard-chord chord="Am" position="2" finger-labels></mq-fretboard-chord>
+          <mq-fretboard-chord name="Am" position="2" finger-labels></mq-fretboard-chord>
           <p class="caption">position 2</p>
         </div>
         <div>
-          <mq-fretboard-chord chord="Am" position="3" finger-labels></mq-fretboard-chord>
+          <mq-fretboard-chord name="Am" position="3" finger-labels></mq-fretboard-chord>
           <p class="caption">position 3</p>
         </div>
       </div>
     </section>
 
     <section>
-      <h2>Left-handed</h2>
+      <h3>Left-handed</h3>
       <p class="desc">Mirror the diagram with the <code>left-handed</code> attribute.</p>
-      <div class="row">
+      <div class="gallery">
         <div>
-          <mq-fretboard-chord chord="C" finger-labels></mq-fretboard-chord>
-          <p class="caption">Right-handed</p>
+          <mq-fretboard-chord name="C" finger-labels></mq-fretboard-chord>
+          <p class="caption">right-handed</p>
         </div>
         <div>
-          <mq-fretboard-chord chord="C" finger-labels left-handed></mq-fretboard-chord>
-          <p class="caption">Left-handed</p>
+          <mq-fretboard-chord name="C" finger-labels left-handed></mq-fretboard-chord>
+          <p class="caption"><code>left-handed</code></p>
         </div>
       </div>
     </section>
 
     <section>
-      <h2>Sharps & flats</h2>
-      <div class="row">
-        <mq-fretboard-chord chord="F#m" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="Bbmaj7" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="Ebm7" finger-labels></mq-fretboard-chord>
+      <h3>Ukulele</h3>
+      <p class="desc">
+        Switch the voicing source with <code>instrument="ukulele"</code> (4 strings).
+      </p>
+      <div class="gallery">
+        <mq-fretboard-chord name="C" instrument="ukulele" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord name="Am" instrument="ukulele" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord name="G" instrument="ukulele" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord name="F" instrument="ukulele" finger-labels></mq-fretboard-chord>
       </div>
     </section>
 
-    <section>
-      <h2>Barre chords</h2>
-      <div class="row">
-        <mq-fretboard-chord chord="F" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="Bm" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="C11" finger-labels></mq-fretboard-chord>
-      </div>
-    </section>
+    <h2>Style</h2>
 
     <section>
-      <h2>Ukulele</h2>
-      <p class="desc"><code>instrument="ukulele"</code></p>
-      <div class="row">
-        <mq-fretboard-chord chord="C" instrument="ukulele" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="Am" instrument="ukulele" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="G" instrument="ukulele" finger-labels></mq-fretboard-chord>
-        <mq-fretboard-chord chord="F" instrument="ukulele" finger-labels></mq-fretboard-chord>
-      </div>
-    </section>
-
-    <section>
-      <h2>Style — CSS parts</h2>
-      <p class="desc">Customize via <code>::part(dot)</code> and <code>::part(barre)</code>.</p>
+      <h3>Theming markers</h3>
+      <p class="desc">
+        Recolor the markers via <code>::part(marker)</code> and <code>::part(marker-barre)</code>.
+      </p>
       <style>
-        .red-dots::part(dot) {
+        .red-dots::part(marker),
+        .red-dots::part(marker-barre) {
           background: #c0392b;
         }
-        .red-dots::part(barre) {
-          background: #e74c3c;
-        }
-        .green-dots::part(dot) {
+        .green-dots::part(marker),
+        .green-dots::part(marker-barre) {
           background: #1e8449;
         }
-        .green-dots::part(barre) {
-          background: #27ae60;
-        }
-        .purple-dots::part(dot) {
+        .purple-dots::part(marker),
+        .purple-dots::part(marker-barre) {
           background: #6c3483;
         }
-        .purple-dots::part(barre) {
-          background: #a569bd;
-        }
       </style>
-      <div class="row">
-        <mq-fretboard-chord chord="F" class="red-dots"></mq-fretboard-chord>
-        <mq-fretboard-chord chord="F" class="green-dots"></mq-fretboard-chord>
-        <mq-fretboard-chord chord="F" class="purple-dots"></mq-fretboard-chord>
+      <div class="gallery">
+        <mq-fretboard-chord name="F" class="red-dots"></mq-fretboard-chord>
+        <mq-fretboard-chord name="F" class="green-dots"></mq-fretboard-chord>
+        <mq-fretboard-chord name="F" class="purple-dots"></mq-fretboard-chord>
       </div>
     </section>
 
