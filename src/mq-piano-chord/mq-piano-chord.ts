@@ -58,7 +58,7 @@ export class MqPianoChord extends LitElement {
               class="fill${black ? " black" : ""}"
             >
               ${this.noteLabels
-                ? html`<span class="label"
+                ? html`<span class="label" part="label"
                     >${note.replace(/\d+$/, "").replace("#", "♯").replace("b", "♭")}</span
                   >`
                 : nothing}
@@ -116,7 +116,6 @@ export class MqPianoChord extends LitElement {
       font-size: 0.55em;
       font-weight: bold;
       padding-bottom: 0.5em;
-      color: #fff;
     }
 
     .error {

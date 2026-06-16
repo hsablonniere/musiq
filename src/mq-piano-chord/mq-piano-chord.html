@@ -25,9 +25,13 @@
       mq-piano-chord::part(key-black) {
         background-color: #222222;
       }
-      /* Pressed keys ship unstyled too — the demo gives them a fill. */
+      /* Pressed keys ship unstyled too — the demo gives them a fill and a
+         readable label color. */
       mq-piano-chord::part(key-pressed) {
         background-color: #4a90d9;
+      }
+      mq-piano-chord::part(label) {
+        color: #fff;
       }
 
       .row mq-piano-chord {
@@ -221,6 +225,12 @@
           <tr>
             <td data-label="Part"><code>name</code></td>
             <td data-label="Description">Chord name heading above the keyboard</td>
+          </tr>
+          <tr>
+            <td data-label="Part"><code>label</code></td>
+            <td data-label="Description">
+              A note-name label on a pressed key (only with <code>note-labels</code>)
+            </td>
           </tr>
           <tr>
             <td data-label="Part"><code>key</code> <span class="ref">*</span></td>
