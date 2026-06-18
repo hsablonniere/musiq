@@ -60,7 +60,7 @@ Fretboard with chord diagram. Pass a chord name, get finger positions with open/
 
 ### `<mq-fretboard-scale>`
 
-Fretboard with scale visualization across the full neck. Custom tunings (drop D, ukulele…), configurable fret range, `note-labels`, `degree-labels`, and `left-handed`.
+Fretboard with scale visualization across the full neck. Custom tunings (drop D, ukulele…), configurable fret range, `note-labels`, `degree-labels`, octave-aware open-string `tuning-labels` (re-entrant strings shown lowercase), and `left-handed`.
 
 **[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-fretboard-scale/mq-fretboard-scale.html)**
 

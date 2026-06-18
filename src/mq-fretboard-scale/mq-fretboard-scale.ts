@@ -1,6 +1,7 @@
 import { css, html, LitElement, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { Note, Scale } from "tonal";
+import { assignOctaves } from "../utils.js";
 import "../mq-fretboard/mq-fretboard.js";
 
 interface ScaleDot {
@@ -19,6 +20,7 @@ export class MqFretboardScale extends LitElement {
   @property({ type: Number, attribute: "end-fret" }) accessor endFret: number = 12;
   @property({ type: Boolean, attribute: "note-labels" }) accessor noteLabels: boolean = false;
   @property({ type: Boolean, attribute: "degree-labels" }) accessor degreeLabels: boolean = false;
+  @property({ type: Boolean, attribute: "tuning-labels" }) accessor tuningLabels: boolean = false;
   @property({ type: Boolean, reflect: true, attribute: "left-handed" })
   accessor leftHanded: boolean = false;
   @property({
@@ -40,13 +42,22 @@ export class MqFretboardScale extends LitElement {
     const scaleChromas = scaleNotes.map((n) => Note.chroma(n)!);
     const rootChroma = scaleChromas[0];
 
-    const tuningPCs = this.tuning
-      .split(",")
-      .map((s) => s.trim());
+    const tuningPCs = this.tuning.split(",").map((s) => s.trim());
     const stringCount = tuningPCs.length;
 
     const fbStartFret = Math.max(1, this.startFret);
     const showOpen = this.startFret <= 0;
+
+    const hasOctaves = tuningPCs.some((pc) => /\d/.test(pc));
+    const openNotes = hasOctaves ? tuningPCs : assignOctaves(tuningPCs, 2);
+    const openMidi = openNotes.map((n) => Note.midi(n));
+    const isReentrant = (i: number): boolean => {
+      const here = openMidi[i];
+      const next = openMidi[i + 1];
+      return here != null && next != null && here > next;
+    };
+
+    const showTuningLabels = this.tuningLabels && showOpen;
 
     const dots: ScaleDot[] = [];
 
@@ -82,6 +93,7 @@ export class MqFretboardScale extends LitElement {
         exportparts="fret-number"
       >
         ${dots.map((d) => {
+          if (showTuningLabels && d.fret === 0) return nothing;
           const slotName = d.fret === 0 ? `s${d.string}-marker` : `s${d.string}-f${d.fret}`;
           return html`
             <div slot="${slotName}" class="dot${d.isRoot ? " root" : ""}" part="dot">
@@ -92,6 +104,31 @@ export class MqFretboardScale extends LitElement {
             </div>
           `;
         })}
+        ${showTuningLabels
+          ? openNotes.map((note, i) => {
+              const chroma = Note.chroma(note);
+              const scaleIndex = chroma == null ? -1 : scaleChromas.indexOf(chroma);
+              const inScale = scaleIndex >= 0;
+              const isRoot = chroma === rootChroma;
+              const reentrant = isReentrant(i);
+              const pc = Note.pitchClass(note).replace("#", "♯").replace("b", "♭");
+              const name = reentrant ? pc.toLowerCase() : pc;
+              const octave = Note.octave(note);
+              const classes = [
+                "tuning",
+                inScale ? "in-scale" : "",
+                isRoot ? "root" : "",
+                reentrant ? "reentrant" : "",
+              ]
+                .filter(Boolean)
+                .join(" ");
+              return html`
+                <div slot="s${i + 1}-marker" class="${classes}" part="tuning-label">
+                  ${name}${octave == null ? nothing : html`<span class="oct">${octave}</span>`}
+                </div>
+              `;
+            })
+          : nothing}
       </mq-fretboard>
     `;
   }
@@ -144,6 +181,48 @@ export class MqFretboardScale extends LitElement {
       font-size: 0.4em;
       color: rgba(255, 255, 255, 0.8);
       line-height: 1;
+    }
+
+    .tuning {
+      box-sizing: border-box;
+      width: 1.4em;
+      height: 1.4em;
+      border-radius: 50%;
+      border: 2px solid var(--mq-fretboard-scale-active-color, #2980b9);
+      background: transparent;
+      color: var(--mq-fretboard-scale-active-color, #2980b9);
+      margin: 0.2em 0.4em;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      font-family: system-ui, sans-serif;
+      font-size: 0.55em;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .tuning.in-scale {
+      background: var(--mq-fretboard-scale-active-color, #2980b9);
+      color: #fff;
+    }
+
+    .tuning.root {
+      border-color: var(--mq-fretboard-scale-root-color, #c0392b);
+      color: var(--mq-fretboard-scale-root-color, #c0392b);
+    }
+
+    .tuning.in-scale.root {
+      background: var(--mq-fretboard-scale-root-color, #c0392b);
+      color: #fff;
+    }
+
+    .tuning.reentrant {
+      font-style: italic;
+    }
+
+    .tuning .oct {
+      font-size: 0.7em;
+      font-weight: normal;
     }
 
     .error {
