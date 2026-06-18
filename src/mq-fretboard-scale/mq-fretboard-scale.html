@@ -183,9 +183,9 @@
     <header>
       <h1><code>&lt;mq-fretboard-scale&gt;</code></h1>
       <p>
-        Fretboard with scale visualization across the full neck. Custom tunings
-        (drop D, ukulele…), configurable fret range, <code>note-labels</code>,
-        <code>degree-labels</code>, and <code>left-handed</code>.
+        Fretboard with scale visualization across the full neck. Custom tunings (drop D, ukulele…),
+        configurable fret range, <code>note-labels</code>, <code>degree-labels</code>, and
+        <code>left-handed</code>.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
@@ -216,14 +216,26 @@
             <td><code>scale</code></td>
             <td><code>string</code></td>
             <td>—</td>
-            <td>Scale name (e.g. <code>"C major"</code>, <code>"A minor pentatonic"</code>, <code>"D dorian"</code>). See <a href="https://github.com/tonaljs/tonal/tree/main/packages/scale-type">tonal scale-type</a> for the full list of supported scales</td>
+            <td>
+              Scale name (e.g. <code>"C major"</code>, <code>"A minor pentatonic"</code>,
+              <code>"D dorian"</code>). See
+              <a href="https://github.com/tonaljs/tonal/tree/main/packages/scale-type"
+                >tonal scale-type</a
+              >
+              for the full list of supported scales
+            </td>
           </tr>
           <tr>
             <td><code>tuning</code></td>
             <td><code>tuning</code></td>
             <td><code>string</code></td>
             <td><code>'E,A,D,G,B,E'</code></td>
-            <td>Open string notes, comma-separated from low to high (e.g. <code>"D,A,D,G,B,E"</code> for drop D)</td>
+            <td>
+              Open string notes, comma-separated from low to high (e.g.
+              <code>"D,A,D,G,B,E"</code> for drop D). Notes may include an octave (e.g.
+              <code>"G4,C4,E4,A4"</code>) to describe re-entrant tunings for
+              <code>tuning-labels</code>
+            </td>
           </tr>
           <tr>
             <td><code>start-fret</code></td>
@@ -252,6 +264,16 @@
             <td><code>boolean</code></td>
             <td><code>false</code></td>
             <td>Show scale degree numbers on dots</td>
+          </tr>
+          <tr>
+            <td><code>tuning-labels</code></td>
+            <td><code>tuningLabels</code></td>
+            <td><code>boolean</code></td>
+            <td><code>false</code></td>
+            <td>
+              Label each open string with its note name at the nut, octave-aware; a re-entrant
+              string (tuned higher than the one above it) is shown lowercase
+            </td>
           </tr>
           <tr>
             <td><code>left-handed</code></td>
@@ -309,6 +331,10 @@
           <tr>
             <td><code>dot</code></td>
             <td>Scale note dots on the fretboard</td>
+          </tr>
+          <tr>
+            <td><code>tuning-label</code></td>
+            <td>Open-string note labels at the nut (when <code>tuning-labels</code> is set)</td>
           </tr>
           <tr>
             <td><code>fret-number</code></td>
@@ -401,8 +427,41 @@
     </section>
 
     <section>
+      <h2>Tuning labels</h2>
+      <p class="desc">
+        <code>tuning-labels</code> draws each open string's note name at the nut. Tuning notes may
+        include an octave (e.g. <code>"G4,C4,E4,A4"</code>); a string tuned higher than the one
+        above it — like the re-entrant high-<em>g</em> of a ukulele — is shown lowercase. Labels are
+        filled when the open note belongs to the scale.
+      </p>
+      <div class="row">
+        <div>
+          <mq-fretboard-scale
+            scale="C major"
+            tuning-labels
+            end-fret="5"
+            tuning="G4,C4,E4,A4"
+          ></mq-fretboard-scale>
+          <p class="caption">Re-entrant — <code>tuning="G4,C4,E4,A4"</code></p>
+        </div>
+        <div>
+          <mq-fretboard-scale
+            scale="C major"
+            tuning-labels
+            end-fret="5"
+            tuning="G3,C4,E4,A4"
+          ></mq-fretboard-scale>
+          <p class="caption">Low-G — <code>tuning="G3,C4,E4,A4"</code></p>
+        </div>
+      </div>
+    </section>
+
+    <section>
       <h2>Style — colors</h2>
-      <p class="desc">Customize via <code>--mq-fretboard-scale-active-color</code> and <code>--mq-fretboard-scale-root-color</code>.</p>
+      <p class="desc">
+        Customize via <code>--mq-fretboard-scale-active-color</code> and
+        <code>--mq-fretboard-scale-root-color</code>.
+      </p>
       <mq-fretboard-scale
         scale="C major"
         note-labels
