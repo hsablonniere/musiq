@@ -66,6 +66,14 @@ Fretboard with scale visualization across the full neck. Custom tunings (drop D,
 
 ![mq-fretboard-scale](src/mq-fretboard-scale/mq-fretboard-scale.png)
 
+### `<mq-ukulele-chord>`
+
+Ukulele chord diagram. A convenience wrapper around `<mq-fretboard-chord>` with the ukulele instrument and its standard 4-string tuning built in. Multiple voicings via `position`, `finger-labels`, and `left-handed`.
+
+**[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-ukulele-chord/mq-ukulele-chord.html)**
+
+![mq-ukulele-chord](src/mq-ukulele-chord/mq-ukulele-chord.png)
+
 ## License
 
 [MIT](./LICENSE)
