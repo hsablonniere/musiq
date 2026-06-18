@@ -11,6 +11,14 @@ interface ScaleDot {
   isRoot: boolean;
 }
 
+const TUNING_PRESETS: Record<string, string> = {
+  guitar: "E,A,D,G,B,E",
+  bass: "E,A,D,G",
+  "drop-d": "D,A,D,G,B,E",
+  ukulele: "G,C,E,A",
+  "ukulele-baritone": "D,G,B,E",
+};
+
 @customElement("mq-fretboard-scale")
 export class MqFretboardScale extends LitElement {
   @property() accessor scale: string = "";
@@ -40,9 +48,7 @@ export class MqFretboardScale extends LitElement {
     const scaleChromas = scaleNotes.map((n) => Note.chroma(n)!);
     const rootChroma = scaleChromas[0];
 
-    const tuningPCs = this.tuning
-      .split(",")
-      .map((s) => s.trim());
+    const tuningPCs = (TUNING_PRESETS[this.tuning] ?? this.tuning).split(",").map((s) => s.trim());
     const stringCount = tuningPCs.length;
 
     const fbStartFret = Math.max(1, this.startFret);
