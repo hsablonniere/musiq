@@ -15,6 +15,7 @@ export default defineConfig({
         'mq-fretboard/mq-fretboard': 'src/mq-fretboard/mq-fretboard.ts',
         'mq-fretboard-chord/mq-fretboard-chord': 'src/mq-fretboard-chord/mq-fretboard-chord.ts',
         'mq-fretboard-scale/mq-fretboard-scale': 'src/mq-fretboard-scale/mq-fretboard-scale.ts',
+        'mq-ukulele-chord/mq-ukulele-chord': 'src/mq-ukulele-chord/mq-ukulele-chord.ts',
       },
       formats: ['es'],
     },

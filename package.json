@@ -40,6 +40,11 @@
       "types": "./dist/mq-fretboard-scale/mq-fretboard-scale.d.ts",
       "import": "./dist/mq-fretboard-scale/mq-fretboard-scale.js",
       "default": "./dist/mq-fretboard-scale/mq-fretboard-scale.js"
+    },
+    "./mq-ukulele-chord": {
+      "types": "./dist/mq-ukulele-chord/mq-ukulele-chord.d.ts",
+      "import": "./dist/mq-ukulele-chord/mq-ukulele-chord.js",
+      "default": "./dist/mq-ukulele-chord/mq-ukulele-chord.js"
     }
   },
   "files": [
