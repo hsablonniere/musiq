@@ -189,6 +189,7 @@ export class MqFretboard extends LitElement {
 
     :host([orientation="vertical"]) .grid {
       display: inline-grid;
+      vertical-align: top;
     }
 
     slot {
