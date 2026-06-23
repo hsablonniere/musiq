@@ -40,7 +40,7 @@ Piano keyboard with scale visualization. Major, minor, pentatonic, blues, modes 
 
 **[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-piano-scale/mq-piano-scale.html)**
 
-![mq-piano-scale](src/mq-piano-scale/mq-piano-scale.png)
+<img src="src/mq-piano-scale/mq-piano-scale.png" alt="mq-piano-scale" height="180">
 
 ### `<mq-fretboard>`
 
