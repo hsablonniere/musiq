@@ -24,7 +24,7 @@ Piano keyboard with realistic key geometry. Configurable range, `accurate` or `c
 
 **[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-piano/mq-piano.html)**
 
-![mq-piano](src/mq-piano/mq-piano.png)
+<img src="src/mq-piano/mq-piano.png" alt="mq-piano" height="180">
 
 ### `<mq-piano-chord>`
 
@@ -32,7 +32,7 @@ Piano keyboard with chord visualization. Pass a chord name, get highlighted keys
 
 **[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-piano-chord/mq-piano-chord.html)**
 
-![mq-piano-chord](src/mq-piano-chord/mq-piano-chord.png)
+<img src="src/mq-piano-chord/mq-piano-chord.png" alt="mq-piano-chord" height="180">
 
 ### `<mq-piano-scale>`
 
