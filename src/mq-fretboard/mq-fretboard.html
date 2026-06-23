@@ -639,6 +639,79 @@
       ></mq-fretboard>
     </section>
 
+    <h2>Putting it all together</h2>
+
+    <section>
+      <p class="desc">
+        A fully themed <strong>D major</strong> open chord (D – F♯ – A) on a warm maple neck: dark
+        nut, amber inlays at the 3rd and 5th frets, fret numbers, the two roots singled out in red,
+        the open <code>D</code> contoured and the two low strings marked muted (<code>✕</code>)
+        before the nut — the structure themed through the <code>--mq-fretboard-*</code> custom
+        properties, the fret numbers through <code>::part(fret-number)</code>, the markers placed on
+        named slots.
+      </p>
+      <style>
+        .showcase {
+          --mq-fretboard-neck-color: #f3e2bb;
+          --mq-fretboard-nut-color: #3a322a;
+          --mq-fretboard-nut-width: 6px;
+          --mq-fretboard-nut-radius: 2px;
+          --mq-fretboard-fret-color: #a89a7e;
+          --mq-fretboard-string-color: #7d7468;
+          --mq-fretboard-string-width: 2px;
+          --mq-fretboard-inlay-color: #cbab6e;
+          --mq-fretboard-inlay-size: 9px;
+        }
+        .showcase::part(fret-number) {
+          color: #7a6a4a;
+          font-weight: 700;
+        }
+        .showcase .dot {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 1.6em;
+          height: 1.6em;
+          margin: 0.15em;
+          border-radius: 50%;
+          background: #2980b9;
+          color: #fff;
+          font-weight: 700;
+          font-size: 0.9em;
+        }
+        .showcase .dot.root {
+          background: #c0392b;
+        }
+        /* Open and muted strings: hollow rings before the nut. */
+        .showcase .dot.open,
+        .showcase .dot.muted {
+          background: none;
+          border: 2px solid #6b5d45;
+          color: #6b5d45;
+        }
+        .showcase .dot.open.root {
+          border-color: #c0392b;
+          color: #c0392b;
+        }
+        .showcase .dot.muted {
+          border-style: dashed;
+          opacity: 0.7;
+        }
+      </style>
+      <mq-fretboard class="showcase" end-fret="5" fret-numbers="3,5" inlays>
+        <span slot="s6-marker" class="dot muted">✕</span>
+        <span slot="s5-marker" class="dot muted">✕</span>
+        <span slot="s4-marker" class="dot open root">D</span>
+        <span slot="s3-f2" class="dot">A</span>
+        <span slot="s2-f3" class="dot root">D</span>
+        <span slot="s1-f2" class="dot">F♯</span>
+      </mq-fretboard>
+      <p class="caption">
+        D major (x x 0 2 3 2) · roots in red · open <code>○</code> and muted <code>✕</code> before
+        the nut
+      </p>
+    </section>
+
     <footer><code>&lt;mq-fretboard&gt;</code> · musique</footer>
   </body>
 </html>
