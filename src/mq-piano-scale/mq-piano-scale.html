@@ -4,181 +4,93 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>&lt;mq-piano-scale&gt; — demo</title>
+
+    <!-- Shared page chrome (layout, typography, API tables, responsive). -->
+    <link rel="stylesheet" href="../demo.css" />
+
+    <!-- mq-piano-scale ships unstyled; this base theme colors the keyboard and the
+         scale keys. Scale rules come AFTER the inactive ones, and key-tonic AFTER
+         key-in-scale: a marker reuses its key's parts, and ::part() adds no
+         per-ident specificity, so source order decides. Per-example overrides further down. -->
     <style>
-      :root {
-        --bg: #fafaf8;
-        --fg: #1a1a1a;
-        --muted: #6b6b6b;
-        --accent: #27ae60;
-        --card: #fff;
-        --line: #e6e6e2;
+      mq-piano-scale {
+        --mq-piano-border-color: #d0d0d0;
+        --mq-piano-border-color-outer: #b0b0b0;
+        --mq-piano-border-width: 1px;
       }
 
-      * {
-        box-sizing: border-box;
+      /* Inactive keys. */
+      mq-piano-scale::part(key-white) {
+        background: #fafafa;
+      }
+      mq-piano-scale::part(key-black) {
+        background: #222;
       }
 
-      body {
+      /* Scale keys — one color for all, a darker shade for blacks. font-size sits
+         on the marker (cqi, proportional to the keyboard) so the labels inherit it:
+         bigger on the wide white keys, smaller on the narrow black ones. */
+      mq-piano-scale::part(key-in-scale) {
+        background: #27ae60;
+        color: #fff;
+      }
+      mq-piano-scale::part(key-white key-in-scale) {
+        font-size: 4cqi;
+      }
+      mq-piano-scale::part(key-black key-in-scale) {
+        background: #1e8449;
+        font-size: 2.4cqi;
+      }
+      /* Tonic — declared AFTER key-in-scale so it wins (source order, no specificity). */
+      mq-piano-scale::part(key-tonic) {
+        background: #145a32;
+      }
+
+      /* Labels and degrees (font-size AND color inherited from the marker above). */
+      mq-piano-scale::part(label) {
         font-family: system-ui, sans-serif;
-        line-height: 1.6;
-        background: var(--bg);
-        color: var(--fg);
-        margin: 0 auto;
-        padding: 3rem 2rem 6rem;
-        max-width: 80rem;
+        font-weight: bold;
       }
-
-      header {
-        border-bottom: 2px solid var(--fg);
-        margin-bottom: 3rem;
-        padding-bottom: 1.5rem;
+      mq-piano-scale::part(degree) {
+        font-family: system-ui, sans-serif;
+        font-size: 0.8em;
+        opacity: 0.8;
+        padding-bottom: 0.3em;
       }
-
-      h1 {
-        font-size: 2.4rem;
-        margin: 0 0 0.25rem;
+      mq-piano-scale::part(name) {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 0.4rem;
+        font-family: system-ui, sans-serif;
       }
-
-      h1 code {
-        background: var(--fg);
-        color: var(--bg);
-        padding: 0.1em 0.3em;
-        border-radius: 4px;
-      }
-
-      header p {
-        color: var(--muted);
-        margin: 0.5rem 0 0;
-      }
-
-      header a {
+      mq-piano-scale::part(error) {
         color: var(--accent);
       }
 
-      section {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 1.75rem 2rem 2rem;
-        margin-bottom: 2rem;
-      }
-
-      h2 {
-        font-size: 1.05rem;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
+      /* API footnote marker — same accent as the section subtitles (h3). */
+      .ref {
         color: var(--accent);
-        margin: 0 0 0.4rem;
       }
 
-      h3 {
-        font-size: 1.4rem;
-        margin: 0 0 0.5rem;
+      /* Per-example scale-color overrides (key-tonic after key-in-scale). */
+      .scale-red::part(key-in-scale) {
+        background: #c0392b;
       }
-
-      .desc {
-        color: var(--muted);
-        margin: 0 0 1.5rem;
-        max-width: 46rem;
+      .scale-red::part(key-tonic) {
+        background: #7d2419;
       }
-
-      .desc code,
-      .api code,
-      h2 code,
-      footer code {
-        background: #f0f0ec;
-        padding: 0.1em 0.35em;
-        border-radius: 4px;
-        font-size: 0.88em;
-        color: var(--fg);
+      .scale-blue::part(key-in-scale) {
+        background: #3578c0;
       }
-
-      .row {
-        display: flex;
-        gap: 1.5rem;
-        flex-wrap: wrap;
+      .scale-blue::part(key-tonic) {
+        background: #1f4e80;
       }
-
-      .row > * {
-        flex: 1;
-        min-width: 200px;
+      .scale-purple::part(key-in-scale) {
+        background: #8e44ad;
       }
-
-      .row mq-piano-scale {
-        height: 200px;
-      }
-
-      .caption {
-        font-size: 0.85rem;
-        color: var(--muted);
-        margin: 0.6rem 0 0;
-        text-align: center;
-      }
-
-      footer {
-        color: var(--muted);
-        font-size: 0.85rem;
-        text-align: center;
-        margin-top: 4rem;
-      }
-
-      .api h3 {
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--muted);
-        margin: 1.5rem 0 0.4rem;
-      }
-
-      .api h3:first-of-type {
-        margin-top: 0.25rem;
-      }
-
-      .api table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.88rem;
-      }
-
-      .api th {
-        text-align: left;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--muted);
-        border-bottom: 2px solid var(--line);
-        padding: 0.3rem 0.75rem 0.3rem 0;
-        font-weight: 600;
-      }
-
-      .api td {
-        padding: 0.3rem 0.75rem 0.3rem 0;
-        border-bottom: 1px solid var(--line);
-        vertical-align: top;
-      }
-
-      .api .swatch {
-        display: inline-block;
-        width: 1em;
-        height: 1em;
-        border-radius: 2px;
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        vertical-align: baseline;
-        margin-right: 0.3em;
-      }
-
-      pre {
-        background: #f0f0ec;
-        padding: 0.75rem 1rem;
-        border-radius: 6px;
-        overflow-x: auto;
-        font-size: 0.88rem;
-        margin: 0.5rem 0;
-      }
-
-      pre code {
-        background: none;
-        padding: 0;
+      .scale-purple::part(key-tonic) {
+        background: #5b2c6f;
       }
     </style>
     <script type="module" src="./mq-piano-scale.ts"></script>
@@ -187,22 +99,22 @@
     <header>
       <h1><code>&lt;mq-piano-scale&gt;</code></h1>
       <p>
-        Piano keyboard with scale visualization. Major, minor, pentatonic, blues,
-        modes (dorian, phrygian, lydian…), and more. Distinct root color,
-        <code>note-labels</code>, and <code>degree-labels</code>.
+        Piano keyboard with scale visualization. Pass a scale name, get its notes highlighted across
+        one octave (the tonic repeated at the top). Supports any tonal scale and optional
+        <code>note-labels</code> / <code>degree-labels</code>. Ships unstyled — theme the keyboard,
+        the scale keys, and the tonic via <code>::part()</code>.
       </p>
       <p><a href="../../">← Back to index</a></p>
     </header>
 
+    <h2>Install</h2>
     <section>
-      <h2>Install</h2>
       <pre><code>npm install @hsablonniere/musiq</code></pre>
       <pre><code>import '@hsablonniere/musiq/mq-piano-scale';</code></pre>
     </section>
 
+    <h2>API</h2>
     <section class="api">
-      <h2>API</h2>
-
       <h3>Attributes / Properties</h3>
       <table>
         <thead>
@@ -216,53 +128,156 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>scale</code></td>
-            <td><code>scale</code></td>
-            <td><code>string</code></td>
-            <td>—</td>
-            <td>Scale name (e.g. <code>"C major"</code>, <code>"A minor pentatonic"</code>, <code>"D dorian"</code>). See <a href="https://github.com/tonaljs/tonal/tree/main/packages/scale-type">tonal scale-type</a> for the full list of supported scales</td>
+            <td data-label="Attribute"><code>name</code></td>
+            <td data-label="Property"><code>name</code></td>
+            <td data-label="Type"><code>string</code></td>
+            <td data-label="Default">—</td>
+            <td data-label="Description">
+              Scale name (e.g. <code>"C major"</code>, <code>"A minor pentatonic"</code>,
+              <code>"D dorian"</code>). See
+              <a
+                href="https://github.com/tonaljs/tonal/tree/main/packages/scale-type"
+                target="_blank"
+                rel="noreferrer"
+                >tonal scale-type</a
+              >
+              for the full list of supported scales
+            </td>
           </tr>
           <tr>
-            <td><code>note-labels</code></td>
-            <td><code>noteLabels</code></td>
-            <td><code>boolean</code></td>
-            <td><code>false</code></td>
-            <td>Show note names on active keys</td>
+            <td data-label="Attribute"><code>note-labels</code></td>
+            <td data-label="Property"><code>noteLabels</code></td>
+            <td data-label="Type"><code>boolean</code></td>
+            <td data-label="Default"><code>false</code></td>
+            <td data-label="Description">
+              Show note names on scale keys (English notation: A, B, C, D, E, F, G)
+            </td>
           </tr>
           <tr>
-            <td><code>degree-labels</code></td>
-            <td><code>degreeLabels</code></td>
-            <td><code>boolean</code></td>
-            <td><code>false</code></td>
-            <td>Show scale degree numbers (1–7) on active keys</td>
+            <td data-label="Attribute"><code>degree-labels</code></td>
+            <td data-label="Property"><code>degreeLabels</code></td>
+            <td data-label="Type"><code>boolean</code></td>
+            <td data-label="Default"><code>false</code></td>
+            <td data-label="Description">
+              Show scale-degree numbers (1–7) on scale keys; the tonic repeats as 1
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Attribute"><code>mode</code> <span class="ref">*</span></td>
+            <td data-label="Property"><code>mode</code></td>
+            <td data-label="Type"><code>'accurate' | 'centered'</code></td>
+            <td data-label="Default"><code>accurate</code></td>
+            <td data-label="Description">
+              Black key positioning: <code>accurate</code> uses real piano geometry,
+              <code>centered</code> centers them between white keys
+            </td>
           </tr>
         </tbody>
       </table>
+      <p class="desc" style="margin-top: 0.75rem">
+        <span class="ref">*</span> forwarded to the inner <code>mq-piano</code>.
+      </p>
+    </section>
 
+    <section class="api">
       <h3>CSS Custom Properties</h3>
       <table>
         <thead>
           <tr>
             <th>Property</th>
+            <th>Type</th>
             <th>Default</th>
             <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><code>--mq-piano-scale-active-color</code></td>
-            <td><span class="swatch" style="background: #27ae60"></span><code>#27ae60</code></td>
-            <td>Fill color for scale note keys</td>
+            <td data-label="Property">
+              <code>--mq-piano-black-key-height</code> <span class="ref">*</span>
+            </td>
+            <td data-label="Type"><code>&lt;percentage&gt;</code></td>
+            <td data-label="Default"><code>64%</code></td>
+            <td data-label="Description">
+              Black-key height as a fraction of the full key height: <code>100%</code> spans the
+              whole keyboard, <code>0%</code> hides them. Defaults to real piano proportions
+            </td>
           </tr>
           <tr>
-            <td><code>--mq-piano-scale-root-color</code></td>
-            <td><span class="swatch" style="background: #1e8449"></span><code>#1e8449</code></td>
-            <td>Fill color for root note keys</td>
+            <td data-label="Property">
+              <code>--mq-piano-border-color</code> <span class="ref">*</span>
+            </td>
+            <td data-label="Type"><code>&lt;color&gt;</code></td>
+            <td data-label="Default"><code>transparent</code></td>
+            <td data-label="Description">Base color for all borders (outer + inner)</td>
+          </tr>
+          <tr>
+            <td data-label="Property">
+              <code>--mq-piano-border-width</code> <span class="ref">*</span>
+            </td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default"><code>1px</code></td>
+            <td data-label="Description">Base width for all borders (outer + inner)</td>
+          </tr>
+          <tr>
+            <td data-label="Property">
+              <code>--mq-piano-border-color-outer</code> <span class="ref">*</span>
+            </td>
+            <td data-label="Type"><code>&lt;color&gt;</code></td>
+            <td data-label="Default">falls back to <code>border-color</code></td>
+            <td data-label="Description">Color of the outer border around the keyboard</td>
+          </tr>
+          <tr>
+            <td data-label="Property">
+              <code>--mq-piano-border-color-inner</code> <span class="ref">*</span>
+            </td>
+            <td data-label="Type"><code>&lt;color&gt;</code></td>
+            <td data-label="Default">falls back to <code>border-color</code></td>
+            <td data-label="Description">Color of borders between keys</td>
+          </tr>
+          <tr>
+            <td data-label="Property">
+              <code>--mq-piano-border-width-outer</code> <span class="ref">*</span>
+            </td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default">falls back to <code>border-width</code></td>
+            <td data-label="Description">Width of the outer border around the keyboard</td>
+          </tr>
+          <tr>
+            <td data-label="Property">
+              <code>--mq-piano-border-width-inner</code> <span class="ref">*</span>
+            </td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default">falls back to <code>border-width</code></td>
+            <td data-label="Description">Width of borders between keys</td>
+          </tr>
+          <tr>
+            <td data-label="Property">
+              <code>--mq-piano-border-radius</code> <span class="ref">*</span>
+            </td>
+            <td data-label="Type"><code>&lt;length&gt;</code></td>
+            <td data-label="Default"><code>0</code></td>
+            <td data-label="Description">
+              Corner radius of the keyboard frame; the corner keys are clipped to match (<code
+                >overflow: clip</code
+              >)
+            </td>
           </tr>
         </tbody>
       </table>
+      <p class="desc" style="margin-top: 0.75rem">
+        <span class="ref">*</span> consumed by the inner <code>mq-piano</code> — custom properties
+        inherit through the shadow boundary.
+      </p>
+    </section>
 
+    <section class="api">
       <h3>CSS Parts</h3>
+      <p class="desc">
+        This component is unstyled. Theme inactive keys with the <code>key-*</code> /
+        <code>note-*</code> parts, and scale keys by combining <code>key-in-scale</code> (and
+        <code>key-tonic</code> for the root) with any of them — <code>::part()</code> matches an
+        element carrying <em>all</em> the listed names, in any order.
+      </p>
       <table>
         <thead>
           <tr>
@@ -272,110 +287,450 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>title</code></td>
-            <td>Scale name heading above the keyboard</td>
+            <td data-label="Part"><code>name</code></td>
+            <td data-label="Description">Scale name heading above the keyboard</td>
           </tr>
           <tr>
-            <td><code>key</code></td>
-            <td>All keys (forwarded from <code>mq-piano</code>)</td>
+            <td data-label="Part"><code>label</code></td>
+            <td data-label="Description">
+              Note-name label on a scale key (with <code>note-labels</code>)
+            </td>
           </tr>
           <tr>
-            <td><code>key-white</code></td>
-            <td>White keys (forwarded from <code>mq-piano</code>)</td>
+            <td data-label="Part"><code>degree</code></td>
+            <td data-label="Description">
+              Scale-degree number on a scale key (with <code>degree-labels</code>)
+            </td>
           </tr>
           <tr>
-            <td><code>key-black</code></td>
-            <td>Black keys (forwarded from <code>mq-piano</code>)</td>
+            <td data-label="Part"><code>error</code></td>
+            <td data-label="Description">Fallback shown for an unknown scale</td>
+          </tr>
+          <tr>
+            <td data-label="Part"><code>key</code> <span class="ref">*</span></td>
+            <td data-label="Description">All keys, white and black</td>
+          </tr>
+          <tr>
+            <td data-label="Part"><code>key-white</code> <span class="ref">*</span></td>
+            <td data-label="Description">White keys only</td>
+          </tr>
+          <tr>
+            <td data-label="Part"><code>key-black</code> <span class="ref">*</span></td>
+            <td data-label="Description">Black keys only</td>
+          </tr>
+          <tr>
+            <td data-label="Part">
+              <code>note-c</code> … <code>note-b</code> <span class="ref">*</span>
+            </td>
+            <td data-label="Description">
+              White keys by pitch-class, octave-agnostic: <code>note-c</code>, <code>note-d</code>,
+              <code>note-e</code>, <code>note-f</code>, <code>note-g</code>, <code>note-a</code>,
+              <code>note-b</code>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Part">
+              <code>note-cs</code>/<code>note-db</code> … <span class="ref">*</span>
+            </td>
+            <td data-label="Description">
+              Black keys by pitch-class, both enharmonic aliases exposed:
+              <code>note-cs</code>/<code>note-db</code>, <code>note-ds</code>/<code>note-eb</code>,
+              <code>note-fs</code>/<code>note-gb</code>, <code>note-gs</code>/<code>note-ab</code>,
+              <code>note-as</code>/<code>note-bb</code>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Part">
+              <code>note-c4</code>, <code>note-fs4</code> … <span class="ref">*</span>
+            </td>
+            <td data-label="Description">
+              A single key by absolute pitch. Black keys expose both enharmonic names:
+              <code>note-cs4</code>/<code>note-db4</code>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Part"><code>key-in-scale</code></td>
+            <td data-label="Description">
+              Marker covering a key that belongs to the scale. Combine it with any key part:
+              <code>::part(key-in-scale)</code> (all), <code>::part(key-white key-in-scale)</code>,
+              <code>::part(key-black key-in-scale)</code>, <code>::part(note-c key-in-scale)</code>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Part"><code>key-tonic</code></td>
+            <td data-label="Description">
+              Marker covering the tonic — it also carries <code>key-in-scale</code>, so
+              <code>::part(key-tonic)</code> singles out the root. Declare its rules after
+              <code>key-in-scale</code> to win (source order decides)
+            </td>
           </tr>
         </tbody>
       </table>
+      <p class="desc" style="margin-top: 0.75rem">
+        <span class="ref">*</span> exported from the inner <code>mq-piano</code> (via
+        <code>exportparts</code>).
+      </p>
     </section>
 
-    <section>
-      <h2>Basic — major & minor scales</h2>
-      <div class="row">
-        <mq-piano-scale scale="C major"></mq-piano-scale>
-        <mq-piano-scale scale="G major"></mq-piano-scale>
-        <mq-piano-scale scale="A minor"></mq-piano-scale>
-      </div>
-    </section>
+    <h2>Name</h2>
 
     <section>
-      <h2>Note labels</h2>
-      <p class="desc">Display note names on active keys with the <code>note-labels</code> attribute.</p>
-      <div class="row">
-        <mq-piano-scale scale="Bb major" note-labels></mq-piano-scale>
-        <mq-piano-scale scale="F# minor" note-labels></mq-piano-scale>
-        <mq-piano-scale scale="Eb major" note-labels></mq-piano-scale>
-      </div>
-    </section>
-
-    <section>
-      <h2>Degree labels</h2>
-      <p class="desc">Show scale degree numbers with the <code>degree-labels</code> attribute.</p>
-      <div class="row">
-        <mq-piano-scale scale="C major" degree-labels></mq-piano-scale>
-        <mq-piano-scale scale="A minor" degree-labels note-labels></mq-piano-scale>
-      </div>
-    </section>
-
-    <section>
-      <h2>Modes</h2>
-      <p class="desc">Church modes from C</p>
+      <h3>Major &amp; minor</h3>
+      <p class="desc">
+        <code>name</code> accepts any scale
+        <a
+          href="https://tonaljs.github.io/tonal/docs/groups/scales"
+          target="_blank"
+          rel="noreferrer"
+          >tonal</a
+        >
+        understands.
+      </p>
       <div class="row">
         <div>
-          <mq-piano-scale scale="D dorian" note-labels></mq-piano-scale>
-          <p class="caption">Dorian</p>
+          <mq-piano-scale name="C major"></mq-piano-scale>
+          <p class="caption">major</p>
         </div>
         <div>
-          <mq-piano-scale scale="E phrygian" note-labels></mq-piano-scale>
-          <p class="caption">Phrygian</p>
+          <mq-piano-scale name="G major"></mq-piano-scale>
+          <p class="caption">major</p>
         </div>
         <div>
-          <mq-piano-scale scale="F lydian" note-labels></mq-piano-scale>
-          <p class="caption">Lydian</p>
+          <mq-piano-scale name="A minor"></mq-piano-scale>
+          <p class="caption">natural minor</p>
         </div>
       </div>
     </section>
 
     <section>
-      <h2>Exotic scales</h2>
-      <p class="desc">Pentatonic, blues, whole tone.</p>
+      <h3>Modes</h3>
+      <p class="desc">The church modes — same white keys, a different tonic each time.</p>
       <div class="row">
         <div>
-          <mq-piano-scale scale="C major pentatonic" note-labels></mq-piano-scale>
-          <p class="caption">Major pentatonic</p>
+          <mq-piano-scale name="D dorian" note-labels></mq-piano-scale>
+          <p class="caption">dorian</p>
         </div>
         <div>
-          <mq-piano-scale scale="A blues" note-labels></mq-piano-scale>
-          <p class="caption">Blues</p>
+          <mq-piano-scale name="E phrygian" note-labels></mq-piano-scale>
+          <p class="caption">phrygian</p>
         </div>
         <div>
-          <mq-piano-scale scale="C whole tone" note-labels></mq-piano-scale>
-          <p class="caption">Whole tone</p>
+          <mq-piano-scale name="F lydian" note-labels></mq-piano-scale>
+          <p class="caption">lydian</p>
         </div>
       </div>
     </section>
 
     <section>
-      <h2>Style — active color</h2>
-      <p class="desc">Customize via <code>--mq-piano-scale-active-color</code> and <code>--mq-piano-scale-root-color</code>.</p>
+      <h3>Exotic</h3>
+      <p class="desc">Pentatonic, blues, whole tone, and beyond.</p>
       <div class="row">
-        <mq-piano-scale
-          scale="C major"
-          style="--mq-piano-scale-active-color: #c0392b; --mq-piano-scale-root-color: #962d22"
-        ></mq-piano-scale>
-        <mq-piano-scale
-          scale="C major"
-          style="--mq-piano-scale-active-color: #4a90d9; --mq-piano-scale-root-color: #2c5f8a"
-        ></mq-piano-scale>
-        <mq-piano-scale
-          scale="C major"
-          style="--mq-piano-scale-active-color: #8e44ad; --mq-piano-scale-root-color: #6c3483"
-        ></mq-piano-scale>
+        <div>
+          <mq-piano-scale name="C major pentatonic" note-labels></mq-piano-scale>
+          <p class="caption">major pentatonic</p>
+        </div>
+        <div>
+          <mq-piano-scale name="A blues" note-labels></mq-piano-scale>
+          <p class="caption">blues</p>
+        </div>
+        <div>
+          <mq-piano-scale name="C whole tone" note-labels></mq-piano-scale>
+          <p class="caption">whole tone</p>
+        </div>
       </div>
     </section>
 
-    <footer><code>&lt;mq-piano-scale&gt;</code> · musique</footer>
+    <h2>Note labels</h2>
+
+    <section>
+      <h3>Note names</h3>
+      <p class="desc">
+        The <code>note-labels</code> attribute prints each note's name on its scale key — style them
+        with <code>::part(label)</code>.
+      </p>
+      <div class="row">
+        <div>
+          <mq-piano-scale name="Bb major" note-labels></mq-piano-scale>
+          <p class="caption">B♭ major</p>
+        </div>
+        <div>
+          <mq-piano-scale name="F# minor" note-labels></mq-piano-scale>
+          <p class="caption">F♯ minor</p>
+        </div>
+        <div>
+          <mq-piano-scale name="Eb major" note-labels></mq-piano-scale>
+          <p class="caption">E♭ major</p>
+        </div>
+      </div>
+    </section>
+
+    <h2>Degree labels</h2>
+
+    <section>
+      <h3>Scale degrees</h3>
+      <p class="desc">
+        <code>degree-labels</code> numbers each note 1–7 by its position in the scale (the tonic
+        repeats as 1) — style them with <code>::part(degree)</code>. Combine with
+        <code>note-labels</code> to show both.
+      </p>
+      <div class="row">
+        <div>
+          <mq-piano-scale name="C major" degree-labels></mq-piano-scale>
+          <p class="caption">degrees only</p>
+        </div>
+        <div>
+          <mq-piano-scale name="A minor" degree-labels></mq-piano-scale>
+          <p class="caption">degrees only</p>
+        </div>
+        <div>
+          <mq-piano-scale name="A minor" degree-labels note-labels></mq-piano-scale>
+          <p class="caption">degrees + note names</p>
+        </div>
+      </div>
+    </section>
+
+    <h2>Mode</h2>
+
+    <section>
+      <h3><code>accurate</code> vs <code>centered</code></h3>
+      <p class="desc">
+        <code>mode</code> is forwarded to <code>mq-piano</code>. The default
+        <code>accurate</code> uses real piano geometry; <code>centered</code> evens out the white
+        keys with the black keys centered between them.
+      </p>
+      <div class="row">
+        <div>
+          <mq-piano-scale name="Eb major" note-labels></mq-piano-scale>
+          <p class="caption"><code>mode="accurate"</code> (default)</p>
+        </div>
+        <div>
+          <mq-piano-scale name="Eb major" mode="centered" note-labels></mq-piano-scale>
+          <p class="caption"><code>mode="centered"</code></p>
+        </div>
+      </div>
+    </section>
+
+    <h2>Style</h2>
+
+    <section>
+      <h3>Scale keys — <code>::part(key-in-scale)</code></h3>
+      <p class="desc">
+        The marker over each scale note is the part unique to this component. Recolor every scale
+        key with <code>::part(key-in-scale)</code> (the tonic override rides along).
+      </p>
+      <div class="row">
+        <mq-piano-scale class="scale-red" name="C major"></mq-piano-scale>
+        <mq-piano-scale class="scale-blue" name="C major"></mq-piano-scale>
+        <mq-piano-scale class="scale-purple" name="C major"></mq-piano-scale>
+      </div>
+    </section>
+
+    <section>
+      <h3>Single out the tonic — <code>::part(key-tonic)</code></h3>
+      <p class="desc">
+        Every scale key carries <code>key-in-scale</code>; the tonic carries
+        <code>key-tonic</code> on top. Style <code>key-in-scale</code> first, then
+        <code>key-tonic</code> after it (source order wins — <code>::part()</code> adds no
+        specificity) to make the root stand out.
+      </p>
+      <style>
+        .tonic-demo::part(key-in-scale) {
+          background: #9b59b6;
+        }
+        /* Declared after key-in-scale, so the tonic stands out. */
+        .tonic-demo::part(key-tonic) {
+          background: #e67e22;
+        }
+      </style>
+      <div class="row">
+        <div>
+          <mq-piano-scale class="tonic-demo" name="C major" note-labels></mq-piano-scale>
+          <p class="caption">tonic <code>C</code> in orange</p>
+        </div>
+        <div>
+          <mq-piano-scale class="tonic-demo" name="A minor" note-labels></mq-piano-scale>
+          <p class="caption">tonic <code>A</code> in orange</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3>Target white, black, or a single note</h3>
+      <p class="desc">
+        <code>::part()</code> matches an element carrying <em>all</em> the listed names, so
+        combining <code>key-in-scale</code> with a key part reaches a subset: white vs black, or a
+        single pitch-class.
+      </p>
+      <style>
+        /* Distinct shades for white and black scale keys. */
+        .split::part(key-white key-in-scale) {
+          background: #e9b949;
+          color: #1a1a1a;
+        }
+        .split::part(key-black key-in-scale) {
+          background: #0f7a64;
+        }
+        /* Tint every C, then layer a marker on the in-scale one. note-c keeps
+           painting the background, so the highlighted C stays in the family. */
+        .root-c::part(note-c) {
+          background: #f6d6d0;
+        }
+        .root-c::part(note-c key-in-scale) {
+          color: #1a1a1a;
+          text-decoration: underline 0.15em #c0392b;
+          text-underline-offset: 0.15em;
+        }
+      </style>
+      <div class="row">
+        <div>
+          <mq-piano-scale class="split" name="F# minor" note-labels></mq-piano-scale>
+          <p class="caption">
+            <code>::part(key-white key-in-scale)</code> ·
+            <code>::part(key-black key-in-scale)</code>
+          </p>
+        </div>
+        <div>
+          <mq-piano-scale class="root-c" name="C major" note-labels></mq-piano-scale>
+          <p class="caption">
+            <code>::part(note-c)</code> tints both C · <code>::part(note-c key-in-scale)</code>
+            underlines the tonic
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3>Labels &amp; degrees — <code>::part(label)</code> / <code>::part(degree)</code></h3>
+      <p class="desc">
+        <code>note-labels</code> adds a <code>::part(label)</code> and <code>degree-labels</code> a
+        <code>::part(degree)</code> on each scale key — style them independently.
+      </p>
+      <style>
+        .theory::part(label) {
+          font-weight: bold;
+        }
+        .theory::part(degree) {
+          font-size: 0.75em;
+          opacity: 0.7;
+        }
+      </style>
+      <div class="row">
+        <div>
+          <mq-piano-scale class="theory" name="C major" note-labels degree-labels></mq-piano-scale>
+          <p class="caption">major, degree by degree</p>
+        </div>
+        <div>
+          <mq-piano-scale class="theory" name="D dorian" note-labels degree-labels></mq-piano-scale>
+          <p class="caption">the dorian mode</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3>Scale name — <code>::part(name)</code></h3>
+      <p class="desc">
+        The scale <code>name</code> above the keyboard is this component's own part, styled
+        independently of the keys — same component, two styles.
+      </p>
+      <style>
+        /* Style 1 — centered accent pill. */
+        .name-pill::part(name) {
+          width: fit-content;
+          margin: 0 auto 0.5rem;
+          padding: 0.1em 0.7em;
+          border-radius: 999px;
+          background: var(--accent);
+          color: #fff;
+          font:
+            600 0.9rem system-ui,
+            sans-serif;
+          letter-spacing: 0.02em;
+        }
+        /* Style 2 — left-aligned tag with an accent underline. */
+        .name-underline::part(name) {
+          width: fit-content;
+          margin: 0 0 0.5rem;
+          padding-bottom: 0.12em;
+          border-bottom: 3px solid var(--accent);
+          color: #1a1a1a;
+          text-align: left;
+          font:
+            700 1.1rem system-ui,
+            sans-serif;
+        }
+      </style>
+      <div class="row">
+        <div>
+          <mq-piano-scale class="name-pill" name="C major"></mq-piano-scale>
+          <p class="caption">Accent pill, centered</p>
+        </div>
+        <div>
+          <mq-piano-scale class="name-underline" name="A minor"></mq-piano-scale>
+          <p class="caption">Underlined tag, left-aligned</p>
+        </div>
+      </div>
+    </section>
+
+    <h2>Putting it all together</h2>
+
+    <section>
+      <p class="desc">
+        A fully themed <strong>B♭ major</strong> (B♭ – C – D – E♭ – F – G – A): dark frame, classic
+        black-and-white keys, green scale markers (a darker shade on the black keys), the tonic
+        <code>B♭</code> singled out, note names, scale degrees, and a pill heading — every layer
+        reached through <code>::part()</code>.
+      </p>
+      <style>
+        .showcase {
+          --mq-piano-border-radius: 0.5em;
+          --mq-piano-border-color: #d6d6d6;
+          --mq-piano-border-color-outer: #111;
+          --mq-piano-border-width-outer: 2px;
+        }
+        .showcase::part(key-white) {
+          background: #fff;
+        }
+        .showcase::part(key-black) {
+          background: #161616;
+          border-radius: 0 0 0.4cqi 0.4cqi;
+        }
+        /* Scale keys: green on white, a deeper shade on the narrow black keys. */
+        .showcase::part(key-white key-in-scale) {
+          background: #2e8b57;
+          font-size: 4cqi;
+        }
+        .showcase::part(key-black key-in-scale) {
+          background: #1d6b40;
+          border-radius: 0 0 0.4cqi 0.4cqi;
+          font-size: 2.4cqi;
+        }
+        /* Single out the tonic (declared last so it wins over key-in-scale). */
+        .showcase::part(key-tonic) {
+          background: #e67e22;
+        }
+        .showcase::part(label) {
+          font-weight: bold;
+        }
+        .showcase::part(degree) {
+          font-size: 0.75em;
+          opacity: 0.85;
+        }
+        .showcase::part(name) {
+          width: fit-content;
+          margin: 0 auto 0.6rem;
+          padding: 0.12em 0.8em;
+          border-radius: 999px;
+          background: #111;
+          color: #fff;
+          font:
+            700 1rem system-ui,
+            sans-serif;
+          letter-spacing: 0.04em;
+        }
+      </style>
+      <mq-piano-scale class="showcase" name="Bb major" note-labels degree-labels></mq-piano-scale>
+    </section>
+
+    <footer><code>&lt;mq-piano-scale&gt;</code> · musiq</footer>
   </body>
 </html>

@@ -20,31 +20,31 @@ import '@hsablonniere/musiq';
 
 ### `<mq-piano>`
 
-Piano keyboard with realistic key geometry. Configurable range, `accurate` or `centered` black key positioning, `preserve-ratio` for real-world proportions. Stylable via `::part()` and CSS custom properties. Named slots (`note-C3`, `note-Fs4`…) for per-key annotations.
+Piano keyboard with realistic key geometry. Configurable range, `accurate` or `centered` black key positioning, always locked to real piano proportions. **Ships unstyled** — fully themeable via `::part()` and CSS custom properties. Named slots (`note-C3`, `note-Fs4`…) for per-key annotations.
 
 **[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-piano/mq-piano.html)**
 
-![mq-piano](src/mq-piano/mq-piano.png)
+<img src="src/mq-piano/mq-piano.png" alt="mq-piano" height="180">
 
 ### `<mq-piano-chord>`
 
-Piano keyboard with chord visualization. Pass a chord name, get highlighted keys. Supports inversions via slash chords (`C/E`, `C/G`), `note-labels`, and customizable active color.
+Piano keyboard with chord visualization. Pass a chord name, get highlighted keys. Supports inversions via slash chords (`C/E`, `C/G`) and `note-labels`. **Ships unstyled** — theme the pressed keys via `::part(key-pressed)`.
 
 **[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-piano-chord/mq-piano-chord.html)**
 
-![mq-piano-chord](src/mq-piano-chord/mq-piano-chord.png)
+<img src="src/mq-piano-chord/mq-piano-chord.png" alt="mq-piano-chord" height="180">
 
 ### `<mq-piano-scale>`
 
-Piano keyboard with scale visualization. Major, minor, pentatonic, blues, modes (dorian, phrygian, lydian…), and more. Distinct root color, `note-labels`, and `degree-labels`.
+Piano keyboard with scale visualization. Major, minor, pentatonic, blues, modes (dorian, phrygian, lydian…), and more. Ships unstyled — theme the scale keys and the tonic via `::part()`. `note-labels` and `degree-labels`.
 
 **[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-piano-scale/mq-piano-scale.html)**
 
-![mq-piano-scale](src/mq-piano-scale/mq-piano-scale.png)
+<img src="src/mq-piano-scale/mq-piano-scale.png" alt="mq-piano-scale" height="180">
 
 ### `<mq-fretboard>`
 
-Guitar/bass fretboard with slot-based content placement. The component positions, you style. Horizontal or vertical orientation, configurable string count and fret range, `inlays`, `full-neck`, `left-handed`, and multi-string span slots for barres via `extra-slots`.
+Guitar/bass fretboard with slot-based content placement. The component positions, you style. Horizontal or vertical orientation, configurable string count and fret range, `inlays`, `full-neck`, `left-handed`, and multi-string span slots for barres via `extra-slots`. **Ships unstyled** — theme the neck, frets, strings and nut via the `--mq-fretboard-*` custom properties.
 
 **[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-fretboard/mq-fretboard.html)**
 
@@ -52,7 +52,7 @@ Guitar/bass fretboard with slot-based content placement. The component positions
 
 ### `<mq-fretboard-chord>`
 
-Fretboard with chord diagram. Pass a chord name, get finger positions with open/muted string indicators and barre support. Guitar and ukulele, multiple voicings via `position`, `finger-labels`, and `left-handed`.
+Fretboard chord diagram. Pass a chord `name`, get finger positions with open/muted string indicators and barre support. Guitar and ukulele, multiple voicings via `position`, `finger-labels`, and `left-handed`. Ships unstyled — theme the markers via `::part(marker)`, `::part(marker-open)`, `::part(marker-muted)` and `::part(marker-barre)`.
 
 **[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-fretboard-chord/mq-fretboard-chord.html)**
 
@@ -60,7 +60,7 @@ Fretboard with chord diagram. Pass a chord name, get finger positions with open/
 
 ### `<mq-fretboard-scale>`
 
-Fretboard with scale visualization across the full neck. Custom tunings (drop D, ukulele…), configurable fret range, `note-labels`, `degree-labels`, and `left-handed`.
+Fretboard with scale visualization across the full neck. Custom tunings (drop D, ukulele…), configurable fret range, `note-labels`, `degree-labels`, and `left-handed`. Ships unstyled — theme the scale notes via `::part(marker)` and the tonic via `::part(marker-tonic)`.
 
 **[Docs & demos](https://hsablonniere.github.io/musiq/src/mq-fretboard-scale/mq-fretboard-scale.html)**
 

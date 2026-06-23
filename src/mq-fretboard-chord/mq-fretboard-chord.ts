@@ -70,22 +70,55 @@ function lookupChord(data: InstrumentData, key: string, suffix: string): ChordEn
   return chords.find((c) => c.suffix === suffix) ?? null;
 }
 
+/**
+ * Fretboard chord diagram. Pass a chord name and an instrument (guitar or
+ * ukulele) and a playable voicing is rendered on a vertical fretboard — fretted
+ * notes, open/muted strings and barres, with optional finger numbers. Voicings
+ * come from `@tombatossals/chords-db`; pick among them with `position`.
+ *
+ * Ships **unstyled** like `mq-fretboard`: neither the neck nor the chord markers
+ * carry color of their own. Theme the neck through the inner `mq-fretboard`'s
+ * `--mq-fretboard-*` custom properties, and the markers via `::part(marker)`,
+ * `::part(marker-open)`, `::part(marker-muted)` and `::part(marker-barre)`.
+ *
+ * @csspart name - The chord name heading above the fretboard.
+ * @csspart marker - A fretted note.
+ * @csspart marker-open - An open-string indicator (○) above the nut.
+ * @csspart marker-muted - A muted-string indicator (✕) above the nut.
+ * @csspart marker-barre - A barre spanning several strings at one fret.
+ * @csspart finger - A finger-number label on a marker (only with `finger-labels`).
+ * @csspart error - The fallback shown for an unknown chord.
+ * @csspart fret-number - A fret-number label (exported from the inner `mq-fretboard`).
+ *
+ * @cssprop --mq-fretboard-neck-color - Fill of the neck background (consumed by the inner `mq-fretboard`).
+ * @cssprop --mq-fretboard-nut-color - Color of the nut (consumed by the inner `mq-fretboard`).
+ * @cssprop --mq-fretboard-fret-color - Color of the fret wires (consumed by the inner `mq-fretboard`).
+ * @cssprop --mq-fretboard-string-color - Color of the strings (consumed by the inner `mq-fretboard`).
+ * @cssprop [--mq-fretboard-nut-width=3px] - Thickness of the nut (consumed by the inner `mq-fretboard`).
+ * @cssprop [--mq-fretboard-fret-width=1px] - Thickness of the fret wires (consumed by the inner `mq-fretboard`).
+ * @cssprop [--mq-fretboard-string-width=1px] - Thickness of the strings (consumed by the inner `mq-fretboard`).
+ */
 @customElement("mq-fretboard-chord")
 export class MqFretboardChord extends LitElement {
-  @property() accessor chord: string = "";
+  /** Chord name, e.g. `C`, `Am`, `F#maj7`, `Bbdim`. */
+  @property() accessor name: string = "";
+  /** Instrument whose chord voicings to use. */
   @property() accessor instrument: Instrument = "guitar";
+  /** Index of the voicing to show among those available for the chord (0-based). */
   @property({ type: Number }) accessor position: number = 0;
+  /** Mirror the diagram for left-handed players. */
   @property({ type: Boolean, reflect: true, attribute: "left-handed" })
   accessor leftHanded: boolean = false;
+  /** Show finger numbers (1–4) on the markers and barres. */
   @property({ type: Boolean, attribute: "finger-labels" }) accessor fingerLabels: boolean = false;
 
   render() {
-    const parsed = parseChordName(this.chord);
-    if (!parsed) return html`<div class="error">Unknown chord: ${this.chord}</div>`;
+    const parsed = parseChordName(this.name);
+    if (!parsed) return html`<div class="error" part="error">Unknown chord: ${this.name}</div>`;
 
     const data = INSTRUMENT_DATA[this.instrument] ?? INSTRUMENT_DATA.guitar;
     const entry = lookupChord(data, parsed.key, parsed.suffix);
-    if (!entry) return html`<div class="error">Unknown chord: ${this.chord}</div>`;
+    if (!entry) return html`<div class="error" part="error">Unknown chord: ${this.name}</div>`;
 
     const pos = entry.positions[this.position] ?? entry.positions[0];
     if (!pos) return nothing;
@@ -137,7 +170,7 @@ export class MqFretboardChord extends LitElement {
     const fretNumbers = startFret > 1 ? String(startFret) : "";
 
     return html`
-      ${this.chord ? html`<div class="title" part="title">${this.chord}</div>` : nothing}
+      ${this.name ? html`<div class="name" part="name">${this.name}</div>` : nothing}
       <mq-fretboard
         .strings=${stringCount}
         start-fret=${startFret}
@@ -151,17 +184,17 @@ export class MqFretboardChord extends LitElement {
         ${frets.map((fret, i) => {
           const s = i + 1;
           if (fret === -1) {
-            return html`<div slot="s${s}-marker" class="marker muted" part="marker">✕</div>`;
+            return html`<div slot="s${s}-marker" class="marker-muted" part="marker-muted">✕</div>`;
           }
           if (fret === 0) {
-            return html`<div slot="s${s}-marker" class="marker open" part="marker">○</div>`;
+            return html`<div slot="s${s}-marker" class="marker-open" part="marker-open">○</div>`;
           }
           if (barreStringIndices.has(i)) return nothing;
           const actualFret = baseFret + fret - 1;
           const finger = fingers[i];
-          return html`<div slot="s${s}-f${actualFret}" class="dot" part="dot">
+          return html`<div slot="s${s}-f${actualFret}" class="marker" part="marker">
             ${this.fingerLabels && finger > 0
-              ? html`<span class="finger">${finger}</span>`
+              ? html`<span class="finger" part="finger">${finger}</span>`
               : nothing}
           </div>`;
         })}
@@ -169,11 +202,11 @@ export class MqFretboardChord extends LitElement {
           (barre) => html`
             <div
               slot="s${barre.fromString}-s${barre.toString}-f${barre.actualFret}"
-              class="barre"
-              part="barre"
+              class="marker-barre"
+              part="marker-barre"
             >
               ${this.fingerLabels && barre.finger > 0
-                ? html`<span class="finger">${barre.finger}</span>`
+                ? html`<span class="finger" part="finger">${barre.finger}</span>`
                 : nothing}
             </div>
           `,
@@ -188,56 +221,24 @@ export class MqFretboardChord extends LitElement {
       flex-direction: column;
     }
 
-    .title {
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-
     mq-fretboard {
       flex: 1;
       min-height: 0;
     }
 
-    .marker {
-      text-align: center;
-      line-height: 1;
-      margin-bottom: 0.25em;
-    }
-
-    .dot {
-      width: 1.2em;
-      height: 1.2em;
-      border-radius: 50%;
-      background: #000;
-      color: #fff;
+    /* Markers ship unstyled — size, shape and color come from ::part(marker),
+       ::part(marker-open), ::part(marker-muted) and ::part(marker-barre).
+       Layout glue only: center any slotted content (finger labels, glyphs). */
+    .marker,
+    .marker-open,
+    .marker-muted,
+    .marker-barre {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0.4em 0.2em;
-    }
-
-    .barre {
-      height: 1.2em;
-      border-radius: 0.6em;
-      background: #000;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0.2em;
-    }
-
-    .finger {
-      font-size: 0.6em;
-      font-weight: bold;
-      line-height: 1;
-      font-family: system-ui, sans-serif;
     }
 
     .error {
-      font-family: system-ui, sans-serif;
-      color: #c0392b;
       font-style: italic;
       padding: 1em;
     }

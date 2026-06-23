@@ -1,74 +1,153 @@
 import { css, html, LitElement } from "lit";
+import type { PropertyValues, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { styleMap } from "lit/directives/style-map.js";
 
-const NOTES_BY_SEMITONE = [
+/** Horizontal geometry of a white key, in proportional flex units. */
+type WhiteKeyGeometry = {
+  /** Width of the back edge — the strip visible between the neighbouring black keys. */
+  backWidth: number;
+  /** Width of the front edge (full key width); equals `startGap + backWidth + endGap`. */
+  frontWidth: number;
+  /** Back-edge span taken by the black key on the left (`0` when there is none). */
+  startGap: number;
+  /** Back-edge span taken by the black key on the right (`0` when there is none). */
+  endGap: number;
+};
+
+/**
+ * One semitone slot of the keyboard model: a white key (two geometry variants)
+ * or a black key (note names only).
+ */
+type Note =
+  | {
+      type: "white";
+      names: readonly [string];
+      accurate: WhiteKeyGeometry;
+      centered: WhiteKeyGeometry;
+    }
+  | { type: "black"; names: readonly [string, string] };
+
+// One octave of semitones; white keys carry the geometry that positions the
+// black keys between them (see `WhiteKeyGeometry`). `accurate` mirrors real
+// piano measurements; `centered` evenly spaces the black keys. Proportions
+// derived from http://quadibloc.com/other/cnv05.htm
+const NOTES_BY_SEMITONE: readonly Note[] = [
   {
     type: "white",
     names: ["C"],
-    accurate: { top: 14, bottom: 23, startPad: 0, endPad: 9 },
-    centered: { top: 17, bottom: 24, startPad: 0, endPad: 7 },
+    accurate: { backWidth: 14, frontWidth: 23, startGap: 0, endGap: 9 },
+    centered: { backWidth: 17, frontWidth: 24, startGap: 0, endGap: 7 },
   },
   { type: "black", names: ["Cs", "Db"] },
   {
     type: "white",
     names: ["D"],
-    accurate: { top: 14, bottom: 24, startPad: 5, endPad: 5 },
-    centered: { top: 10, bottom: 24, startPad: 7, endPad: 7 },
+    accurate: { backWidth: 14, frontWidth: 24, startGap: 5, endGap: 5 },
+    centered: { backWidth: 10, frontWidth: 24, startGap: 7, endGap: 7 },
   },
   { type: "black", names: ["Ds", "Eb"] },
   {
     type: "white",
     names: ["E"],
-    accurate: { top: 14, bottom: 23, startPad: 9, endPad: 0 },
-    centered: { top: 17, bottom: 24, startPad: 7, endPad: 0 },
+    accurate: { backWidth: 14, frontWidth: 23, startGap: 9, endGap: 0 },
+    centered: { backWidth: 17, frontWidth: 24, startGap: 7, endGap: 0 },
   },
   {
     type: "white",
     names: ["F"],
-    accurate: { top: 13, bottom: 24, startPad: 0, endPad: 11 },
-    centered: { top: 17, bottom: 24, startPad: 0, endPad: 7 },
+    accurate: { backWidth: 13, frontWidth: 24, startGap: 0, endGap: 11 },
+    centered: { backWidth: 17, frontWidth: 24, startGap: 0, endGap: 7 },
   },
   { type: "black", names: ["Fs", "Gb"] },
   {
     type: "white",
     names: ["G"],
-    accurate: { top: 13, bottom: 23, startPad: 3, endPad: 7 },
-    centered: { top: 10, bottom: 24, startPad: 7, endPad: 7 },
+    accurate: { backWidth: 13, frontWidth: 23, startGap: 3, endGap: 7 },
+    centered: { backWidth: 10, frontWidth: 24, startGap: 7, endGap: 7 },
   },
   { type: "black", names: ["Gs", "Ab"] },
   {
     type: "white",
     names: ["A"],
-    accurate: { top: 13, bottom: 23, startPad: 7, endPad: 3 },
-    centered: { top: 10, bottom: 24, startPad: 7, endPad: 7 },
+    accurate: { backWidth: 13, frontWidth: 23, startGap: 7, endGap: 3 },
+    centered: { backWidth: 10, frontWidth: 24, startGap: 7, endGap: 7 },
   },
   { type: "black", names: ["As", "Bb"] },
   {
     type: "white",
     names: ["B"],
-    accurate: { top: 13, bottom: 24, startPad: 11, endPad: 0 },
-    centered: { top: 17, bottom: 24, startPad: 7, endPad: 0 },
+    accurate: { backWidth: 13, frontWidth: 24, startGap: 11, endGap: 0 },
+    centered: { backWidth: 17, frontWidth: 24, startGap: 7, endGap: 0 },
   },
-] as const;
-
-type Note = (typeof NOTES_BY_SEMITONE)[number];
+];
 
 const SEMITONE_BY_NOTES: Record<string, number> = {};
 NOTES_BY_SEMITONE.forEach((n, semitone) => {
   for (const name of n.names) SEMITONE_BY_NOTES[name] = semitone;
 });
 
+/**
+ * Parse a scientific-pitch note name into an absolute semitone index
+ * (`C0` = 0, each octave = 12 semitones).
+ *
+ * Expected format: pitch class `A`–`G` (uppercase only), optional accidental `s` (sharp ♯) or
+ * `b` (flat ♭), then a non-negative octave. No `#` (use `s`), no double
+ * accidentals, no negative octaves.
+ *
+ * @example
+ * parseSemitone("C0")      // => 0
+ * parseSemitone("C3")      // => 36
+ * parseSemitone("Fs4")     // => 54  (F♯, same as "Gb4")
+ * parseSemitone("Eb3")     // => 39
+ * parseSemitone("H3")      // => null (invalid pitch class)
+ * parseSemitone("C#3")     // => null (use "Cs3")
+ * parseSemitone(undefined) // => null
+ *
+ * @returns the semitone index, or `null` if `note` is nullish or malformed.
+ */
 function parseSemitone(note: string | undefined): number | null {
   if (note == null) return null;
   const groups = note.match(/^(?<note>[A-G][sb]?)(?<octave>\d+)$/)?.groups;
   if (groups == null) return null;
   const base = SEMITONE_BY_NOTES[groups.note];
   if (base == null) return null;
-  return parseInt(groups.octave) * 12 + base;
+  return parseInt(groups.octave, 10) * 12 + base;
 }
 
 function isBlack(semitone: number): boolean {
   return NOTES_BY_SEMITONE[semitone % 12].type === "black";
+}
+
+/**
+ * Build the `exportparts` value a parent needs to forward mq-piano's full part
+ * surface for a given note range: the key categories (`key`, `key-white`,
+ * `key-black`), every pitch-class part (octave-agnostic, both enharmonics for
+ * black keys) and every absolute-pitch part within range.
+ *
+ * `exportparts` has no wildcard, so a parent that re-exposes these parts must
+ * enumerate them. This keeps mq-piano the single source of truth for the part
+ * names; callers pass only their range.
+ *
+ * Falls back to the key categories alone when the range is nullish/inverted.
+ */
+export function pianoExportParts(startNote: string, endNote: string): string {
+  const start = parseSemitone(startNote);
+  const end = parseSemitone(endNote);
+  if (start == null || end == null || end < start) return "key, key-white, key-black";
+
+  const pitchClasses = new Set<string>();
+  const absolute: string[] = [];
+  for (let semitone = start; semitone <= end; semitone++) {
+    const note = NOTES_BY_SEMITONE[semitone % 12];
+    const octave = Math.floor(semitone / 12);
+    for (const noteName of note.names) {
+      const name = noteName.toLowerCase();
+      pitchClasses.add(`note-${name}`);
+      absolute.push(`note-${name}${octave}`);
+    }
+  }
+  return ["key", "key-white", "key-black", ...pitchClasses, ...absolute].join(", ");
 }
 
 const DEFAULT_START_NOTE = "C3";
@@ -77,65 +156,118 @@ const DEFAULT_START_SEMITONE = parseSemitone(DEFAULT_START_NOTE)!;
 const DEFAULT_END_SEMITONE = parseSemitone(DEFAULT_END_NOTE)!;
 const DEFAULT_RANGE = DEFAULT_END_SEMITONE - DEFAULT_START_SEMITONE;
 
+// Hard cap on the keyboard span (10 octaves). Beyond this, rendering that many
+// keys is almost certainly a mistake (a real piano spans ~7.25 octaves).
+const MAX_RANGE = 120;
+
+// Real piano proportions in millimeters, used to lock the element's aspect
+// ratio: one white key is 23.5mm wide, the keyboard is 150mm deep.
+const WHITE_KEY_WIDTH_MM = 23.5;
+const KEYBOARD_DEPTH_MM = 150;
+
+/**
+ * Piano keyboard with realistic key geometry. Configurable range, `accurate`
+ * or `centered` black key positioning, always locked to real piano
+ * proportions. Ships **unstyled** — fully themeable via `::part()` and CSS
+ * custom properties. Named slots for per-key annotations.
+ *
+ * Keys are correctly positioned but have no color by default. Apply appearance
+ * via `::part()` and CSS custom properties.
+ *
+ * The component is a block whose aspect ratio always matches real piano
+ * proportions. Set `width` and/or `height` on the element to size it; if only
+ * one dimension is constrained, the other follows the ratio.
+ *
+ * @slot note-{name}{octave} - Per-note content, e.g. `note-C3`, `note-Fs4`, `note-Db3`. Black keys expose both enharmonic names; use `s` for sharp (♯).
+ *
+ * @csspart key - Every key (white and black).
+ * @csspart key-white - White keys only.
+ * @csspart key-black - Black keys only.
+ * @csspart note-{name} - All keys of a pitch-class (octave-agnostic), e.g. `note-c`, `note-fs`. Black keys expose both enharmonics: `note-cs`/`note-db`, `note-ds`/`note-eb`, `note-fs`/`note-gb`, `note-gs`/`note-ab`, `note-as`/`note-bb`. Use `s` for sharp (♯).
+ * @csspart note-{name}{octave} - A single key by absolute pitch, e.g. `note-c3`, `note-fs4`, `note-db3`.
+ *
+ * @cssprop [--mq-piano-black-key-height=64%] - Black-key height as a percentage of the full key height: `100%` spans the whole keyboard, `0%` hides them. Defaults to real piano proportions.
+ * @cssprop [--mq-piano-border-color=transparent] - Base color for all borders (outer frame + inner separators).
+ * @cssprop [--mq-piano-border-width=1px] - Base width for all borders.
+ * @cssprop --mq-piano-border-color-outer - Color of the outer frame (falls back to `--mq-piano-border-color`).
+ * @cssprop --mq-piano-border-color-inner - Color of inter-key separators (falls back to `--mq-piano-border-color`).
+ * @cssprop --mq-piano-border-width-outer - Width of the outer frame (falls back to `--mq-piano-border-width`).
+ * @cssprop --mq-piano-border-width-inner - Width of inter-key separators (falls back to `--mq-piano-border-width`).
+ * @cssprop [--mq-piano-border-radius=0] - Corner radius of the outer frame; the keyboard is always clipped to it (`overflow: clip`), so the corner keys follow the rounding.
+ */
 @customElement("mq-piano")
 export class MqPiano extends LitElement {
   @property({ attribute: "start-note" }) accessor startNote: string | undefined;
   @property({ attribute: "end-note" }) accessor endNote: string | undefined;
-  @property() accessor mode: "accurate" | "centered" = "accurate";
-  @property({ type: Boolean, attribute: "preserve-ratio" }) accessor preserveRatio: boolean = false;
+  @property({ reflect: true }) accessor mode: "accurate" | "centered" = "accurate";
 
   private _startSemitone = DEFAULT_START_SEMITONE;
   private _endSemitone = DEFAULT_END_SEMITONE;
 
-  willUpdate() {
-    let startSemitone = parseSemitone(this.startNote);
-    let endSemitone = parseSemitone(this.endNote);
+  willUpdate(changed: PropertyValues) {
+    if (changed.has("mode") && this.mode !== "accurate" && this.mode !== "centered") {
+      console.warn(`mq-piano: invalid mode "${this.mode}", falling back to "accurate"`);
+      this.mode = "accurate";
+    }
 
-    if (this.startNote != null && startSemitone == null) {
+    // Only the note range drives the geometry; skip the recompute on unrelated
+    // updates (e.g. a `mode` change), but always run on the first update.
+    if (this.hasUpdated && !changed.has("startNote") && !changed.has("endNote")) return;
+
+    const parsedStart = parseSemitone(this.startNote);
+    const parsedEnd = parseSemitone(this.endNote);
+
+    if (this.startNote != null && parsedStart == null) {
       console.warn(`mq-piano: invalid start-note "${this.startNote}", ignored`);
     }
-    if (this.endNote != null && endSemitone == null) {
+    if (this.endNote != null && parsedEnd == null) {
       console.warn(`mq-piano: invalid end-note "${this.endNote}", ignored`);
     }
 
-    if (startSemitone == null && endSemitone == null) {
-      startSemitone = DEFAULT_START_SEMITONE;
-      endSemitone = DEFAULT_END_SEMITONE;
-    } else if (startSemitone == null) {
-      startSemitone = endSemitone! - DEFAULT_RANGE;
-    } else if (endSemitone == null) {
-      endSemitone = startSemitone + DEFAULT_RANGE;
-    }
+    // Resolve both ends, deriving the missing one from the other (or defaults).
+    let start =
+      parsedStart ?? (parsedEnd != null ? parsedEnd - DEFAULT_RANGE : DEFAULT_START_SEMITONE);
+    let end = parsedEnd ?? start + DEFAULT_RANGE;
 
-    if (endSemitone! < startSemitone) {
+    if (end < start) {
       console.warn(`mq-piano: end-note before start-note, falling back to defaults`);
-      startSemitone = DEFAULT_START_SEMITONE;
-      endSemitone = DEFAULT_END_SEMITONE;
+      start = DEFAULT_START_SEMITONE;
+      end = DEFAULT_END_SEMITONE;
     }
 
-    startSemitone = Math.max(0, startSemitone);
-    if (isBlack(startSemitone)) startSemitone--;
-    if (isBlack(endSemitone!)) endSemitone = endSemitone! + 1;
+    start = Math.max(0, start);
+    if (isBlack(start)) start--;
+    if (isBlack(end)) end++;
 
-    this._startSemitone = startSemitone;
-    this._endSemitone = endSemitone!;
+    // Cap after the white-key adjustments above, so the rendered span never
+    // exceeds MAX_RANGE. Clamp `end` back to a white key without re-widening.
+    if (end - start > MAX_RANGE) {
+      console.warn(`mq-piano: range exceeds ${MAX_RANGE / 12} octaves, clamping end-note`);
+      end = start + MAX_RANGE;
+      if (isBlack(end)) end--;
+    }
+
+    this._startSemitone = start;
+    this._endSemitone = end;
 
     let whiteCount = 0;
-    for (let s = startSemitone; s <= endSemitone!; s++) {
+    for (let s = start; s <= end; s++) {
       if (NOTES_BY_SEMITONE[s % 12].type === "white") whiteCount++;
     }
-    this.style.aspectRatio = this.preserveRatio ? `${whiteCount * 23.5} / 150` : "";
+    this.style.aspectRatio = `${whiteCount * WHITE_KEY_WIDTH_MM} / ${KEYBOARD_DEPTH_MM}`;
   }
 
   render() {
-    const whiteLayer: unknown[] = [];
-    const blackLayer: unknown[] = [];
+    const whiteLayer: TemplateResult[] = [];
+    const blackLayer: TemplateResult[] = [];
     let prevWasWhite = false;
 
+    // `_startSemitone` always lands on a white key (willUpdate adjusts it); the
+    // `type === "white"` test is kept to narrow the union for the geometry access below.
     const startNote = NOTES_BY_SEMITONE[this._startSemitone % 12];
     if (startNote.type === "white" && this._startSemitone > 0 && isBlack(this._startSemitone - 1)) {
-      const w = this.mode === "centered" ? startNote.centered : startNote.accurate;
-      blackLayer.push(html`<div style="flex:${w.startPad}"></div>`);
+      const keyGeometry = this.mode === "centered" ? startNote.centered : startNote.accurate;
+      blackLayer.push(html`<div style=${styleMap({ flex: keyGeometry.startGap })}></div>`);
     }
 
     for (let semitone = this._startSemitone; semitone <= this._endSemitone; semitone++) {
@@ -148,12 +280,11 @@ export class MqPiano extends LitElement {
           blackLayer.push(this._borderTpl);
         }
 
-        const w = this.mode === "centered" ? note.centered : note.accurate;
-        whiteLayer.push(this._renderKey(note, octave, w));
-        blackLayer.push(html` <div
+        const keyGeometry = this.mode === "centered" ? note.centered : note.accurate;
+        whiteLayer.push(this._renderKey(note, octave, keyGeometry));
+        blackLayer.push(html`<div
           class="white-spacer"
-          data-key="${note.names.join("-")}"
-          style="--top-width:${w.top}"
+          style=${styleMap({ "--back-width": keyGeometry.backWidth })}
         ></div>`);
         prevWasWhite = true;
       } else {
@@ -163,10 +294,11 @@ export class MqPiano extends LitElement {
       }
     }
 
+    // Always a white key (see willUpdate); the `type === "white"` test narrows the union.
     const endNote = NOTES_BY_SEMITONE[this._endSemitone % 12];
     if (endNote.type === "white" && isBlack(this._endSemitone + 1)) {
-      const w = this.mode === "centered" ? endNote.centered : endNote.accurate;
-      blackLayer.push(html`<div style="flex:${w.endPad}"></div>`);
+      const keyGeometry = this.mode === "centered" ? endNote.centered : endNote.accurate;
+      blackLayer.push(html`<div style=${styleMap({ flex: keyGeometry.endGap })}></div>`);
     }
 
     return html`
@@ -175,16 +307,21 @@ export class MqPiano extends LitElement {
     `;
   }
 
-  private _renderKey(note: Note, octave: number, w?: { top: number; bottom: number }) {
-    const style = w == null ? "" : `--top-width:${w.top};--bottom-width:${w.bottom}`;
+  private _renderKey(note: Note, octave: number, geometry?: WhiteKeyGeometry) {
+    const style = geometry ? { "--front-width": geometry.frontWidth } : {};
+    const notesClassParts = note.names
+      .flatMap((noteName) => {
+        const name = noteName.toLowerCase();
+        return [`note-${name}`, `note-${name}${octave}`];
+      })
+      .join(" ");
     return html`
       <div
-        part="key key-${note.type}"
+        part="key key-${note.type} ${notesClassParts}"
         data-type="${note.type}"
-        data-key="${note.names.join("-")}"
-        style="${style}"
+        style=${styleMap(style)}
       >
-        ${note.names.map((alias) => html` <slot name="note-${alias}${octave}"></slot>`)}
+        ${note.names.map((alias) => html`<slot name="note-${alias}${octave}"></slot>`)}
       </div>
     `;
   }
@@ -193,14 +330,18 @@ export class MqPiano extends LitElement {
 
   static styles = css`
     :host {
-      --border-color: var(--mq-piano-border-color, #000);
+      --border-color: var(--mq-piano-border-color, transparent);
       --border-width: var(--mq-piano-border-width, 1px);
       border-color: var(--mq-piano-border-color-outer, var(--border-color));
       border-style: solid;
       border-width: var(--mq-piano-border-width-outer, var(--border-width));
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: 2fr 1fr;
+      grid-template-rows: var(--mq-piano-black-key-height, 64%) 1fr;
+      border-radius: var(--mq-piano-border-radius, 0);
+      /* Clip the keys to the (optionally rounded) frame. Neutral at radius 0
+         since the keys already fill the host; only visible once rounded. */
+      overflow: clip;
     }
 
     .layer {
@@ -217,16 +358,14 @@ export class MqPiano extends LitElement {
     }
 
     [data-type="white"] {
-      background-color: #fff;
-      flex: var(--bottom-width);
+      flex: var(--front-width);
     }
 
     .white-spacer {
-      flex: var(--top-width);
+      flex: var(--back-width);
     }
 
     [data-type="black"] {
-      background-color: #000;
       flex: 14;
     }
 
