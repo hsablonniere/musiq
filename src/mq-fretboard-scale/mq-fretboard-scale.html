@@ -334,6 +334,67 @@
       ></mq-fretboard-scale>
     </section>
 
+    <h2>Putting it all together</h2>
+
+    <section>
+      <p class="desc">
+        A fully themed <strong>G major</strong> (G – A – B – C – D – E – F♯) mapped across the neck:
+        warm maple with amber inlays, blue round markers with the tonic <code>G</code> singled out
+        in red, each marker stacking its note name and scale degree, under a pill name heading —
+        every layer reached through <code>::part()</code>.
+      </p>
+      <style>
+        .showcase {
+          --mq-fretboard-neck-color: #f3e2bb;
+          --mq-fretboard-nut-color: #3a322a;
+          --mq-fretboard-nut-width: 6px;
+          --mq-fretboard-fret-color: #a89a7e;
+          --mq-fretboard-string-color: #7d7468;
+          --mq-fretboard-inlay-color: #cbab6e;
+        }
+        .showcase::part(marker) {
+          width: 2.2em;
+          height: 2.2em;
+          border-radius: 50%;
+          background: #2980b9;
+          color: #fff;
+        }
+        /* Tonic carries both parts, so this overrides marker (declared after). */
+        .showcase::part(marker-tonic) {
+          background: #c0392b;
+        }
+        .showcase::part(label) {
+          font:
+            700 0.7em system-ui,
+            sans-serif;
+        }
+        .showcase::part(degree) {
+          font-size: 0.55em;
+          opacity: 0.85;
+        }
+        .showcase::part(name) {
+          width: fit-content;
+          margin: 0 auto 0.6rem;
+          padding: 0.12em 0.8em;
+          border-radius: 999px;
+          background: #111;
+          color: #fff;
+          font:
+            700 1rem system-ui,
+            sans-serif;
+          letter-spacing: 0.04em;
+        }
+      </style>
+      <mq-fretboard-scale
+        class="showcase"
+        name="G major"
+        note-labels
+        degree-labels
+        inlays
+      ></mq-fretboard-scale>
+      <p class="caption">G major · tonic in red · note names + scale degrees on every marker</p>
+    </section>
+
     <footer><code>&lt;mq-fretboard-scale&gt;</code> · musique</footer>
   </body>
 </html>
