@@ -345,6 +345,70 @@
       </div>
     </section>
 
+    <h2>Putting it all together</h2>
+
+    <section>
+      <p class="desc">
+        Two fully themed voicings on a warm maple neck, each under a pill name heading: a
+        <strong>F</strong> barre chord (the barre styled through <code>::part(marker-barre)</code>)
+        and an open <strong>C</strong> showing every marker type — round red fretted markers
+        carrying their finger numbers, the open strings marked <code>○</code>, the muted low E
+        marked <code>✕</code>. Every layer is reached through <code>::part()</code>.
+      </p>
+      <style>
+        .showcase {
+          --mq-fretboard-neck-color: #f3e2bb;
+          --mq-fretboard-nut-color: #3a322a;
+          --mq-fretboard-nut-width: 6px;
+          --mq-fretboard-fret-color: #a89a7e;
+          --mq-fretboard-string-color: #7d7468;
+          --mq-fretboard-string-width: 2px;
+        }
+        .showcase::part(marker),
+        .showcase::part(marker-barre) {
+          background: #c0392b;
+          color: #fff;
+          font:
+            700 0.8em system-ui,
+            sans-serif;
+        }
+        .showcase::part(marker) {
+          width: 1.6em;
+          height: 1.6em;
+          border-radius: 50%;
+        }
+        .showcase::part(marker-barre) {
+          border-radius: 0.8em;
+        }
+        /* Open/muted indicators: hollow glyphs above the nut. */
+        .showcase::part(marker-open),
+        .showcase::part(marker-muted) {
+          color: #6b5d45;
+          font-size: 1.1em;
+        }
+        .showcase::part(name) {
+          width: fit-content;
+          margin: 0 auto 0.6rem;
+          padding: 0.12em 0.8em;
+          border-radius: 999px;
+          background: #111;
+          color: #fff;
+          font:
+            700 1rem system-ui,
+            sans-serif;
+          letter-spacing: 0.04em;
+        }
+      </style>
+      <div class="gallery">
+        <mq-fretboard-chord class="showcase" name="F" finger-labels></mq-fretboard-chord>
+        <mq-fretboard-chord class="showcase" name="C" finger-labels></mq-fretboard-chord>
+      </div>
+      <p class="caption">
+        F barre chord · open C · markers, barre, open <code>○</code>, muted <code>✕</code>, finger
+        numbers and name — all via <code>::part()</code>
+      </p>
+    </section>
+
     <footer><code>&lt;mq-fretboard-chord&gt;</code> · musique</footer>
   </body>
 </html>
